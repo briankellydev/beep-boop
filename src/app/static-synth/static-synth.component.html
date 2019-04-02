@@ -1,0 +1,12 @@
+<div (click)="toggle()">
+  <div class="row">
+    <div class="col-4">
+      <app-oscillator (oscChanged)="changeOsc($event)"></app-oscillator>
+    </div>
+    <div class="col-4">
+    </div>
+    <div class="col-4">
+      <app-volume (volChanged)="changeVol($event)"></app-volume>
+    </div>
+  </div>
+</div>

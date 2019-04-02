@@ -27,9 +27,14 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/round-slider/dist/roundslider.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/tone/build/Tone.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/round-slider/dist/roundslider.min.js"
+            ]
           },
           "configurations": {
             "production": {

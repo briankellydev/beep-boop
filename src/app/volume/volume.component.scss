@@ -1,0 +1,12 @@
+.volume {
+  padding: 10px;
+  font-size: 12px;
+  border: 1px solid black;
+  .sliders {
+    height: 150px;
+    text-align: center;
+    .volume-slider {
+      margin: auto;
+    }
+  }
+}
