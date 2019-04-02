@@ -19,8 +19,7 @@ export class VolumeComponent implements OnInit {
       showTooltip: true,
       value: this.vol / 100,
       min: -50,
-      max: 6,
-      change: 'changes'
+      max: 6
     });
   }
 

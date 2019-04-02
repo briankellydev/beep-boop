@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as Tone from 'tone';
 import { BehaviorSubject } from 'rxjs';
+import { Oscillator, Envelope, LFO, Filter } from '../interfaces';
 
 @Component({
   selector: 'app-static-synth',
@@ -15,19 +16,19 @@ export class StaticSynthComponent implements OnInit {
   volume: any;
   envelope: any;
   volVal = 0;
-  oscConfig = {
+  oscConfig: Oscillator = {
     oscillator: {
       frequency: 440,
       type: 'triangle',
     },
   }
-  envConfig: {
+  envConfig: Envelope = {
     attack: 0.1,
     decay: 0.1 ,
     sustain: 0.3 ,
     release: 1
   }
-  lfoConfig = {
+  lfoConfig: LFO = {
     type: 'sine',
     min: 0,
     max: 1000,
@@ -35,7 +36,7 @@ export class StaticSynthComponent implements OnInit {
     frequency: '4n',
     amplitude: 1
   };
-  freqConfig = {
+  filterConfig: Filter = {
     frequency: 300,
     type: 'lowpass',
     Q: 1
@@ -45,7 +46,7 @@ export class StaticSynthComponent implements OnInit {
 
   ngOnInit() {
     this.volume = new Tone.Volume(this.volVal).toMaster();
-    this.filter = new Tone.Filter({frequency: 300, type: 'lowpass'}).connect(this.volume);
+    this.filter = new Tone.Filter(this.filterConfig).connect(this.volume);
     this.synth = new Tone.Synth(this.oscConfig).connect(this.filter);
     this.lfo = new Tone.LFO(this.lfoConfig).start();
     this.envelope = new Tone.Envelope(this.envConfig).connect(this.filter);
@@ -79,6 +80,9 @@ export class StaticSynthComponent implements OnInit {
     this.synth.oscillator.type = osc;
   }
 
-  
+  changeLfo(lfo: LFO) {
+    this.lfo.frequency.value = lfo.frequency;
+    this.lfo.max = lfo.max;
+  }
 
 }

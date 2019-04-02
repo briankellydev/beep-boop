@@ -18,8 +18,10 @@ export interface Synth {
 }
 
 export interface Oscillator {
-  frequency: number;
-  type: string;
+  oscillator: {
+    frequency: number;
+    type: string;
+  }
 }
 
 export interface Filter {
