@@ -1,3 +1,47 @@
-<p>
-  envelope works!
-</p>
+<div class="env component">
+  <h5>Envelope</h5>
+  <div class="slide-container row">
+    <div class="col-3">
+      A:
+    </div>
+    <div class="col-6">
+      <input type="range" min="1" max="10000" value="50" class="slider" [(ngModel)]="envConfig.attack" (change)="changes()">
+    </div>
+    <div class="col-3">
+      {{envConfig.attack}}ms
+    </div>
+  </div>
+  <div class="slide-container row">
+    <div class="col-3">
+      D:
+    </div>
+    <div class="col-6">
+      <input type="range" min="1" max="10000" value="50" class="slider" [(ngModel)]="envConfig.decay" (change)="changes()">
+    </div>
+    <div class="col-3">
+      {{envConfig.decay}}ms
+    </div>
+  </div>
+  <div class="slide-container row">
+    <div class="col-3">
+      S:
+    </div>
+    <div class="col-6">
+      <input type="range" min="0" max="100" value="50" class="slider" [(ngModel)]="envConfig.sustain" (change)="changes()">
+    </div>
+    <div class="col-3">
+      {{(envConfig.sustain / 100) | number}}
+    </div>
+  </div>
+  <div class="slide-container row">
+    <div class="col-3">
+      R:
+    </div>
+    <div class="col-6">
+      <input type="range" min="1" max="10000" value="50" class="slider" [(ngModel)]="envConfig.release" (change)="changes()">
+    </div>
+    <div class="col-3">
+      {{envConfig.release}}ms
+    </div>
+  </div>
+</div>

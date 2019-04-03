@@ -9,6 +9,7 @@ import { LFO } from '../interfaces';
 export class LfoComponent implements OnInit {
 
   @Output() lfoChanged = new EventEmitter<LFO>();
+  @Output() toggleChanged = new EventEmitter<boolean>();
 
   lfoConfig: LFO = {
     type: 'sine',
@@ -18,20 +19,22 @@ export class LfoComponent implements OnInit {
     frequency: 1,
     amplitude: 1
   };
+  oscillatorSelected = 'sine';
+  enabled = false;
   constructor() { }
 
   ngOnInit() {
     $(".depth").roundSlider({
-      radius: 80,
+      radius: 40,
       circleShape: "default",
       sliderType: "min-range",
       showTooltip: true,
-      value: this.lfoConfig.max,
+      value: this.lfoConfig.max + ' Hz',
       min: 0,
-      max: 1000
+      max: 5000
     });
-    $(".freq").roundSlider({
-      radius: 80,
+    $(".lfo-freq").roundSlider({
+      radius: 40,
       circleShape: "default",
       sliderType: "min-range",
       showTooltip: true,
@@ -42,10 +45,20 @@ export class LfoComponent implements OnInit {
   }
 
   changes() {
-    this.lfoConfig.max = parseInt($(".rs-tooltip").eq(0).text());
-    this.lfoConfig.frequency = parseInt($(".rs-tooltip").eq(1).text()); // TODO map to time vals
-    console.log(this.lfoConfig);
+    this.lfoConfig.max = parseInt($(".lfo .rs-tooltip").eq(0).text());
+    this.lfoConfig.frequency = parseInt($(".lfo .rs-tooltip").eq(1).text()); // TODO map to time vals
+    this.lfoConfig.type = this.oscillatorSelected;
     this.lfoChanged.emit(this.lfoConfig);
+  }
+
+  selectOsc(osc: string) {
+    this.oscillatorSelected = osc;
+    this.changes();
+  }
+
+  toggle() {
+    this.enabled = !this.enabled;
+    this.toggleChanged.emit(this.enabled);
   }
 
 }

@@ -12,6 +12,11 @@ import { SynthService } from './synth.service';
 import { LfoComponent } from './lfo/lfo.component';
 import { EnvelopeComponent } from './envelope/envelope.component';
 import { OscillatorComponent } from './oscillator/oscillator.component';
+import { FilterComponent } from './filter/filter.component';
+import { DistortionComponent } from './distortion/distortion.component';
+import { DelayComponent } from './delay/delay.component';
+import { ReverbComponent } from './reverb/reverb.component';
+import { MatSlideToggleModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -22,11 +27,16 @@ import { OscillatorComponent } from './oscillator/oscillator.component';
     LfoComponent,
     EnvelopeComponent,
     OscillatorComponent,
+    FilterComponent,
+    DistortionComponent,
+    DelayComponent,
+    ReverbComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatSlideToggleModule,
   ],
   providers: [AudioService, SynthService],
   bootstrap: [AppComponent]

@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import './assets/bootstrap-grid.min.css';
 @import './assets/font-awesome/css/font-awesome.min.css';
+@import './assets/indigo-pink.css';
+@import './app/variables.scss';
 
 round-slider {
     display: block;
@@ -59,5 +61,27 @@ round-slider {
   
     .arc {
       fill: steelblue;
+    }
+  }
+
+  h5 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    text-align: center;
+    line-height: 25px;
+  }
+
+  .component {
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 3px;
+    margin: 5px;
+    background-color: $grayBg;
+    color: $synthBlue;
+    mat-slide-toggle {
+      float: right;
+    }
+    .rs-tooltip {
+      color: $grayBg;
     }
   }

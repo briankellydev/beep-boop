@@ -1,12 +1,59 @@
-<div class="lfo">
+<div class="lfo component">
+  <h5>LFO <mat-slide-toggle [checked]="enabled" (change)="toggle()"></mat-slide-toggle></h5>
+  <div class="row">
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectOsc('sine')">
+        <div class="col-1">
+          <app-red-light [active]="oscillatorSelected === 'sine'"></app-red-light>
+        </div>
+        <div class="col-11">
+          Sine
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectOsc('sawtooth')">
+        <div class="col-1">
+          <app-red-light [active]="oscillatorSelected === 'sawtooth'"></app-red-light>
+        </div>
+        <div class="col-11">
+          Sawtooth
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectOsc('square')">
+        <div class="col-1">
+          <app-red-light [active]="oscillatorSelected === 'square'"></app-red-light>
+        </div>
+        <div class="col-11">
+          Square
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectOsc('triangle')">
+        <div class="col-1">
+          <app-red-light [active]="oscillatorSelected === 'triangle'"></app-red-light>
+        </div>
+        <div class="col-11">
+          Triangle
+        </div>
+      </div>
+    </div>
+    
+  </div>
   <div class="row">
     <div class="col-6">
       <h5>Depth</h5>
-      <div (mouseup)="changes()" class="depth">
+      <div (mouseup)="changes()" class="depth"></div>
     </div>
     <div class="col-6">
       <h5>Rate</h5>
-      <div (mouseup)="changes()" class="freq">
+      <div (mouseup)="changes()" class="lfo-freq"></div>
     </div>
     
   </div>

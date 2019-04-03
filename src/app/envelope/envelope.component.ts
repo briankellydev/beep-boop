@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Envelope } from '../interfaces';
 
 @Component({
   selector: 'app-envelope',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EnvelopeComponent implements OnInit {
 
+  @Output() envChanged = new EventEmitter<Envelope>();
+
+  envConfig: Envelope = {
+    attack: 0.1,
+    decay: 0.1,
+    sustain: 30,
+    release: 1
+  };
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  changes() {
+    this.envChanged.emit(this.envConfig);
   }
 
 }

@@ -1,0 +1,40 @@
+@import '../variables.scss';
+
+.col-3, .col-6 {
+    padding: 0;
+}
+.col-3:last-of-type {
+    text-align: left;
+}
+.col-3:first-of-type {
+    text-align: right;
+}
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;   
+    background: $pink;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%; 
+    background: $synthBlue;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: $synthBlue;
+    cursor: pointer;
+  }

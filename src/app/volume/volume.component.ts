@@ -13,7 +13,7 @@ export class VolumeComponent implements OnInit {
 
   ngOnInit() {
     $(".volume-slider").roundSlider({
-      radius: 80,
+      radius: 40,
       circleShape: "default",
       sliderType: "min-range",
       showTooltip: true,
@@ -24,7 +24,7 @@ export class VolumeComponent implements OnInit {
   }
 
   changes() {
-    this.vol = parseInt($(".rs-tooltip").text());
+    this.vol = parseInt($(".volume .rs-tooltip").text());
     this.volChanged.emit(this.vol);
   }
 

@@ -1,0 +1,50 @@
+<div class="filter component">
+  <h5>Filter</h5>
+  <div class="row">
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectType('lowpass')">
+        <div class="col-1">
+          <app-red-light [active]="typeSelected === 'lowpass'"></app-red-light>
+        </div>
+        <div class="col-11">
+          LP
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectType('highpass')">
+        <div class="col-1">
+          <app-red-light [active]="typeSelected === 'highpass'"></app-red-light>
+        </div>
+        <div class="col-11">
+          HP
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="row no-gutters" (click)="selectType('bandpass')">
+    <div class="col-6">
+      <div class="row no-gutters">
+        <div class="col-1">
+          <app-red-light [active]="typeSelected === 'bandpass'"></app-red-light>
+        </div>
+        <div class="col-11">
+          BP
+        </div>
+      </div>
+    </div>
+    <div class="col-6"></div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <h5>Freq</h5>
+      <div (mouseup)="changes()" class="filt-freq"></div>
+    </div>
+    <div class="col-6">
+      <h5>Q</h5>
+      <div (mouseup)="changes()" class="q"></div>
+    </div>
+    
+  </div>
+</div>

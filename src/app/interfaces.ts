@@ -22,6 +22,7 @@ export interface Oscillator {
     frequency: number;
     type: string;
   }
+  envelope?: Envelope;
 }
 
 export interface Filter {

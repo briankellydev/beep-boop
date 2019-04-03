@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-oscillator',
@@ -7,9 +7,12 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class OscillatorComponent implements OnInit {
 
+  @Input() oscNumber: number;
   @Output() oscChanged = new EventEmitter<string>();
+  @Output() oscToggled = new EventEmitter<boolean>();
 
   oscillatorSelected = 'sine';
+  enabled = this.oscNumber === 1 ? true : false;
 
   constructor() { }
 
@@ -19,6 +22,11 @@ export class OscillatorComponent implements OnInit {
   selectOsc(osc: string) {
     this.oscillatorSelected = osc;
     this.oscChanged.emit(osc);
+  }
+
+  toggleOsc() {
+    this.enabled = !this.enabled;
+    this.oscToggled.emit(this.enabled);
   }
 
 }

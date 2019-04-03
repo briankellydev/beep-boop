@@ -1,35 +1,51 @@
-<div class="osc">
-  <h5>Waveform</h5>
-  <div class="row" (click)="selectOsc('sine')">
-    <div class="col-4">
-      <app-red-light [active]="oscillatorSelected === 'sine'"></app-red-light>
+<div class="osc component">
+  <h5>Oscillator {{oscNumber}}
+    <mat-slide-toggle *ngIf="oscNumber !== '1'" [checked]="enabled" (change)="toggleOsc()"></mat-slide-toggle>
+  </h5>
+  <div class="row">
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectOsc('sine')">
+        <div class="col-1">
+          <app-red-light [active]="oscillatorSelected === 'sine'"></app-red-light>
+        </div>
+        <div class="col-11">
+          Sine
+        </div>
+      </div>
     </div>
-    <div class="col-8">
-      Sine
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectOsc('sawtooth')">
+        <div class="col-1">
+          <app-red-light [active]="oscillatorSelected === 'sawtooth'"></app-red-light>
+        </div>
+        <div class="col-11">
+          Sawtooth
+        </div>
+      </div>
     </div>
+    
   </div>
-  <div class="row" (click)="selectOsc('sawtooth')">
-    <div class="col-4">
-      <app-red-light [active]="oscillatorSelected === 'sawtooth'"></app-red-light>
+  <div class="row">
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectOsc('square')">
+        <div class="col-1">
+          <app-red-light [active]="oscillatorSelected === 'square'"></app-red-light>
+        </div>
+        <div class="col-11">
+          Square
+        </div>
+      </div>
     </div>
-    <div class="col-8">
-      Sawtooth
+    <div class="col-6">
+      <div class="row no-gutters" (click)="selectOsc('triangle')">
+        <div class="col-1">
+          <app-red-light [active]="oscillatorSelected === 'triangle'"></app-red-light>
+        </div>
+        <div class="col-11">
+          Triangle
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="row" (click)="selectOsc('square')">
-    <div class="col-4">
-      <app-red-light [active]="oscillatorSelected === 'square'"></app-red-light>
-    </div>
-    <div class="col-8">
-      Square
-    </div>
-  </div>
-  <div class="row" (click)="selectOsc('triangle')">
-    <div class="col-4">
-      <app-red-light [active]="oscillatorSelected === 'triangle'"></app-red-light>
-    </div>
-    <div class="col-8">
-      Triangle
-    </div>
+    
   </div>
 </div>
