@@ -116,13 +116,16 @@ export class StaticSynthComponent implements OnInit {
 
   changeEnv(env: Envelope) {
     this.envelope.attack = env.attack / 1000;
-    this.synth.envelope.attack = env.attack / 1000;
     this.envelope.decay = env.decay / 1000;
-    this.synth.envelope.decay = env.decay / 1000;
     this.envelope.sustain = env.sustain / 100;
-    this.synth.envelope.sustain = env.sustain / 100;
     this.envelope.release = env.release / 1000;
-    this.synth.envelope.release = env.release / 1000;
+    
+    for (let i = 0; i < 3; i++) {
+      this.synth[i].envelope.attack = env.attack / 1000;
+      this.synth[i].envelope.decay = env.decay / 1000;
+      this.synth[i].envelope.sustain = env.sustain / 100;
+      this.synth[i].envelope.release = env.release / 1000;
+    }
   }
 
   changeFilter(filter: Filter) {
