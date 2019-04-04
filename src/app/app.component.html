@@ -1,3 +1,4 @@
 <div>
-  <app-static-synth></app-static-synth>
+  <app-static-synth [sequence]="sequence"></app-static-synth>
+  <app-sequencer (sequenceChanged)="changeSequence($event)"></app-sequencer>
 </div>

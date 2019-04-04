@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { LFO } from '../interfaces';
+import { LFO } from '../../interfaces';
 
 @Component({
   selector: 'app-lfo',

@@ -1,0 +1,41 @@
+<div class="static-synth component">
+  <div class="row no-gutters">
+    <div class="col-8">
+      <h2 class="component">BeepBlaster 9000</h2>
+      <div class="row no-gutters">
+          <div class="col-6">
+            <app-oscillator oscNumber="1" (oscChanged)="changeOsc($event, 0)"></app-oscillator>
+            <app-oscillator oscNumber="2" (oscChanged)="changeOsc($event, 1)" (oscToggled)="toggleOsc($event, 1)"></app-oscillator>
+            <app-oscillator oscNumber="3" (oscChanged)="changeOsc($event, 2)" (oscToggled)="toggleOsc($event, 2)"></app-oscillator>
+            <app-envelope (envChanged)="changeEnv($event)"></app-envelope>
+          </div>
+          <div class="col-6">
+            <app-lfo (lfoChanged)="changeLfo($event)" (toggleChanged)="toggleLfo($event)"></app-lfo>
+            <app-filter (filterChanged)="changeFilter($event)"></app-filter>
+          </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="row no-gutters">
+        <div class="col-6">
+          <app-portamento (portChanged)="changePort($event)"></app-portamento>
+        </div>
+        <div class="col-6">
+          <app-volume (volChanged)="changeVol($event)"></app-volume>
+        </div>
+      </div>
+      
+      <div class="row no-gutters">
+        <div class="col-6">
+          <app-distortion (distChanged)="changeDist($event)" (toggleChanged)="toggleDist($event)"></app-distortion>
+        </div>
+        <div class="col-6">
+          <app-reverb (verbChanged)="changeVerb($event)" (toggleChanged)="toggleVerb($event)"></app-reverb>
+        </div>
+      </div>
+      <app-delay (delayChanged)="changeDelay($event)" (toggleChanged)="toggleDelay($event)"></app-delay>
+        
+    </div>
+  </div>
+  <button (click)="toggle()">Toggle</button>
+</div>

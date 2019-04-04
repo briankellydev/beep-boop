@@ -32,3 +32,9 @@ export interface Filter {
   rolloff?: number;
   gain?: number;
 }
+
+export interface NoteRow {
+  note: string;
+  octave: string;
+  sequence: boolean[];
+};

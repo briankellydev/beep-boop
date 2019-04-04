@@ -1,12 +1,12 @@
-@import '../variables.scss';
+@import '../../variables.scss';
 
-.col-3, .col-6 {
+.col-6 {
     padding: 0;
 }
-.col-3:last-of-type {
+.col-3 {
     text-align: left;
 }
-.col-3:first-of-type {
+.col-2 {
     text-align: right;
 }
 .slider {

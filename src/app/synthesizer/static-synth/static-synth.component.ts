@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as Tone from 'tone';
-import { BehaviorSubject } from 'rxjs';
-import { Oscillator, Envelope, LFO, Filter } from '../interfaces';
+import { Oscillator, Envelope, LFO, Filter } from '../../interfaces';
 
 @Component({
   selector: 'app-static-synth',
@@ -10,7 +9,9 @@ import { Oscillator, Envelope, LFO, Filter } from '../interfaces';
 })
 export class StaticSynthComponent implements OnInit {
 
-  synth: any; // TODO typing?
+  @Input() sequence: string[];
+
+  synth: any[]; // TODO typing?
   filter: any;
   lfo: any;
   volume: any;
@@ -20,10 +21,10 @@ export class StaticSynthComponent implements OnInit {
   delay: any;
   volVal = 0;
   envConfig: Envelope = {
-    attack: 0.1,
-    decay: 0.1 ,
-    sustain: 0.3 ,
-    release: 1
+    attack: 0.001,
+    decay: 0.001,
+    sustain: 0.3,
+    release: 0.001
   };
   oscConfig: Oscillator = {
     oscillator: {
@@ -74,15 +75,16 @@ export class StaticSynthComponent implements OnInit {
     this.lfo = new Tone.LFO(this.lfoConfig);
     this.envelope = new Tone.Envelope(this.envConfig).connect(this.filter);
     this.lfo.connect(this.filter.frequency);
-    var part = new Tone.Part((time, event) => {
+    Tone.Transport.bpm.value = 60;
+  }
+
+  toggle() {
+    var part = new Tone.Sequence((time, note) => {
       //the events will be given to the callback with the time they occur
       this.synth.forEach((synth) => {
-        synth.triggerAttackRelease(event.note, event.dur, time);
+        synth.triggerAttackRelease(note, time);
       });
-    }, [{ time : 0, note : 'C4', dur : '4n'},
-      { time : {'4n' : 1, '8n' : 1}, note : 'E4', dur : '8n'},
-      { time : '2n', note : 'G4', dur : '16n'},
-      { time : {'2n' : 1, '8t' : 1}, note : 'B4', dur : '4n'}]);
+    }, [this.sequence, '16n']);
     
     //start the part at the beginning of the Transport's timeline
     part.start(0);
@@ -90,10 +92,6 @@ export class StaticSynthComponent implements OnInit {
     //loop the part 3 times
     part.loop = 100;
     part.loopEnd = '1m';
-    
-  }
-
-  toggle() {
     Tone.Transport.toggle();
   }
 
@@ -169,6 +167,12 @@ export class StaticSynthComponent implements OnInit {
     } else {
       this.synth[num].disconnect();
     }
+  }
+
+  changePort(port: number) {
+    this.synth.forEach((synth) => {
+      synth.portamento = port / 2;
+    });
   }
 
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Filter } from '../interfaces';
+import { Filter } from '../../interfaces';
 
 @Component({
   selector: 'app-filter',
