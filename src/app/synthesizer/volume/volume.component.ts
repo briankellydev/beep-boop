@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-volume',
@@ -6,7 +6,9 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./volume.component.scss']
 })
 export class VolumeComponent implements OnInit {
+  @Input() playing: boolean;
   @Output() volChanged = new EventEmitter<number>();
+  @Output() playClicked = new EventEmitter<any>();
   vol = 100
 
   constructor() { }
@@ -26,6 +28,10 @@ export class VolumeComponent implements OnInit {
   changes() {
     this.vol = parseInt($(".volume .rs-tooltip").text());
     this.volChanged.emit(this.vol);
+  }
+
+  play() {
+    this.playClicked.emit();
   }
 
 }

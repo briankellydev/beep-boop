@@ -9,6 +9,14 @@
         label, select {
             width: 100%;
         }
+        label {
+            font-size: 12px;
+        }
+    }
+
+    .sequence {
+        height: 450px;
+        overflow-y: scroll;
     }
     
     .note-row {
@@ -27,12 +35,18 @@
         }
         .note {
             text-align: center;
+            background-color: white;
+            color: black;
+            line-height: 15px;
         }
         .step {
             cursor: pointer;
             &.active {
                 background-color: $pink;
             }
+        }
+        .blue-border {
+            border: 2px solid $synthBlue;
         }
     }
 }

@@ -57,11 +57,14 @@ export class StaticSynthComponent implements OnInit {
     feedback: 0,
   };
 
+  partIsRunning = false;
+
   constructor() { }
 
   ngOnInit() {
     this.volume = new Tone.Volume(this.volVal).toMaster();
     this.reverb = new Tone.JCReverb(this.reverbConfig).connect(this.volume);
+    this.reverb.wet.value = 0;
     this.delay = new Tone.FeedbackDelay(this.delayConfig).connect(this.reverb);
     this.delay.wet.value = 0;
     this.distortion = new Tone.Distortion(this.distortionConfig).connect(this.delay);
@@ -75,23 +78,30 @@ export class StaticSynthComponent implements OnInit {
     this.lfo = new Tone.LFO(this.lfoConfig);
     this.envelope = new Tone.Envelope(this.envConfig).connect(this.filter);
     this.lfo.connect(this.filter.frequency);
-    Tone.Transport.bpm.value = 60;
+    Tone.Transport.bpm.value = 120;
   }
 
   toggle() {
+    this.partIsRunning = !this.partIsRunning;
     var part = new Tone.Sequence((time, note) => {
       //the events will be given to the callback with the time they occur
       this.synth.forEach((synth) => {
-        synth.triggerAttackRelease(note, time);
+        synth.triggerAttackRelease(note, "16n", time);
       });
-    }, [this.sequence, '16n']);
-    
-    //start the part at the beginning of the Transport's timeline
-    part.start(0);
-    
+    }, this.sequence, "16n");
     //loop the part 3 times
     part.loop = 100;
-    part.loopEnd = '1m';
+    part.loopStart = 0;
+    // part.loopEnd = '1m';
+    //start the part at the beginning of the Transport's timeline
+    if (this.partIsRunning) {
+      part.start(0);
+    } else {
+      part.stop();
+    }
+    
+    Tone.Transport.loop = true;
+    Tone.Transport.loopEnd = '1m';
     Tone.Transport.toggle();
   }
 
@@ -145,7 +155,7 @@ export class StaticSynthComponent implements OnInit {
   }
 
   changeVerb(roomSize: number) {
-    this.reverb.roomSize.value = roomSize / 100;
+    this.reverb.roomSize.value = roomSize / 200;
   }
 
   toggleVerb(enabled: boolean) {

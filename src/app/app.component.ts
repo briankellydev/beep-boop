@@ -7,15 +7,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'beep-boop';
-  sequence: string[] = [];
 
   constructor() {}
 
   ngOnInit() {
     
-  }
-
-  changeSequence(sequence: string[]) {
-    this.sequence = sequence;
   }
 }

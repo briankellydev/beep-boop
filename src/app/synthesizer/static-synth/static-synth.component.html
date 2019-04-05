@@ -1,7 +1,6 @@
-<div class="static-synth component">
+<div>
   <div class="row no-gutters">
     <div class="col-8">
-      <h2 class="component">BeepBlaster 9000</h2>
       <div class="row no-gutters">
           <div class="col-6">
             <app-oscillator oscNumber="1" (oscChanged)="changeOsc($event, 0)"></app-oscillator>
@@ -16,15 +15,7 @@
       </div>
     </div>
     <div class="col-4">
-      <div class="row no-gutters">
-        <div class="col-6">
-          <app-portamento (portChanged)="changePort($event)"></app-portamento>
-        </div>
-        <div class="col-6">
-          <app-volume (volChanged)="changeVol($event)"></app-volume>
-        </div>
-      </div>
-      
+      <app-volume [playing]="partIsRunning" (volChanged)="changeVol($event)" (playClicked)="toggle()"></app-volume>
       <div class="row no-gutters">
         <div class="col-6">
           <app-distortion (distChanged)="changeDist($event)" (toggleChanged)="toggleDist($event)"></app-distortion>

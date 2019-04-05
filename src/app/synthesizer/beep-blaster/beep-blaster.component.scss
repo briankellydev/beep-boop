@@ -1,0 +1,14 @@
+@import '../../variables.scss';
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
+
+.beep-blaster {
+    background: linear-gradient(to bottom right, $synthBlue, $pink);
+    font-family: 'Orbitron', sans-serif;
+    height: 550px;
+    box-shadow: 2px 2px 2px #DDDDDD;
+    .icon {
+        float: right;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+}

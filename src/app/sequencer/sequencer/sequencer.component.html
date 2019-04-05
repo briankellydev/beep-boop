@@ -1,24 +1,28 @@
 <div class="sequencer component">
   <div class="row no-gutters">
     <div class="col-2 left-menu">
-      <h5>Sequencer</h5>
-      <label>Bottom Note</label>
-      <select name="note" [(ngModel)]="selectedNote">
-        <option *ngFor="let note of notes" [value]="note">
-          {{note}}
-        </option>
-      </select>
-      <label>Lowest Octave</label>
-      <select name="octave" [(ngModel)]="selectedOctave">
-        <option *ngFor="let octave of [0,1,2,3,4,5,6,7]" [value]="octave">
-          {{octave}}
-        </option>
-      </select>
-      <button class="button-primary" (click)="setNotes(selectedNote, selectedOctave)">
-        Update
-      </button>
+      <h5 class="component">Sequencer</h5>
+      <div class="component">
+        <label>Bottom Note</label>
+        <select name="note" [(ngModel)]="selectedNote">
+          <option *ngFor="let note of notes" [value]="note">
+            {{note}}
+          </option>
+        </select>
+        <label>Lowest Octave</label>
+        <select name="octave" [(ngModel)]="selectedOctave">
+          <option *ngFor="let octave of [0,1,2,3,4,5,6,7]" [value]="octave">
+            {{octave}}
+          </option>
+        </select>
+        <div class="center">
+          <button class="button-blue" (click)="setNotes(selectedNote, selectedOctave)">
+            Update
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="col-10">
+    <div class="col-10 sequence">
       <div class="note-row component" *ngFor="let row of noteRows; let rowIdx = index">
         <div class="note component">
           {{row.note}}{{row.octave}}
@@ -26,7 +30,7 @@
         <div
           class="step component"
           *ngFor="let step of row.sequence; let stepIdx = index"
-          [ngClass]="{'active': step === true}"
+          [ngClass]="{'active': step === true, 'blue-border': checkForBlueBorder(stepIdx)}"
           (click)="toggleStep(rowIdx, stepIdx)"
         >
         </div>

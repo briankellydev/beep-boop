@@ -67,6 +67,7 @@ export class SequencerComponent implements OnInit {
       }
       
     });
+    this.compile();
   }
 
   toggleStep(rowIdx: number, noteIdx: number) {
@@ -82,6 +83,14 @@ export class SequencerComponent implements OnInit {
       this.sequence[noteIdx] = null;
     }
     this.sequenceChanged.emit(this.sequence);
+  }
+
+  compile() {
+    // Dis gonna suck
+  }
+
+  checkForBlueBorder(idx: number) {
+    return [0, 4, 8, 12].indexOf(idx) !== -1;
   }
 
 }

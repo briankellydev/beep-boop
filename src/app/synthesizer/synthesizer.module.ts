@@ -13,8 +13,17 @@ import { VolumeComponent } from './volume/volume.component';
 import { MatSlideToggleModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { BeepBlasterComponent } from './beep-blaster/beep-blaster.component';
+import { SequencerModule } from '../sequencer/sequencer.module';
 
 @NgModule({
+  imports: [
+    CommonModule,
+    MatSlideToggleModule,
+    FormsModule,
+    SharedModule,
+    SequencerModule
+  ],
   declarations: [
     DelayComponent,
     DistortionComponent,
@@ -26,15 +35,10 @@ import { SharedModule } from '../shared/shared.module';
     ReverbComponent,
     StaticSynthComponent,
     VolumeComponent,
-  ],
-  imports: [
-    CommonModule,
-    MatSlideToggleModule,
-    FormsModule,
-    SharedModule,
+    BeepBlasterComponent,
   ],
   exports: [
-    StaticSynthComponent
+    BeepBlasterComponent
   ]
 })
 export class SynthesizerModule { }
