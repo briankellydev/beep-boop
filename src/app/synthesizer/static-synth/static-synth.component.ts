@@ -1,15 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import * as Tone from 'tone';
 import { Oscillator, Envelope, LFO, Filter } from '../../interfaces';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-static-synth',
   templateUrl: './static-synth.component.html',
   styleUrls: ['./static-synth.component.scss']
 })
-export class StaticSynthComponent implements OnInit {
+export class StaticSynthComponent implements OnInit, OnDestroy {
 
   @Input() sequence: string[];
+  @Input() playing: BehaviorSubject<boolean>;
+  @Output() togglePlay = new EventEmitter<boolean>();
 
   synth: any[]; // TODO typing?
   filter: any;
@@ -59,6 +63,8 @@ export class StaticSynthComponent implements OnInit {
 
   partIsRunning = false;
 
+  private destroy$ = new Subject<any>();
+
   constructor() { }
 
   ngOnInit() {
@@ -79,21 +85,30 @@ export class StaticSynthComponent implements OnInit {
     this.envelope = new Tone.Envelope(this.envConfig).connect(this.filter);
     this.lfo.connect(this.filter.frequency);
     Tone.Transport.bpm.value = 120;
+    this.playing.pipe(takeUntil(this.destroy$)).subscribe((playing: boolean) => {
+      if (playing !== this.partIsRunning) {
+        this.partIsRunning = playing;
+        this.toggle();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
   }
 
   toggle() {
-    this.partIsRunning = !this.partIsRunning;
-    var part = new Tone.Sequence((time, note) => {
-      //the events will be given to the callback with the time they occur
+    const part = new Tone.Sequence((time, note) => {
+      // the events will be given to the callback with the time they occur
       this.synth.forEach((synth) => {
-        synth.triggerAttackRelease(note, "16n", time);
+        synth.triggerAttackRelease(note, '16n', time);
       });
-    }, this.sequence, "16n");
-    //loop the part 3 times
+    }, this.sequence, '16n');
+
     part.loop = 100;
     part.loopStart = 0;
     // part.loopEnd = '1m';
-    //start the part at the beginning of the Transport's timeline
+    // start the part at the beginning of the Transport's timeline
     if (this.partIsRunning) {
       part.start(0);
     } else {
@@ -103,6 +118,11 @@ export class StaticSynthComponent implements OnInit {
     Tone.Transport.loop = true;
     Tone.Transport.loopEnd = '1m';
     Tone.Transport.toggle();
+  }
+
+  playClicked(playing: boolean) {
+    this.togglePlay.emit(playing);
+    this.playing.next(playing);
   }
 
   changeVol(vol: number) {

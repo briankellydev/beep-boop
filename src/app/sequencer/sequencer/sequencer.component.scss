@@ -12,6 +12,37 @@
         label {
             font-size: 12px;
         }
+        select {
+            border: 1px solid $synthBlue;
+        }
+        button {
+            cursor: pointer;
+        }
+        .pattern-button {
+            background-color: $synthBlue;
+            border: 1px solid black;
+            border-radius: 5px;
+            color: black;
+            text-align: center;
+            padding: 5px 0;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            &.active {
+                background-color: white;
+            }
+        }
+        .play {
+            background: white;
+            border-radius: 50%;
+            height: 70px;
+            width: 70px;
+            border: 1px solid $synthBlue;
+            margin: auto;
+            padding-top: 10px;
+            cursor: pointer;
+            text-align: center;
+          }
     }
 
     .sequence {

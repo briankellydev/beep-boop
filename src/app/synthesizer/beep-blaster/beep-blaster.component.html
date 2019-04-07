@@ -6,6 +6,16 @@
       <i [ngStyle]="{'display': showSequencer ? 'block' : 'none'}" class="fa fa-lg fa-music"></i>
     </div>
   </h2>
-  <app-static-synth [ngStyle]="{'display': showSequencer ? 'none' : 'block'}" [sequence]="sequence"></app-static-synth>
-  <app-sequencer [ngStyle]="{'display': showSequencer ? 'block' : 'none'}" (sequenceChanged)="changeSequence($event)"></app-sequencer>
+  <app-static-synth
+    [playing]="playingSubject$"
+    [ngStyle]="{'display': showSequencer ? 'none' : 'block'}"
+    [sequence]="sequence"
+    (togglePlay)="play()">
+  </app-static-synth>
+  <app-sequencer
+    [playing]="playing"
+    [ngStyle]="{'display': showSequencer ? 'block' : 'none'}"
+    (sequenceChanged)="changeSequence($event)"
+    (togglePlay)="play()">
+  </app-sequencer>
 </div>

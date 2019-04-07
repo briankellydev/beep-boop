@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-beep-blaster',
@@ -7,8 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BeepBlasterComponent implements OnInit {
 
-  sequence: string[] = [];
+  sequence: string[];
   showSequencer = false;
+  playing = false;
+  playingSubject$ = new BehaviorSubject<boolean>(false);
 
   constructor() { }
 
@@ -21,6 +24,11 @@ export class BeepBlasterComponent implements OnInit {
 
   toggleSequencer() {
     this.showSequencer = !this.showSequencer;
+  }
+
+  play() {
+    this.playing = !this.playing;
+    this.playingSubject$.next(this.playing);
   }
 
 }

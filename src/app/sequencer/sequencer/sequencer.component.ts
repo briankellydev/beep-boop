@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FalseRows, NoteSequence, NullSequence } from 'src/app/constants';
-import { NoteRow } from 'src/app/interfaces';
+import { NoteRow, Pattern } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-sequencer',
@@ -9,7 +9,10 @@ import { NoteRow } from 'src/app/interfaces';
 })
 export class SequencerComponent implements OnInit {
 
+  @Input() playing: boolean;
+
   @Output() sequenceChanged = new EventEmitter<string[]>();
+  @Output() togglePlay = new EventEmitter<boolean>();
 
   notes = Object.assign([], NoteSequence).reverse();
   selectedNote: string;
@@ -43,12 +46,22 @@ export class SequencerComponent implements OnInit {
     {note: 'C', octave: '3', sequence: Object.assign([], FalseRows)},
   ];
 
-  sequence = Object.assign([], NullSequence);
+  activePattern: Pattern = null;
+  patterns: Pattern[] = [];
 
   constructor() { }
 
   ngOnInit() {
-    this.setNotes('C', '3');
+    for (let i = 0; i < 9; i++) {
+      this.patterns.push({
+        num: i,
+        lowestNote: 'C',
+        lowestOctave: '3',
+        sequence: Object.assign([], NullSequence),
+      });
+    }
+    this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
+    this.setPattern(0);
   }
 
   // Bottom note/octave
@@ -65,9 +78,9 @@ export class SequencerComponent implements OnInit {
         row.octave = topOctave.toString();
         topOctave--;
       }
-      
     });
-    this.compile();
+    this.activePattern.lowestNote = startingNote;
+    this.activePattern.lowestOctave = octave;
   }
 
   toggleStep(rowIdx: number, noteIdx: number) {
@@ -78,19 +91,57 @@ export class SequencerComponent implements OnInit {
           row.sequence[noteIdx] = false;
         }
       });
-      this.sequence[noteIdx] = this.noteRows[rowIdx].note + this.noteRows[rowIdx].octave;
+      this.activePattern.sequence[noteIdx] = this.noteRows[rowIdx].note + this.noteRows[rowIdx].octave;
     } else {
-      this.sequence[noteIdx] = null;
+      this.activePattern.sequence[noteIdx] = null;
     }
-    this.sequenceChanged.emit(this.sequence);
-  }
-
-  compile() {
-    // Dis gonna suck
+    this.sequenceChanged.emit(this.activePattern.sequence);
   }
 
   checkForBlueBorder(idx: number) {
     return [0, 4, 8, 12].indexOf(idx) !== -1;
+  }
+
+  play() {
+    this.playing = !this.playing;
+    this.togglePlay.emit(this.playing);
+  }
+
+  setPattern(pattern: number) {
+    // Compile active pattern into its corresponding this.patterns
+    this.compile();
+    // Set the new active pattern
+    this.activePattern = JSON.parse(JSON.stringify(this.patterns[pattern]));
+    // Build the sequencer from the new pattern
+    this.convertPatternToSequencer();
+    // Emit the new sequence to the instrument
+    this.sequenceChanged.emit(this.activePattern.sequence);
+  }
+
+  private compile() {
+    this.noteRows.forEach((row: NoteRow, index: number) => {
+      row.sequence.forEach((enabled: boolean, noteIdx: number) => {
+        if (enabled) {
+          this.activePattern.sequence[noteIdx] = row.note + row.octave;
+        }
+      });
+    });
+    this.patterns[this.activePattern.num] = JSON.parse(JSON.stringify(this.activePattern));
+  }
+
+  private convertPatternToSequencer() {
+    this.setNotes(this.activePattern.lowestNote, this.activePattern.lowestOctave);
+    this.noteRows.forEach((row: NoteRow) => {
+      row.sequence = Object.assign([], FalseRows);
+    });
+    this.activePattern.sequence.forEach((note: string, index: number) => {
+      const noteRowIndex = this.noteRows.findIndex((noteRow: NoteRow) => {
+        return noteRow.note + noteRow.octave === note;
+      });
+      if (noteRowIndex !== -1) {
+        this.noteRows[noteRowIndex].sequence[index] = true;
+      }
+    });
   }
 
 }

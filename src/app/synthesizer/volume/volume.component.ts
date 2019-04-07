@@ -8,16 +8,16 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 export class VolumeComponent implements OnInit {
   @Input() playing: boolean;
   @Output() volChanged = new EventEmitter<number>();
-  @Output() playClicked = new EventEmitter<any>();
+  @Output() playClicked = new EventEmitter<boolean>();
   vol = 100
 
   constructor() { }
 
   ngOnInit() {
-    $(".volume-slider").roundSlider({
+    $('.volume-slider').roundSlider({
       radius: 40,
-      circleShape: "default",
-      sliderType: "min-range",
+      circleShape: 'default',
+      sliderType: 'min-range',
       showTooltip: true,
       value: this.vol / 100,
       min: -50,
@@ -26,12 +26,13 @@ export class VolumeComponent implements OnInit {
   }
 
   changes() {
-    this.vol = parseInt($(".volume .rs-tooltip").text());
+    this.vol = parseInt($('.volume .rs-tooltip').text());
     this.volChanged.emit(this.vol);
   }
 
   play() {
-    this.playClicked.emit();
+    this.playing = !this.playing;
+    this.playClicked.emit(this.playing);
   }
 
 }

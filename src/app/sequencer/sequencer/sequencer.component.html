@@ -21,6 +21,26 @@
           </button>
         </div>
       </div>
+      <div class="component">
+        <h5>Pattern</h5>
+        <div class="row no-gutters" *ngFor="let row of [0, 1, 2]">
+          <div class="col-4" *ngFor="let button of [1, 2, 3]">
+              <div
+                class="pattern-button"
+                [ngClass]="{'active': activePattern.num === button - 1 + (3 * row)}"
+                (click)="setPattern(button - 1 + (3 * row))"
+                >
+                {{button + ( 3 * row)}}
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="component">
+        <div class="play" (click)="play()">
+          <i *ngIf="!playing" class="fa fa-play fa-3x"></i>
+          <i *ngIf="playing" class="fa fa-pause fa-3x"></i>
+        </div>
+      </div>
     </div>
     <div class="col-10 sequence">
       <div class="note-row component" *ngFor="let row of noteRows; let rowIdx = index">

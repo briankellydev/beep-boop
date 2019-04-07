@@ -38,3 +38,10 @@ export interface NoteRow {
   octave: string;
   sequence: boolean[];
 };
+
+export interface Pattern {
+  num: number;
+  lowestNote: string;
+  lowestOctave: string;
+  sequence: string[];
+}
