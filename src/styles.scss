@@ -3,7 +3,6 @@
 @import './assets/font-awesome/css/font-awesome.min.css';
 @import './assets/indigo-pink.css';
 @import './app/variables.scss';
-@import url('https://fonts.googleapis.com/css?family=Orbitron');
 
 round-slider {
     display: block;
@@ -72,13 +71,16 @@ round-slider {
     line-height: 25px;
   }
 
+  .subtitle {
+    font-size: 12px;
+  }
+
   .component {
     border: 1px solid black;
     padding: 10px;
     border-radius: 3px;
     margin: 5px;
     background-color: $grayBg;
-    color: $synthBlue;
     mat-slide-toggle {
       float: right;
     }
@@ -97,7 +99,6 @@ round-slider {
     background-color: $synthBlue;
     color: black;
     margin: 5px 0;
-    font-family: 'Orbitron', sans-serif;
   }
 
   .center {

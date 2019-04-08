@@ -1,0 +1,14 @@
+@import '../../variables.scss';
+@import url('https://fonts.googleapis.com/css?family=Play');
+
+.boom-boom {
+    background-color: $closeToBlack;
+    box-shadow: 2px 2px 2px #DDDDDD;
+    font-family: 'Play', sans-serif;
+    color: $drumMachineRed;
+    .icon {
+        float: right;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+}

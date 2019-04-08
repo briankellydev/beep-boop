@@ -37,11 +37,26 @@ export interface NoteRow {
   note: string;
   octave: string;
   sequence: boolean[];
-};
+}
 
 export interface Pattern {
   num: number;
-  lowestNote: string;
-  lowestOctave: string;
+  lowestNote?: string;
+  lowestOctave?: string;
   sequence: string[];
+}
+
+export interface PolyPattern {
+  num: number;
+  sequence: Array<string[]>
+}
+
+export interface DrumMachineSample {
+  sampleName: string;
+  possibleSamples: string[];
+  trackName: string;
+}
+
+export interface DrumRow extends NoteRow {
+  drum: string;
 }

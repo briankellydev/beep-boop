@@ -1,0 +1,14 @@
+<div class="boom-boom component" [ngStyle]="{'height': collapsed ? auto : '385px'}">
+  <h2 class="component">
+    Boom-Boom <span class="subtitle">Drum Machine</span>
+    <div class="icon" (click)="toggleCollapsed()">
+      <i *ngIf="!collapsed" class="fa fa-lg fa-chevron-down"></i>
+      <i *ngIf="collapsed" class="fa fa-lg fa-chevron-right"></i>
+    </div>
+  </h2>
+  <div *ngIf="!collapsed">
+    <app-drum-machine>
+    </app-drum-machine>
+  </div>
+  
+</div>

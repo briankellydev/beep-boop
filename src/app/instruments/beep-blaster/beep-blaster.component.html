@@ -1,0 +1,28 @@
+<div class="beep-blaster component" [ngStyle]="{'height': collapsed ? auto : '550px'}">
+  <h2 class="component">
+    BeepBlaster 9000 <span class="subtitle">Analog-Style Synthesizer</span>
+    <div class="icon" (click)="toggleCollapsed()">
+      <i *ngIf="!collapsed" class="fa fa-lg fa-chevron-down"></i>
+      <i *ngIf="collapsed" class="fa fa-lg fa-chevron-right"></i>
+    </div>
+    <div *ngIf="!collapsed" class="icon" (click)="toggleSequencer()">
+      <i *ngIf="!showSequencer" class="fa fa-lg fa-braille"></i>
+      <i *ngIf="showSequencer" class="fa fa-lg fa-music"></i>
+    </div>
+  </h2>
+  <div *ngIf="!collapsed">
+    <app-static-synth
+      [playing]="playingSubject$"
+      [ngStyle]="{'display': showSequencer ? 'none' : 'block'}"
+      [sequence]="sequence"
+      (togglePlay)="play()">
+    </app-static-synth>
+    <app-sequencer
+      [playing]="playing"
+      [ngStyle]="{'display': showSequencer ? 'block' : 'none'}"
+      (sequenceChanged)="changeSequence($event)"
+      (togglePlay)="play()">
+    </app-sequencer>
+  </div>
+  
+</div>

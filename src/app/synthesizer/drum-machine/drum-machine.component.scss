@@ -1,0 +1,75 @@
+@import '../../variables.scss';
+.left-menu {
+    background-color: $gray;
+    .pattern-button {
+        background-color: $drumMachineRed;
+        border: 1px solid $closeToBlack;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        text-align: center;
+        &.active {
+            background-color: white;
+            color: $closeToBlack;
+        }
+    }
+    .play {
+        background: $closeToBlack;
+        border-radius: 50%;
+        height: 70px;
+        width: 70px;
+        border: 1px solid $drumMachineRed;
+        margin: auto;
+        padding-top: 10px;
+        cursor: pointer;
+        text-align: center;
+      }
+}
+.kits {
+    label {
+        padding-left: 5px;
+    }
+    .kit {
+        background-color: $drumMachineRed;
+        color: white;
+        cursor: pointer;
+        text-align: center;
+        padding: 5px;
+        &.active {
+            background-color: white;
+            color: black;
+        }
+    }
+}
+
+
+.note-row {
+    padding: 0;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: $gray;
+    height: 25px;
+    .note, .step {
+        height: 15px;
+        width: 4.5%;
+        margin: 5px 0.6%;
+        float: left;
+        padding: 0;
+        font-size: 10px;
+    }
+    .note {
+        text-align: center;
+        background-color: white;
+        color: black;
+        line-height: 15px;
+    }
+    .step {
+        cursor: pointer;
+        &.active {
+            background-color: $drumMachineRed;
+        }
+    }
+    .border {
+        border: 2px solid $drumMachineOrange;
+    }
+}

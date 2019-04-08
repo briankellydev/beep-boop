@@ -7,8 +7,7 @@ import { AppComponent } from './app.component';
 import { AudioService } from './audio.service';
 import { SynthService } from './synth.service';
 import { MatSlideToggleModule } from '@angular/material';
-import { SynthesizerModule } from './synthesizer/synthesizer.module';
-import { SequencerModule } from './sequencer/sequencer.module';
+import { InstrumentsModule } from './instruments/instruments.module';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { SequencerModule } from './sequencer/sequencer.module';
     FormsModule,
     AppRoutingModule,
     MatSlideToggleModule,
-    SynthesizerModule,
-    SequencerModule
+    InstrumentsModule,
   ],
   providers: [AudioService, SynthService],
   bootstrap: [AppComponent]

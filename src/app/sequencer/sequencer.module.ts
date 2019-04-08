@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   exports: [
-      SequencerComponent
+      SequencerComponent,
   ]
 })
 export class SequencerModule { }

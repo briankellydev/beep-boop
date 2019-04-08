@@ -12,6 +12,7 @@ export class BeepBlasterComponent implements OnInit {
   showSequencer = false;
   playing = false;
   playingSubject$ = new BehaviorSubject<boolean>(false);
+  collapsed = true;
 
   constructor() { }
 
@@ -24,6 +25,10 @@ export class BeepBlasterComponent implements OnInit {
 
   toggleSequencer() {
     this.showSequencer = !this.showSequencer;
+  }
+
+  toggleCollapsed() {
+    this.collapsed = !this.collapsed;
   }
 
   play() {
