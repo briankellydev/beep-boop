@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ComponentRef } from '@angular/core';
+import { SynthService } from 'src/app/shared/synth.service';
 
 @Component({
   selector: 'app-boom-boom',
@@ -7,11 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BoomBoomComponent implements OnInit {
 
-  collapsed = false;
+  collapsed = true;
   playing = false;
   showSequencer = false;
+  instanceNumber: number;
 
-  constructor() { }
+  constructor(private synthService: SynthService) { }
 
   ngOnInit() {
   }
@@ -20,16 +22,8 @@ export class BoomBoomComponent implements OnInit {
     this.collapsed = !this.collapsed;
   }
 
-  toggleSequencer() {
-    this.showSequencer = !this.showSequencer;
-  }
-
-  changeSequence() {
-
-  }
-
-  play() {
-    
+  destroy() {
+    this.synthService.instanceToDelete.next(this.instanceNumber);
   }
 
 }

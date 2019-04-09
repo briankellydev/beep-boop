@@ -5,8 +5,11 @@
       <i *ngIf="!collapsed" class="fa fa-lg fa-chevron-down"></i>
       <i *ngIf="collapsed" class="fa fa-lg fa-chevron-right"></i>
     </div>
+    <div class="icon" (click)="destroy()">
+      <i class="fa fa-lg fa-trash"></i>
+    </div>
   </h2>
-  <div *ngIf="!collapsed">
+  <div [ngStyle]="{'display': collapsed ? 'none' : 'block'}">
     <app-drum-machine>
     </app-drum-machine>
   </div>

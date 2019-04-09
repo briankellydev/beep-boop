@@ -81,6 +81,7 @@ export class SequencerComponent implements OnInit {
     });
     this.activePattern.lowestNote = startingNote;
     this.activePattern.lowestOctave = octave;
+    this.compile();
   }
 
   toggleStep(rowIdx: number, noteIdx: number) {

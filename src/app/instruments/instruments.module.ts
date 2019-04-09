@@ -4,6 +4,7 @@ import { BeepBlasterComponent } from './beep-blaster/beep-blaster.component';
 import { SequencerModule } from '../sequencer/sequencer.module';
 import { SynthesizerModule } from '../synthesizer/synthesizer.module';
 import { BoomBoomComponent } from './boom-boom/boom-boom.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -14,8 +15,13 @@ import { BoomBoomComponent } from './boom-boom/boom-boom.component';
     CommonModule,
     SequencerModule,
     SynthesizerModule,
+    SharedModule,
   ],
   exports: [
+    BeepBlasterComponent,
+    BoomBoomComponent
+  ],
+  entryComponents: [
     BeepBlasterComponent,
     BoomBoomComponent
   ]

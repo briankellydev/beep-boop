@@ -4,14 +4,18 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AudioService } from './audio.service';
-import { SynthService } from './synth.service';
 import { MatSlideToggleModule } from '@angular/material';
 import { InstrumentsModule } from './instruments/instruments.module';
+import { RackComponent } from './components/rack/rack.component';
+import { TimelineComponent } from './components/timeline/timeline.component';
+import { TransportComponent } from './components/transport/transport.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    RackComponent,
+    TimelineComponent,
+    TransportComponent,
   ],
   imports: [
     BrowserModule,
@@ -20,7 +24,7 @@ import { InstrumentsModule } from './instruments/instruments.module';
     MatSlideToggleModule,
     InstrumentsModule,
   ],
-  providers: [AudioService, SynthService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

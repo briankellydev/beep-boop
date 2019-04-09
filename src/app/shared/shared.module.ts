@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RedLightComponent } from './red-light/red-light.component';
+import { SynthService } from './synth.service';
 
 @NgModule({
   declarations: [
@@ -11,6 +12,9 @@ import { RedLightComponent } from './red-light/red-light.component';
   ],
   exports: [
     RedLightComponent,
+  ],
+  providers: [
+    SynthService,
   ]
 })
 export class SharedModule { }

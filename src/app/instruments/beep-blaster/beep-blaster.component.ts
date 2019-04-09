@@ -1,5 +1,7 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ComponentRef, Input } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SynthService } from 'src/app/shared/synth.service';
+import { NullSequence } from 'src/app/constants';
 
 @Component({
   selector: 'app-beep-blaster',
@@ -8,13 +10,14 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class BeepBlasterComponent implements OnInit {
 
-  sequence: string[];
+  sequence: string[] = JSON.parse(JSON.stringify(NullSequence));
   showSequencer = false;
   playing = false;
   playingSubject$ = new BehaviorSubject<boolean>(false);
   collapsed = true;
+  instanceNumber: number;
 
-  constructor() { }
+  constructor(private synthService: SynthService) { }
 
   ngOnInit() {
   }
@@ -34,6 +37,10 @@ export class BeepBlasterComponent implements OnInit {
   play() {
     this.playing = !this.playing;
     this.playingSubject$.next(this.playing);
+  }
+
+  destroy() {
+    this.synthService.instanceToDelete.next(this.instanceNumber);
   }
 
 }

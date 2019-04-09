@@ -3,6 +3,11 @@
 @import './assets/font-awesome/css/font-awesome.min.css';
 @import './assets/indigo-pink.css';
 @import './app/variables.scss';
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+* {
+  font-family: 'Open Sans', sans-serif;
+}
 
 round-slider {
     display: block;
