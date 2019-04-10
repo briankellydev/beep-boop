@@ -1,4 +1,4 @@
-<div class="beep-blaster component" [ngStyle]="{'height': collapsed ? auto : '550px'}">
+<div class="beep-blaster component" [ngStyle]="{'height': collapsed ? auto : '565px'}">
   <h2 class="component">
     BeepBlaster 9000 <span class="subtitle">Analog-Style Synthesizer</span>
     <div class="icon" (click)="toggleCollapsed()">
@@ -15,13 +15,11 @@
   </h2>
   <div [ngStyle]="{'display': collapsed ? 'none' : 'block'}">
     <app-static-synth
-      [playing]="playingSubject$"
       [ngStyle]="{'display': showSequencer ? 'none' : 'block'}"
       [sequence]="sequence"
       (togglePlay)="play()">
     </app-static-synth>
     <app-sequencer
-      [playing]="playing"
       [ngStyle]="{'display': showSequencer ? 'block' : 'none'}"
       (sequenceChanged)="changeSequence($event)"
       (togglePlay)="play()">

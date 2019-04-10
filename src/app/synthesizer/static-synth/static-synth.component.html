@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="col-4">
-      <app-volume [playing]="partIsRunning" (volChanged)="changeVol($event)" (playClicked)="playClicked($event)"></app-volume>
+      <app-volume (volChanged)="changeVol($event)"></app-volume>
       <div class="row no-gutters">
         <div class="col-6">
           <app-distortion (distChanged)="changeDist($event)" (toggleChanged)="toggleDist($event)"></app-distortion>

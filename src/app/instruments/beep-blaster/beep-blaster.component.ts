@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, ComponentRef, Input } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { SynthService } from 'src/app/shared/synth.service';
 import { NullSequence } from 'src/app/constants';
 
@@ -8,18 +8,21 @@ import { NullSequence } from 'src/app/constants';
   templateUrl: './beep-blaster.component.html',
   styleUrls: ['./beep-blaster.component.scss']
 })
-export class BeepBlasterComponent implements OnInit {
+export class BeepBlasterComponent implements OnInit, OnDestroy {
 
   sequence: string[] = JSON.parse(JSON.stringify(NullSequence));
   showSequencer = false;
-  playing = false;
-  playingSubject$ = new BehaviorSubject<boolean>(false);
   collapsed = true;
   instanceNumber: number;
+  destroy$ = new Subject<any>();
 
   constructor(private synthService: SynthService) { }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
   }
 
   changeSequence(sequence: string[]) {
@@ -32,11 +35,6 @@ export class BeepBlasterComponent implements OnInit {
 
   toggleCollapsed() {
     this.collapsed = !this.collapsed;
-  }
-
-  play() {
-    this.playing = !this.playing;
-    this.playingSubject$.next(this.playing);
   }
 
   destroy() {

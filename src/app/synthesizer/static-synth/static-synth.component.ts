@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import * as Tone from 'tone';
 import { Oscillator, Envelope, LFO, Filter } from '../../interfaces';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SynthService } from 'src/app/shared/synth.service';
 
 @Component({
   selector: 'app-static-synth',
@@ -12,7 +12,6 @@ import { takeUntil } from 'rxjs/operators';
 export class StaticSynthComponent implements OnInit, OnDestroy {
 
   @Input() sequence: string[];
-  @Input() playing: BehaviorSubject<boolean>;
   @Output() togglePlay = new EventEmitter<boolean>();
 
   synth: any[]; // TODO typing?
@@ -61,11 +60,12 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     feedback: 0,
   };
 
-  partIsRunning = false;
+  globalPlaying = false;
+  part: any;
 
   private destroy$ = new Subject<any>();
 
-  constructor() { }
+  constructor(private synthService: SynthService) { }
 
   ngOnInit() {
     this.volume = new Tone.Volume(this.volVal).toMaster();
@@ -84,45 +84,45 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     this.lfo = new Tone.LFO(this.lfoConfig);
     this.envelope = new Tone.Envelope(this.envConfig).connect(this.filter);
     this.lfo.connect(this.filter.frequency);
-    Tone.Transport.bpm.value = 120;
-    this.playing.pipe(takeUntil(this.destroy$)).subscribe((playing: boolean) => {
-      if (playing !== this.partIsRunning) {
-        this.partIsRunning = playing;
-        this.toggle();
-      }
+
+    this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
+      this.globalPlaying = isPlaying;
+      this.toggle();
     });
   }
 
   ngOnDestroy() {
+    this.synth.forEach((synth: any) => {
+      synth.dispose();
+    });
+    this.synth = [];
+    this.volume.dispose();
+    this.reverb.dispose();
+    this.delay.dispose();
+    this.distortion.dispose();
+    this.filter.dispose();
+    this.lfo.dispose();
+    this.envelope.dispose();
+    this.part.dispose();
     this.destroy$.next();
   }
 
   toggle() {
-    const part = new Tone.Sequence((time, note) => {
+    this.part = new Tone.Sequence((time, note) => {
       // the events will be given to the callback with the time they occur
       this.synth.forEach((synth) => {
         synth.triggerAttackRelease(note, '16n', time);
       });
     }, this.sequence, '16n');
-
-    part.loop = 100;
-    part.loopStart = 0;
+    this.part.loop = 100;
+    this.part.loopStart = 0;
     // part.loopEnd = '1m';
     // start the part at the beginning of the Transport's timeline
-    if (this.partIsRunning) {
-      part.start(0);
+    if (this.globalPlaying) {
+      this.part.start(0);
     } else {
-      part.stop();
+      this.part.stop();
     }
-    
-    Tone.Transport.loop = true;
-    Tone.Transport.loopEnd = '1m';
-    Tone.Transport.toggle();
-  }
-
-  playClicked(playing: boolean) {
-    this.togglePlay.emit(playing);
-    this.playing.next(playing);
   }
 
   changeVol(vol: number) {

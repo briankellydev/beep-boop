@@ -6,8 +6,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SynthService {
 
-  // synthJson = new BehaviorSubject<Synth>(BasicSynth);
   instanceToDelete = new BehaviorSubject<number>(null);
+  playing = new BehaviorSubject<boolean>(false);
 
   constructor() { }
 }

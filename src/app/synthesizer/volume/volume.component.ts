@@ -6,10 +6,9 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
   styleUrls: ['./volume.component.scss']
 })
 export class VolumeComponent implements OnInit {
-  @Input() playing: boolean;
+
   @Output() volChanged = new EventEmitter<number>();
-  @Output() playClicked = new EventEmitter<boolean>();
-  vol = 100
+  vol = 100;
 
   constructor() { }
 
@@ -28,11 +27,6 @@ export class VolumeComponent implements OnInit {
   changes() {
     this.vol = parseInt($('.volume .rs-tooltip').text());
     this.volChanged.emit(this.vol);
-  }
-
-  play() {
-    this.playing = !this.playing;
-    this.playClicked.emit(this.playing);
   }
 
 }

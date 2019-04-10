@@ -9,8 +9,6 @@ import { NoteRow, Pattern } from 'src/app/interfaces';
 })
 export class SequencerComponent implements OnInit {
 
-  @Input() playing: boolean;
-
   @Output() sequenceChanged = new EventEmitter<string[]>();
   @Output() togglePlay = new EventEmitter<boolean>();
 
@@ -101,11 +99,6 @@ export class SequencerComponent implements OnInit {
 
   checkForBlueBorder(idx: number) {
     return [0, 4, 8, 12].indexOf(idx) !== -1;
-  }
-
-  play() {
-    this.playing = !this.playing;
-    this.togglePlay.emit(this.playing);
   }
 
   setPattern(pattern: number) {

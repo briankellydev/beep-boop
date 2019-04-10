@@ -1,13 +1,16 @@
-import { Component, OnInit, } from '@angular/core';
+import { Component, OnInit, OnDestroy, } from '@angular/core';
 import { DrumMachineSample, DrumRow, PolyPattern } from 'src/app/interfaces';
 import { FalseRows, NullSequence } from 'src/app/constants';
+import { SynthService } from 'src/app/shared/synth.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-drum-machine',
   templateUrl: './drum-machine.component.html',
   styleUrls: ['./drum-machine.component.scss']
 })
-export class DrumMachineComponent implements OnInit {
+export class DrumMachineComponent implements OnInit, OnDestroy {
 
   drumMachineSamples: DrumMachineSample[] = [
     {
@@ -85,7 +88,7 @@ export class DrumMachineComponent implements OnInit {
 
   activePattern: PolyPattern = null;
   patterns: PolyPattern[] = [];
-  playing = false;
+  globalPlaying = false;
   collapsed = false;
 
   drumMachine: any[];
@@ -97,8 +100,11 @@ export class DrumMachineComponent implements OnInit {
   };
 
   selectedKit: string;
+  parts: any[] = [];
 
-  constructor() { }
+  private destroy$ = new Subject<any>();
+
+  constructor(private synthService: SynthService) { }
 
   ngOnInit() {
     this.selectKit(this.DRUM_KITS['808']);
@@ -117,7 +123,20 @@ export class DrumMachineComponent implements OnInit {
     }
     this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
     this.setPattern(0);
-    Tone.Transport.bpm.value = 120;
+    this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
+      this.globalPlaying = isPlaying;
+      this.toggle();
+    });
+  }
+
+  ngOnDestroy() {
+    this.drumMachine.forEach((synth: any) => {
+      synth.dispose();
+    });
+    this.parts.forEach((part: any) => {
+      part.dispose();
+    });
+    this.destroy$.next();
   }
 
   selectKit(kit: string) {
@@ -244,7 +263,6 @@ export class DrumMachineComponent implements OnInit {
       ];
       break;
     }
-    
   }
   
   toggleStep(rowIdx: number, noteIdx: number) {
@@ -254,38 +272,28 @@ export class DrumMachineComponent implements OnInit {
   }
 
   toggle() {
-    const parts = [];
     for (let i = 0; i < 6; i++) {
-      parts.push(new Tone.Sequence((time, note) => {
+      this.parts.push(new Tone.Sequence((time, note) => {
         // the events will be given to the callback with the time they occur
         this.drumMachine[i].triggerAttackRelease(note, '16n', time);
       }, this.activePattern.sequence[i], '16n'));
-      parts[i].loop = 100;
-      parts[i].loopStart = 0;
+      this.parts[i].loop = 100;
+      this.parts[i].loopStart = 0;
     }
     
     // part.loopEnd = '1m';
     // start the part at the beginning of the Transport's timeline
-    parts.forEach((part) => {
-      if (this.playing) {
+    this.parts.forEach((part) => {
+      if (this.globalPlaying) {
         part.start(0);
       } else {
         part.stop();
       }
     });
-    
-    Tone.Transport.loop = true;
-    Tone.Transport.loopEnd = '1m';
-    Tone.Transport.toggle();
   }
 
   checkForBlueBorder(idx: number) {
     return [0, 4, 8, 12].indexOf(idx) !== -1;
-  }
-
-  play() {
-    this.playing = !this.playing;
-    this.toggle();
   }
 
   setPattern(pattern: number) {

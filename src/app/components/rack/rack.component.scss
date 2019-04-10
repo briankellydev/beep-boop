@@ -33,13 +33,13 @@
         background: linear-gradient(to bottom right, $synthBlue, $pink);
     }
     .beep-blaster:hover {
-        background: linear-gradient(to bottom right, $synthBlue, $pink);
+        background: linear-gradient(to bottom right, $pink, $synthBlue);
     }
     .boom-boom:hover {
         background: linear-gradient(to bottom right, $closeToBlack, $drumMachineRed);
     }
 
     .boom-boom .component {
-        background: linear-gradient(to bottom right, $closeToBlack, $drumMachineRed);
+        background: linear-gradient(to bottom right, $drumMachineRed, $closeToBlack);
     }
 }

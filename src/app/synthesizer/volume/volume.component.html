@@ -1,15 +1,10 @@
 <div class="volume component">
   <div class="row">
+    <div class="col-6"></div>
     <div class="col-6">
       <h5>Volume</h5>
       <div class="sliders">
         <div (mouseup)="changes()" class="volume-slider"></div>
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="play" (click)="play()">
-        <i *ngIf="!playing" class="fa fa-play fa-3x"></i>
-        <i *ngIf="playing" class="fa fa-pause fa-3x"></i>
       </div>
     </div>
   </div>

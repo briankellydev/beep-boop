@@ -7,10 +7,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'beep-boop';
+  showTimeline = false;
 
   constructor() {}
 
   ngOnInit() {
     
+  }
+
+  toggleTimeline(enabled: boolean) {
+    this.showTimeline = enabled;
   }
 }

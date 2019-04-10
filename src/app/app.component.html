@@ -1,3 +1,5 @@
-<div>
-  <app-rack></app-rack>
+<div class="app">
+  <app-rack *ngIf="!showTimeline"></app-rack>
+  <app-timeline *ngIf="showTimeline"></app-timeline>
+  <app-transport (timelineToggled)="toggleTimeline($event)"></app-transport>
 </div>
