@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Oscillator, Envelope, LFO, Filter } from '../../interfaces';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, DoCheck } from '@angular/core';
+import { Oscillator, Envelope, LFO, Filter, TimelineTrack, Pattern } from '../../interfaces';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { SynthService } from 'src/app/shared/synth.service';
+import { NullSequence } from 'src/app/constants';
 
 @Component({
   selector: 'app-static-synth',
@@ -11,7 +12,8 @@ import { SynthService } from 'src/app/shared/synth.service';
 })
 export class StaticSynthComponent implements OnInit, OnDestroy {
 
-  @Input() sequence: string[];
+  @Input() patterns: Pattern[];
+  @Input() instanceNumber: number;
   @Output() togglePlay = new EventEmitter<boolean>();
 
   synth: any[]; // TODO typing?
@@ -61,9 +63,12 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
   };
 
   globalPlaying = false;
+  parts: any[] = [];
   part: any;
 
   private destroy$ = new Subject<any>();
+  private tracksIndex: number;
+  private tracks: TimelineTrack[];
 
   constructor(private synthService: SynthService) { }
 
@@ -85,9 +90,15 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     this.envelope = new Tone.Envelope(this.envConfig).connect(this.filter);
     this.lfo.connect(this.filter.frequency);
 
-    this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
-      this.globalPlaying = isPlaying;
-      this.toggle();
+    this.synthService.tracks.pipe(take(1)).subscribe((tracks: TimelineTrack[]) => {
+      this.tracks = tracks;
+      this.tracksIndex = tracks.findIndex((track) => {
+        return track.instanceNumber === this.instanceNumber;
+      });
+      this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
+        this.globalPlaying = isPlaying;
+        this.toggle();
+      });
     });
   }
 
@@ -103,26 +114,30 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     this.filter.dispose();
     this.lfo.dispose();
     this.envelope.dispose();
-    this.part.dispose();
+    this.parts.forEach((part: any) => {
+      part.dispose();
+    });
     this.destroy$.next();
   }
 
   toggle() {
-    this.part = new Tone.Sequence((time, note) => {
-      // the events will be given to the callback with the time they occur
-      this.synth.forEach((synth) => {
-        synth.triggerAttackRelease(note, '16n', time);
-      });
-    }, this.sequence, '16n');
-    this.part.loop = 100;
-    this.part.loopStart = 0;
-    // part.loopEnd = '1m';
-    // start the part at the beginning of the Transport's timeline
-    if (this.globalPlaying) {
-      this.part.start(0);
-    } else {
-      this.part.stop();
-    }
+    this.parts = [];
+    this.tracks[this.tracksIndex].patternPerMeasure.forEach((pattern: number, index: number) => {
+      if (pattern) {
+        this.parts.push(new Tone.Sequence((time, note) => {
+          // the events will be given to the callback with the time they occur
+          this.synth.forEach((synth) => {
+            synth.triggerAttackRelease(note, '16n', time);
+          });
+        }, this.patterns[pattern - 1].sequence, '16n'));
+        this.parts[index].loop = false;
+        if (this.globalPlaying) {
+          this.parts[index].start(`${index}m`);
+        } else {
+          this.parts[index].stop(`${index + 1}m`);
+        }
+      }
+    });
   }
 
   changeVol(vol: number) {

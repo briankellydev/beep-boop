@@ -1,3 +1,16 @@
-<p>
-  timeline works!
-</p>
+<div>
+  <table>
+    <tr>
+      <th>Instruments</th>
+      <th *ngFor="let measure of measures; let i = index">{{i + 1}}</th>
+    </tr>
+    <tr *ngFor="let track of timelineTracks">
+      <td>{{track.instrument}}</td>
+      <td *ngFor="let measure of measures; let i = index">
+        <select [(ngModel)]="track.patternPerMeasure[i]">
+          <option *ngFor="let pattern of [null,1,2,3,4,5,6,7,8,9]" [value]="pattern">{{pattern}}</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+</div>

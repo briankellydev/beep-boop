@@ -60,3 +60,9 @@ export interface DrumMachineSample {
 export interface DrumRow extends NoteRow {
   drum: string;
 }
+
+export interface TimelineTrack {
+  instrument: string;
+  instanceNumber: number;
+  patternPerMeasure: number[];
+}

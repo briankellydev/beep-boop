@@ -9,40 +9,14 @@ import { NoteRow, Pattern } from 'src/app/interfaces';
 })
 export class SequencerComponent implements OnInit {
 
-  @Output() sequenceChanged = new EventEmitter<string[]>();
+  @Output() patternsChanged = new EventEmitter<Pattern[]>();
   @Output() togglePlay = new EventEmitter<boolean>();
 
   notes = Object.assign([], NoteSequence).reverse();
   selectedNote: string;
   selectedOctave: number;
-  
-  noteRows: NoteRow[] = [
-    {note: 'C', octave: '5', sequence: Object.assign([], FalseRows)},
-    {note: 'B', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'A#', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'A', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'G#', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'G', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'F#', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'F', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'E', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'D#', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'D', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'C#', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'C', octave: '4', sequence: Object.assign([], FalseRows)},
-    {note: 'B', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'A#', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'A', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'G#', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'G', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'F#', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'F', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'E', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'D#', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'D', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'C#', octave: '3', sequence: Object.assign([], FalseRows)},
-    {note: 'C', octave: '3', sequence: Object.assign([], FalseRows)},
-  ];
+
+  noteRows: NoteRow[] = [];
 
   activePattern: Pattern = null;
   patterns: Pattern[] = [];
@@ -50,6 +24,7 @@ export class SequencerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.initNoteRows();
     for (let i = 0; i < 9; i++) {
       this.patterns.push({
         num: i,
@@ -80,6 +55,7 @@ export class SequencerComponent implements OnInit {
     this.activePattern.lowestNote = startingNote;
     this.activePattern.lowestOctave = octave;
     this.compile();
+    this.patternsChanged.emit(this.patterns);
   }
 
   toggleStep(rowIdx: number, noteIdx: number) {
@@ -94,7 +70,8 @@ export class SequencerComponent implements OnInit {
     } else {
       this.activePattern.sequence[noteIdx] = null;
     }
-    this.sequenceChanged.emit(this.activePattern.sequence);
+    this.compile();
+    this.patternsChanged.emit(this.patterns);
   }
 
   checkForBlueBorder(idx: number) {
@@ -102,14 +79,14 @@ export class SequencerComponent implements OnInit {
   }
 
   setPattern(pattern: number) {
-    // Compile active pattern into its corresponding this.patterns
-    this.compile();
+    // Send active pattern into its corresponding this.patterns
+    this.patterns[this.activePattern.num] = JSON.parse(JSON.stringify(this.activePattern));
     // Set the new active pattern
     this.activePattern = JSON.parse(JSON.stringify(this.patterns[pattern]));
     // Build the sequencer from the new pattern
     this.convertPatternToSequencer();
     // Emit the new sequence to the instrument
-    this.sequenceChanged.emit(this.activePattern.sequence);
+    this.patternsChanged.emit(this.patterns);
   }
 
   private compile() {
@@ -124,6 +101,7 @@ export class SequencerComponent implements OnInit {
   }
 
   private convertPatternToSequencer() {
+    this.initNoteRows();
     this.setNotes(this.activePattern.lowestNote, this.activePattern.lowestOctave);
     this.noteRows.forEach((row: NoteRow) => {
       row.sequence = Object.assign([], FalseRows);
@@ -136,6 +114,36 @@ export class SequencerComponent implements OnInit {
         this.noteRows[noteRowIndex].sequence[index] = true;
       }
     });
+  }
+
+  private initNoteRows() {
+    this.noteRows = [
+      {note: 'C', octave: '5', sequence: Object.assign([], FalseRows)},
+      {note: 'B', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'A#', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'A', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'G#', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'G', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'F#', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'F', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'E', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'D#', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'D', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'C#', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'C', octave: '4', sequence: Object.assign([], FalseRows)},
+      {note: 'B', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'A#', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'A', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'G#', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'G', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'F#', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'F', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'E', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'D#', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'D', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'C#', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'C', octave: '3', sequence: Object.assign([], FalseRows)},
+    ];
   }
 
 }

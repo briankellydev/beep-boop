@@ -4,6 +4,7 @@ import { BoomBoomComponent } from 'src/app/instruments/boom-boom/boom-boom.compo
 import { SynthService } from 'src/app/shared/synth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TimelineTrack } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-rack',
@@ -22,6 +23,7 @@ export class RackComponent implements OnInit, OnDestroy {
   
   private destroy$ = new Subject<any>();
   private components: ComponentRef<any>[] = [];
+  private timelineTracks: TimelineTrack[] = [];
 
   constructor(
     private resolver: ComponentFactoryResolver,
@@ -31,12 +33,20 @@ export class RackComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.synthService.instanceToDelete.pipe(takeUntil(this.destroy$)).subscribe((numToDel: number) => {
       if (numToDel !== null) {
+        const idxToDelete = this.timelineTracks.findIndex((track) => {
+          return track.instanceNumber === numToDel;
+        });
+        this.timelineTracks.splice(idxToDelete, 1);
+
         this.components.forEach((component) => {
           if (numToDel === component.instance.instanceNumber) {
             component.destroy();
           }
         });
       }
+    });
+    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
+      this.timelineTracks = tracks;
     });
   }
 
@@ -46,6 +56,11 @@ export class RackComponent implements OnInit, OnDestroy {
 
   createComponent(component: string) {
     let factory;
+    const track: TimelineTrack = {
+      instrument: component,
+      instanceNumber: null,
+      patternPerMeasure: []
+    };
     switch(component) {
       case this.INSTRUMENTS.BEEPBLASTER:
       factory = this.resolver.resolveComponentFactory(BeepBlasterComponent);
@@ -56,8 +71,14 @@ export class RackComponent implements OnInit, OnDestroy {
     }
     const componentRef: any = this.entry.createComponent(factory);
     componentRef.instance.instanceNumber = this.currentInstanceNumber;
+    track.instanceNumber = this.currentInstanceNumber;
+    for (let i = 0; i < this.synthService.numberOfMeasures; i++) {
+      track.patternPerMeasure.push(null);
+    }
+    this.timelineTracks.push(track);
+    this.synthService.tracks.next(this.timelineTracks);
     this.components.push(componentRef);
     this.currentInstanceNumber++;
-}
+  }
 
 }

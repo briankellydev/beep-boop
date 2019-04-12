@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { SynthService } from 'src/app/shared/synth.service';
 import { NullSequence } from 'src/app/constants';
+import { Pattern } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-beep-blaster',
@@ -10,7 +11,7 @@ import { NullSequence } from 'src/app/constants';
 })
 export class BeepBlasterComponent implements OnInit, OnDestroy {
 
-  sequence: string[] = JSON.parse(JSON.stringify(NullSequence));
+  patterns: Pattern[] = [];
   showSequencer = false;
   collapsed = true;
   instanceNumber: number;
@@ -25,8 +26,8 @@ export class BeepBlasterComponent implements OnInit, OnDestroy {
     this.destroy$.next();
   }
 
-  changeSequence(sequence: string[]) {
-    this.sequence = sequence;
+  changePatterns(patterns: Pattern[]) {
+    this.patterns = patterns;
   }
 
   toggleSequencer() {
