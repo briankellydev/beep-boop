@@ -3,28 +3,31 @@
 #transport {
     width: 100%;
     height: 55px;
-    background-color: $lightGray;
+    background-color: $grayBg;
     position: fixed;
     bottom: 0;
     left: 0;
-    border-top: 1px solid black;
+    border-top: 1px solid $lightGray;
     z-index: 1;
     .transport-button {
         cursor: pointer;
-        background-color: white;
-        transition: 0.3s background-color;
+        background-color: $lightestGray;
+        transition: 0.2s background-color;
         text-align: center;
+        color: $grayBg;
         &:hover {
             background-color: $paleYellow;
         }
     }
     .tempo {
-        color: white;
+        color: $closeToBlack;
+        background-color: $lightGray;
         padding: 5px;
+        margin-top: 8px;
         input {
-            background-color: black;
-            border: 1px solid white;
-            color: white;
+            background-color: $closeToBlack;
+            border: 1px solid $grayBg;
+            color: $lightestGray;
             font-size: 20px;
         }
     }

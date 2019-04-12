@@ -4,12 +4,12 @@
     .pattern-button {
         background-color: $drumMachineRed;
         border: 1px solid $closeToBlack;
-        color: white;
+        color: $lightestGray;
         cursor: pointer;
         border-radius: 5px;
         text-align: center;
         &.active {
-            background-color: white;
+            background-color: $lightestGray;
             color: $closeToBlack;
         }
     }
@@ -31,13 +31,13 @@
     }
     .kit {
         background-color: $drumMachineRed;
-        color: white;
+        color: $lightestGray;
         cursor: pointer;
         text-align: center;
         padding: 5px;
         &.active {
-            background-color: white;
-            color: black;
+            background-color: $lightestGray;
+            color: $grayBg;
         }
     }
 }
@@ -45,7 +45,7 @@
 
 .note-row {
     padding: 0;
-    border: 1px solid black;
+    border: 1px solid $grayBg;
     border-radius: 5px;
     background-color: $gray;
     height: 25px;
@@ -59,8 +59,8 @@
     }
     .note {
         text-align: center;
-        background-color: white;
-        color: black;
+        background-color: $lightestGray;
+        color: $grayBg;
         line-height: 15px;
     }
     .step {

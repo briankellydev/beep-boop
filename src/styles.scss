@@ -5,10 +5,6 @@
 @import './app/variables.scss';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-* {
-  font-family: 'Open Sans', sans-serif;
-}
-
 round-slider {
     display: block;
   
@@ -38,7 +34,7 @@ round-slider {
       top: 41%;
       pointer-events: none;
       z-index: 10;
-      color: white;
+      color: $lightestGray;
       font-size: 18px;
     }
   
@@ -81,11 +77,12 @@ round-slider {
   }
 
   .component {
-    border: 1px solid black;
+    border: 1px solid $lightestGray;
     padding: 10px;
     border-radius: 3px;
     margin: 5px;
     background-color: $grayBg;
+    color: $lightestGray;
     mat-slide-toggle {
       float: right;
     }
@@ -100,9 +97,9 @@ round-slider {
   }
 
   .button-blue {
-    border: 1px solid black;
+    border: 1px solid $grayBg;
     background-color: $synthBlue;
-    color: black;
+    color: $grayBg;
     margin: 5px 0;
   }
 
@@ -112,4 +109,13 @@ round-slider {
 
   .box-shadow {
     box-shadow: 2px 2px 2px #AAAAAA;
+    &-dark {
+      box-shadow: 2px 2px 2px black;
+    }
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    color: $grayBg;
   }

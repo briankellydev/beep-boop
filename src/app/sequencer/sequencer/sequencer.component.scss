@@ -3,7 +3,7 @@
 .sequencer {
     .left-menu {
         background-color: $gray;
-        border: 1px solid black;
+        border: 1px solid $grayBg;
         border-radius: 5px;
         padding: 0 5px;
         h5 {
@@ -23,20 +23,20 @@
         }
         .pattern-button {
             background-color: $synthBlue;
-            border: 1px solid black;
+            border: 1px solid $grayBg;
             border-radius: 5px;
-            color: black;
+            color: $grayBg;
             text-align: center;
             padding: 5px 0;
             margin-bottom: 5px;
             cursor: pointer;
             transition: background-color 0.2s;
             &.active {
-                background-color: white;
+                background-color: $lightestGray;
             }
         }
         .play {
-            background: white;
+            background: $lightestGray;
             border-radius: 50%;
             height: 70px;
             width: 70px;
@@ -55,7 +55,7 @@
     
     .note-row {
         padding: 0;
-        border: 1px solid black;
+        border: 1px solid $grayBg;
         border-radius: 5px;
         background-color: $gray;
         height: 25px;
@@ -69,8 +69,8 @@
         }
         .note {
             text-align: center;
-            background-color: white;
-            color: black;
+            background-color: $lightestGray;
+            color: $grayBg;
             line-height: 15px;
         }
         .step {

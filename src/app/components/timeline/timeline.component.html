@@ -1,16 +1,25 @@
-<div>
-  <table>
-    <tr>
-      <th>Instruments</th>
-      <th *ngFor="let measure of measures; let i = index">{{i + 1}}</th>
-    </tr>
-    <tr *ngFor="let track of timelineTracks">
-      <td>{{track.instrument}}</td>
-      <td *ngFor="let measure of measures; let i = index">
-        <select [(ngModel)]="track.patternPerMeasure[i]">
-          <option *ngFor="let pattern of [null,1,2,3,4,5,6,7,8,9]" [value]="pattern">{{pattern}}</option>
-        </select>
-      </td>
-    </tr>
-  </table>
+<div id="timeline" class="box-shadow">
+  <h2 class="component">Timeline</h2>
+  <div class="overflow">
+    <table cellspacing="0">
+        <tr>
+          <th></th>
+          <th *ngFor="let measure of measures; let i = index">{{i + 1}}</th>
+        </tr>
+        <tr *ngFor="let track of timelineTracks">
+          <td [ngClass]="track.instrument">{{track.instrument}}</td>
+          <td *ngFor="let measure of measures; let i = index">
+            <div class="pattern" [ngClass]="{'active': track.patternPerMeasure[i] !== null}" (click)="toggleDropdown(track.instanceNumber.toString() + i.toString())">{{track.patternPerMeasure[i]}}</div>
+            <div class="dropdown" *ngIf="dropdownShowing === track.instanceNumber.toString() + i.toString()">
+              <div *ngFor="let pattern of [null,1,2,3,4,5,6,7,8,9]" (click)="selectPattern(track, i, pattern)">
+                {{pattern || 'Clear'}}
+              </div>
+            </div>
+            <!----<select [(ngModel)]="track.patternPerMeasure[i]">
+              <option *ngFor="let pattern of [null,1,2,3,4,5,6,7,8,9]" [value]="pattern">{{pattern}}</option>
+            </select>-->
+          </td>
+        </tr>
+      </table>
+  </div>
 </div>

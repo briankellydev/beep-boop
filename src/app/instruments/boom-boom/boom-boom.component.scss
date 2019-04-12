@@ -4,7 +4,9 @@
 .boom-boom {
     background-color: $closeToBlack;
     font-family: 'Play', sans-serif;
-    color: $drumMachineRed;
+    .component { 
+        color: $drumMachineRed;
+    }
     .icon {
         float: right;
         margin-right: 10px;

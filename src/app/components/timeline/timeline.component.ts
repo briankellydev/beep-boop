@@ -13,6 +13,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   timelineTracks: TimelineTrack[] = [];
   measures: any[] = [];
+  dropdownShowing: string = null;
 
   private destroy$ = new Subject<any>();
 
@@ -31,9 +32,17 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.destroy$.next();
   }
 
-  setPattern(track: TimelineTrack, measure: number) {
-    console.log(track);
-    console.log(measure);
+  toggleDropdown(dropdown: string) {
+    this.dropdownShowing = dropdown === this.dropdownShowing ? null : dropdown;
+  }
+
+  selectPattern(track: TimelineTrack, i: number, pattern: number) {
+    const trackIdx = this.timelineTracks.findIndex((globalTrack: TimelineTrack) => {
+      return track.instanceNumber === globalTrack.instanceNumber;
+    });
+   this.timelineTracks[trackIdx].patternPerMeasure[i] = pattern;
+   this.synthService.tracks.next(this.timelineTracks);
+   this.dropdownShowing = null;
   }
 
 }

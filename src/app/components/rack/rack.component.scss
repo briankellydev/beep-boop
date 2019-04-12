@@ -5,12 +5,13 @@
 }
 .new-instrument {
     height: 55px;
-    background-color: $lightGray;
+    background-color: $lightestGray;
     h3 {
         line-height: 15px;
     }
-    .component {
-        color: white;
+    &.component {
+        border: 1px solid $grayBg;
+        color: $grayBg;
     }
     .beep-blaster, .boom-boom {
         font-size: 12px;
@@ -18,6 +19,7 @@
         padding: 5px 0;
         cursor: pointer;
         transition: 0.3s background-color;
+        color: $lightestGray;
         .component {
             height: 30px;
             width: 30px;

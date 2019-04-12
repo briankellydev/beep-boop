@@ -6,15 +6,21 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: $lightGray;
-    border-bottom: 1px solid black;
+    background-color: $grayBg;
+    border-bottom: 1px solid $lightGray;
+    color: $lightestGray;
     padding: 0 10px;
     h1 {
         margin: 0;
+        color: $lightestGray;
+    }
+    .subtitle {
+        color: $lightestGray;
     }
 }
 .app {
     height: 100vh;
     overflow-y: scroll;
     padding: 50px 0;
+    background-color: $lightestGray;
 }

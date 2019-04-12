@@ -1,8 +1,92 @@
-table {
-    width: 100%;
-    overflow-x: scroll;
-    text-align: center;
-    th, td {
-        border: 1px solid black;
+@import '../../variables.scss';
+#timeline {
+    height: 600px;
+    overflow-y: scroll;
+    background-color: $lighterGray;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    border: 1px solid $grayBg;
+    border-collapse: collapse;
+    border-spacing: 0;
+    h2 {
+        margin: 0;
+        &.component {
+            background-color: $closeToBlack;
+            color: $lightestGray;
+            margin-bottom: 5px;
+        }
+    }
+    .overflow {
+        width: 100%;
+        height: 540px;
+        overflow: scroll;
+    }
+    table {
+        width: 100%;
+        text-align: center;
+        th, td {
+            position: relative;
+            padding: 5px;
+        }
+        th {
+            background-color: $grayBg;
+            color: $lightestGray;
+            border: 1px solid $lightestGray;
+            border-bottom: none;
+            &:first-of-type {
+                background-color: $lighterGray;
+                border: 1px solid $lighterGray;
+            }
+            &:last-of-type {
+                border-right: 1px solid $grayBg;
+            }
+        }
+        td {
+            background-color: $closeToBlack;
+            color: $lightestGray;
+            border: 1px solid $lightestGray;
+            &.BOOMBOOM {
+                background: linear-gradient(to bottom right, $closeToBlack, $drumMachineRed);
+                border: 1px solid $closeToBlack;
+            }
+            &.BEEPBLASTER {
+                background: linear-gradient(to bottom right, $synthBlue, $pink);
+                border: 1px solid $closeToBlack;
+            }
+        }
+        .pattern {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border-radius: 3px;
+            &:hover {
+                background-color: $pink;
+                color: $closeToBlack;
+            }
+            &.active {
+                background-color: $synthBlue;
+                color: $closeToBlack;
+            }
+        }
+        .dropdown {
+            position: absolute;
+            top: 18px;
+            left: 15px;
+            background-color: $lightestGray;
+            font-size: 12px;
+            border: 1px solid $grayBg;
+            z-index: 1;
+            div {
+                width: 50px;
+                cursor: pointer;
+                background-color: $lightestGray;
+                color: $closeToBlack;
+                padding: 5px;
+                &:hover {
+                    background-color: $synthBlue;
+                }
+            }
+        }
     }
 }
