@@ -8,7 +8,7 @@
     bottom: 0;
     left: 0;
     border-top: 1px solid $lightGray;
-    z-index: 1;
+    z-index: 100;
     .transport-button {
         cursor: pointer;
         background-color: $lightestGray;
@@ -24,6 +24,7 @@
         background-color: $lightGray;
         padding: 5px;
         margin-top: 8px;
+        text-align: center;
         input {
             background-color: $closeToBlack;
             border: 1px solid $grayBg;

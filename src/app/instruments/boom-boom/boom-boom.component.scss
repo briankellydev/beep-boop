@@ -4,12 +4,10 @@
 .boom-boom {
     background-color: $closeToBlack;
     font-family: 'Play', sans-serif;
+    &.component {
+        border: 1px solid $grayBg;
+    }
     .component { 
         color: $drumMachineRed;
-    }
-    .icon {
-        float: right;
-        margin-right: 10px;
-        cursor: pointer;
     }
 }

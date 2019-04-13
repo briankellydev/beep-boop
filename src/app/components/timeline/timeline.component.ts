@@ -45,4 +45,22 @@ export class TimelineComponent implements OnInit, OnDestroy {
    this.dropdownShowing = null;
   }
 
+  addMeasure() {
+    this.synthService.numberOfMeasures++;
+    this.measures.push({});
+    this.timelineTracks.forEach((track) => {
+      track.patternPerMeasure.push(null);
+    });
+    this.synthService.tracks.next(this.timelineTracks);
+  }
+
+  deleteMeasure() {
+    this.synthService.numberOfMeasures--;
+    this.measures.pop();
+    this.timelineTracks.forEach((track) => {
+      track.patternPerMeasure.pop();
+    });
+    this.synthService.tracks.next(this.timelineTracks);
+  }
+
 }

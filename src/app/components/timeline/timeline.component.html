@@ -1,5 +1,18 @@
 <div id="timeline" class="box-shadow">
-  <h2 class="component">Timeline</h2>
+  <h2 class="component">
+    Timeline
+    <div class="icon component">
+      <h3>Measures</h3>
+      <div class="row no-gutters">
+        <div class="col-6" (click)="deleteMeasure()">
+          <i class="fa fa-minus"></i>
+        </div>
+        <div class="col-6" (click)="addMeasure()">
+          <i class="fa fa-plus"></i>
+        </div>
+      </div>
+    </div>
+  </h2>
   <div class="overflow">
     <table cellspacing="0">
         <tr>

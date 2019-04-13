@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, } from '@angular/core';
-import { DrumMachineSample, DrumRow, PolyPattern } from 'src/app/interfaces';
+import { Component, OnInit, OnDestroy, Input, } from '@angular/core';
+import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack } from 'src/app/interfaces';
 import { FalseRows, NullSequence } from 'src/app/constants';
 import { SynthService } from 'src/app/shared/synth.service';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -11,6 +11,8 @@ import { Subject } from 'rxjs';
   styleUrls: ['./drum-machine.component.scss']
 })
 export class DrumMachineComponent implements OnInit, OnDestroy {
+
+  @Input() instanceNumber: number;
 
   drumMachineSamples: DrumMachineSample[] = [
     {
@@ -101,8 +103,10 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   selectedKit: string;
   parts: any[] = [];
+  tracks: TimelineTrack[] = [];
 
   private destroy$ = new Subject<any>();
+  private tracksIndex: number;
 
   constructor(private synthService: SynthService) { }
 
@@ -123,9 +127,15 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     }
     this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
     this.setPattern(0);
-    this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
-      this.globalPlaying = isPlaying;
-      this.toggle();
+    this.synthService.tracks.pipe(take(1)).subscribe((tracks: TimelineTrack[]) => {
+      this.tracks = tracks;
+      this.tracksIndex = tracks.findIndex((track) => {
+        return track.instanceNumber === this.instanceNumber;
+      });
+      this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
+        this.globalPlaying = isPlaying;
+        this.toggle();
+      });
     });
   }
 
@@ -269,25 +279,28 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     this.noteRows[rowIdx].sequence[noteIdx] = !this.noteRows[rowIdx].sequence[noteIdx];
     this.activePattern.sequence[rowIdx][noteIdx] = this.noteRows[rowIdx].sequence[noteIdx] ?
       this.noteRows[rowIdx].note + this.noteRows[rowIdx].octave : null;
+    this.compile();
   }
 
   toggle() {
-    for (let i = 0; i < 6; i++) {
-      this.parts.push(new Tone.Sequence((time, note) => {
-        // the events will be given to the callback with the time they occur
-        this.drumMachine[i].triggerAttackRelease(note, '16n', time);
-      }, this.activePattern.sequence[i], '16n'));
-      this.parts[i].loop = 100;
-      this.parts[i].loopStart = 0;
-    }
-    
-    // part.loopEnd = '1m';
-    // start the part at the beginning of the Transport's timeline
-    this.parts.forEach((part) => {
-      if (this.globalPlaying) {
-        part.start(0);
-      } else {
-        part.stop();
+    this.parts = [];
+    this.tracks[this.tracksIndex].patternPerMeasure.forEach((pattern: number, index: number) => {
+      if (pattern) {
+        for (let i = 0; i < 6; i++) {
+          this.parts.push(new Tone.Sequence((time, note) => {
+            // the events will be given to the callback with the time they occur
+            this.drumMachine[i].triggerAttackRelease(note, '16n', time);
+          }, this.patterns[pattern - 1].sequence[i], '16n'));
+        }
+        this.parts.forEach((part) => {
+          part.loop = false;
+          if (this.globalPlaying) {
+            part.start(`${index}m`);
+          } else {
+            part.stop(`${index + 1}m`);
+          }
+        });
+        
       }
     });
   }

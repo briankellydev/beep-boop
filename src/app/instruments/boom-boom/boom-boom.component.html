@@ -10,7 +10,9 @@
     </div>
   </h2>
   <div [ngStyle]="{'display': collapsed ? 'none' : 'block'}">
-    <app-drum-machine>
+    <app-drum-machine
+      [instanceNumber]="instanceNumber"
+    >
     </app-drum-machine>
   </div>
   

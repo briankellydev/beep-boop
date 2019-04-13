@@ -10,7 +10,7 @@ export class SynthService {
   instanceToDelete = new BehaviorSubject<number>(null);
   playing = new BehaviorSubject<boolean>(false);
   tracks = new BehaviorSubject<TimelineTrack[]>([]);
-  numberOfMeasures = 50;
+  numberOfMeasures = 20;
 
   constructor() { }
 }

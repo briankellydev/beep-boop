@@ -4,10 +4,8 @@
 .beep-blaster {
     background: linear-gradient(to bottom right, $synthBlue, $pink);
     font-family: 'Orbitron', sans-serif;
-    .icon {
-        float: right;
-        margin-right: 10px;
-        cursor: pointer;
+    &.component {
+        border: 1px solid $grayBg;
     }
     .component {
         color: $synthBlue;
