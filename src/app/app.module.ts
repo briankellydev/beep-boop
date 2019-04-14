@@ -9,6 +9,7 @@ import { InstrumentsModule } from './instruments/instruments.module';
 import { RackComponent } from './components/rack/rack.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { TransportComponent } from './components/transport/transport.component';
+import { MixerComponent } from './components/mixer/mixer.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { TransportComponent } from './components/transport/transport.component';
     RackComponent,
     TimelineComponent,
     TransportComponent,
+    MixerComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
 import { SynthService } from 'src/app/shared/synth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MENU_SCREENS } from 'src/app/constants';
 
 @Component({
   selector: 'app-transport',
@@ -10,10 +11,12 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class TransportComponent implements OnInit, OnDestroy {
 
-  @Output() timelineToggled = new EventEmitter<boolean>();
+  @Input() itemSelected: string;
+  @Output() showItem = new EventEmitter<string>();
   showTimeline = false;
   playing = false;
   tempo = 120;
+  menuItems = MENU_SCREENS;
 
   private destroy$ = new Subject<any>();
 
@@ -30,11 +33,6 @@ export class TransportComponent implements OnInit, OnDestroy {
     this.destroy$.next();
   }
 
-  toggleTimeline() {
-    this.showTimeline = !this.showTimeline;
-    this.timelineToggled.emit(this.showTimeline);
-  }
-
   togglePlay() {
     this.playing = !this.playing;
     this.synthService.playing.next(this.playing);
@@ -45,6 +43,10 @@ export class TransportComponent implements OnInit, OnDestroy {
 
   setTempo() {
     Tone.Transport.bpm.value = this.tempo;
+  }
+
+  changeItem(item: string) {
+    this.showItem.emit(item);
   }
 
 }

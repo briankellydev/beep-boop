@@ -1,24 +1,30 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { SynthService } from 'src/app/shared/synth.service';
 
 @Component({
   selector: 'app-reverb',
   templateUrl: './reverb.component.html',
   styleUrls: ['./reverb.component.scss']
 })
-export class ReverbComponent implements OnInit {
+export class ReverbComponent implements OnInit, AfterViewInit {
 
   @Output() verbChanged = new EventEmitter<number>();
   @Output() toggleChanged = new EventEmitter<boolean>();
   decay = 0;
   enabled = false;
+  customGeneratedId = this.synthService.generateRandomNumber();
 
-  constructor() { }
+  constructor(private synthService: SynthService) { }
 
   ngOnInit() {
-    $(".reverb .decay").roundSlider({
+    
+  }
+
+  ngAfterViewInit() {
+    $(`#${this.customGeneratedId} .decay`).roundSlider({
       radius: 40,
-      circleShape: "default",
-      sliderType: "min-range",
+      circleShape: `default`,
+      sliderType: `min-range`,
       showTooltip: true,
       value: this.decay,
       min: 0,
@@ -27,8 +33,8 @@ export class ReverbComponent implements OnInit {
   }
 
   changes() {
-    this.decay = parseInt($(".reverb .rs-tooltip").eq(0).text());
-    this.verbChanged.emit(parseInt($(".reverb .rs-tooltip").eq(0).text()));
+    this.decay = parseInt($(`#${this.customGeneratedId} .rs-tooltip`).eq(0).text());
+    this.verbChanged.emit(parseInt($(`#${this.customGeneratedId} .rs-tooltip`).eq(0).text()));
   }
 
   toggle() {

@@ -12,10 +12,10 @@ export class PortamentoComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    $(".port-slider").roundSlider({
+    $(`.port-slider`).roundSlider({
       radius: 40,
-      circleShape: "default",
-      sliderType: "min-range",
+      circleShape: `default`,
+      sliderType: `min-range`,
       showTooltip: true,
       value: this.port,
       min: 0,
@@ -24,7 +24,7 @@ export class PortamentoComponent implements OnInit {
   }
 
   changes() {
-    this.port = parseInt($(".volume .rs-tooltip").text());
+    this.port = parseInt($(`.volume .rs-tooltip`).text());
     this.portChanged.emit(this.port / 5);
   }
 

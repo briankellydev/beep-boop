@@ -39,3 +39,9 @@ export const NullSequence: any[] = [
     null,
     null,
 ];
+
+export const MENU_SCREENS = {
+RACK: 'rack',
+TIMELINE: 'timeline',
+MIXER: 'mixer',
+};

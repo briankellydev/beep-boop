@@ -2,7 +2,8 @@
   <h1>BeepBoop <span class="subtitle">Audio Synthesis Workstation</span></h1>
 </header>
 <div class="app">
-  <app-rack [ngStyle]="{'display': showTimeline ? 'none' : 'block'}"></app-rack>
-  <app-timeline [ngStyle]="{'display': showTimeline ? 'block' : 'none'}"></app-timeline>
-  <app-transport (timelineToggled)="toggleTimeline($event)"></app-transport>
+  <app-rack [ngStyle]="{'display': itemToShow === menuScreens.RACK ? 'block' : 'none'}"></app-rack>
+  <app-timeline [ngStyle]="{'display': itemToShow === menuScreens.TIMELINE ? 'block' : 'none'}"></app-timeline>
+  <app-mixer [ngStyle]="{'display': itemToShow === menuScreens.MIXER ? 'block' : 'none'}"></app-mixer>
+  <app-transport [itemSelected]="itemToShow" (showItem)="showItem($event)"></app-transport>
 </div>

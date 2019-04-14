@@ -15,6 +15,9 @@
         transition: 0.2s background-color;
         text-align: center;
         color: $grayBg;
+        &.active {
+            background-color: $drumMachineYellow;
+        }
         &:hover {
             background-color: $paleYellow;
         }

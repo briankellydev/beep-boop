@@ -1,0 +1,69 @@
+@import '../../variables.scss';
+
+#mixer {
+    height: 600px;
+    overflow-y: scroll;
+    background-color: $lighterGray;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    border: 1px solid $grayBg;
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: center;
+    h2.component {
+        background-color: $closeToBlack;
+        color: $lightestGray;
+        width: 100%;
+        text-align: left;
+        margin: 0;
+    }
+    .channels {
+        width: 100%;
+        .channel {
+            border: 1px solid $closeToBlack;
+            background-color: $lightestGray;
+            width: 150px;
+            float: left;
+            height: 250px;
+            margin: 5px;
+            padding: 5px;
+            .vol-level {
+                width: 100%;
+                background-color: $closeToBlack;
+                color: $pink;
+                border-radius: 3px;
+            }
+            .slider-container {
+                width: 100%;
+                height: 150px;
+                .slider {
+                    transform: rotate(-90deg);
+                    margin-top: 70px;
+                    -webkit-appearance: none;  /* Override default CSS styles */
+                    appearance: none;
+                    background: $closeToBlack;
+                    height: 5px;
+                    &::-webkit-slider-thumb {
+                        -webkit-appearance: none; /* Override default look */
+                        appearance: none;
+                        width: 5px;
+                        height: 30px;
+                        background-color: $grayBg;
+                    }
+                    &::-moz-range-thumb {
+                        width: 5px;
+                        height: 30px;
+                        background-color: $grayBg;
+                    }
+                }
+            }
+            .inst-name {
+                background-color: $paleYellow;
+                width: 100%;
+                border-radius: 3px;
+            }
+        }
+    }
+    
+}

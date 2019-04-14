@@ -1,31 +1,42 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, AfterViewInit, OnChanges } from '@angular/core';
+import { SynthService } from 'src/app/shared/synth.service';
 
 @Component({
   selector: 'app-volume',
   templateUrl: './volume.component.html',
   styleUrls: ['./volume.component.scss']
 })
-export class VolumeComponent implements OnInit {
+export class VolumeComponent implements OnInit, AfterViewInit, OnChanges {
 
+  @Input() vol: number;
   @Output() volChanged = new EventEmitter<number>();
-  vol = 100;
+  customGeneratedId = this.synthService.generateRandomNumber();
 
-  constructor() { }
+  constructor(private synthService: SynthService) { }
 
   ngOnInit() {
-    $('.volume-slider').roundSlider({
+  }
+
+  ngOnChanges() {
+    if (parseInt($(`#${this.customGeneratedId} .rs-tooltip`).text()) !== this.vol) {
+      $(`#${this.customGeneratedId} .rs-tooltip`).text(this.vol);
+    }
+  }
+
+  ngAfterViewInit() {
+    $(`#${this.customGeneratedId} .volume-slider`).roundSlider({
       radius: 40,
       circleShape: 'default',
       sliderType: 'min-range',
       showTooltip: true,
-      value: this.vol / 100,
+      value: this.vol,
       min: -50,
       max: 6
     });
   }
 
   changes() {
-    this.vol = parseInt($('.volume .rs-tooltip').text());
+    this.vol = parseInt($(`#${this.customGeneratedId} .rs-tooltip`).text());
     this.volChanged.emit(this.vol);
   }
 

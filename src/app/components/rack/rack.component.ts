@@ -59,6 +59,7 @@ export class RackComponent implements OnInit, OnDestroy {
     const track: TimelineTrack = {
       instrument: component,
       instanceNumber: null,
+      volume: 0,
       patternPerMeasure: []
     };
     switch(component) {

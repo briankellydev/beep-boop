@@ -64,5 +64,6 @@ export interface DrumRow extends NoteRow {
 export interface TimelineTrack {
   instrument: string;
   instanceNumber: number;
+  volume: number;
   patternPerMeasure: number[];
 }

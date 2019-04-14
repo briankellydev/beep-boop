@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MENU_SCREENS } from './constants';
 
 @Component({
   selector: 'app-root',
@@ -7,15 +8,16 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'beep-boop';
-  showTimeline = false;
+  itemToShow: string;
+  menuScreens = MENU_SCREENS;
 
   constructor() {}
 
   ngOnInit() {
-    
+    this.itemToShow = this.menuScreens.RACK;
   }
 
-  toggleTimeline(enabled: boolean) {
-    this.showTimeline = enabled;
+  showItem(item: string) {
+    this.itemToShow = item;
   }
 }

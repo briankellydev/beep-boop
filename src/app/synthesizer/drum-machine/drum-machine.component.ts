@@ -90,7 +90,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   activePattern: PolyPattern = null;
   patterns: PolyPattern[] = [];
-  globalPlaying = false;
+  globalPlaying = null;
   collapsed = false;
 
   drumMachine: any[];
@@ -107,11 +107,17 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<any>();
   private tracksIndex: number;
+  private volume: any;
+  private volVal = 0;
 
   constructor(private synthService: SynthService) { }
 
   ngOnInit() {
+    this.volume = new Tone.Volume(this.volVal).toMaster();
     this.selectKit(this.DRUM_KITS['808']);
+    this.drumMachine.forEach((drum) => {
+      drum.connect(this.volume);
+    });
     for (let i = 0; i < 9; i++) {
       this.patterns.push({
         num: i,
@@ -127,15 +133,18 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     }
     this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
     this.setPattern(0);
-    this.synthService.tracks.pipe(take(1)).subscribe((tracks: TimelineTrack[]) => {
+    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
       this.tracks = tracks;
       this.tracksIndex = tracks.findIndex((track) => {
         return track.instanceNumber === this.instanceNumber;
       });
-      this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
-        this.globalPlaying = isPlaying;
-        this.toggle();
-      });
+      this.volume.volume.value = this.tracks[this.tracksIndex].volume;
+      if (this.globalPlaying === null) {
+        this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
+          this.globalPlaying = isPlaying;
+          this.toggle();
+        });
+      }
     });
   }
 
@@ -159,37 +168,37 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'G0': '/707/CYM.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'F0': '/707/OH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'E0': '/707/CH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'D0': '/707/SD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'C0': '/707/BD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
       ];
       break;
       case this.DRUM_KITS['808']:
@@ -199,37 +208,37 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'G0': '/808/CYM.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'F0': '/808/OH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'E0': '/808/CH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'D0': '/808/SD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'C0': '/808/BD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
       ];
       break;
       case this.DRUM_KITS['909']:
@@ -239,37 +248,37 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'G0': '/909/CYM.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'F0': '/909/OH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'E0': '/909/CH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'D0': '/909/SD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
         new Tone.Sampler({
           'C0': '/909/BD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
-        }).toMaster(),
+        }),
       ];
       break;
     }

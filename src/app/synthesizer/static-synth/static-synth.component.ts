@@ -62,7 +62,7 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     feedback: 0,
   };
 
-  globalPlaying = false;
+  globalPlaying = null;
   parts: any[] = [];
   part: any;
 
@@ -90,15 +90,20 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     this.envelope = new Tone.Envelope(this.envConfig).connect(this.filter);
     this.lfo.connect(this.filter.frequency);
 
-    this.synthService.tracks.pipe(take(1)).subscribe((tracks: TimelineTrack[]) => {
+    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
       this.tracks = tracks;
       this.tracksIndex = tracks.findIndex((track) => {
         return track.instanceNumber === this.instanceNumber;
       });
-      this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
-        this.globalPlaying = isPlaying;
-        this.toggle();
-      });
+      if (tracks[this.tracksIndex].volume !== this.volVal) {
+        this.changeVol(this.tracks[this.tracksIndex].volume);
+      }
+      if (this.globalPlaying === null) {
+        this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
+          this.globalPlaying = isPlaying;
+          this.toggle();
+        });
+      }
     });
   }
 
@@ -142,6 +147,9 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
 
   changeVol(vol: number) {
     this.volume.volume.value = vol;
+    this.volVal = vol;
+    this.tracks[this.tracksIndex].volume = vol;
+    this.synthService.tracks.next(this.tracks);
   }
 
   changeOsc(osc: string, num: number) {

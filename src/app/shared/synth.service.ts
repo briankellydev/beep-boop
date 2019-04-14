@@ -13,4 +13,8 @@ export class SynthService {
   numberOfMeasures = 20;
 
   constructor() { }
+
+  generateRandomNumber() {
+    return Math.round(Math.random() * 10000);
+  }
 }

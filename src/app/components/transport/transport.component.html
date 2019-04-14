@@ -1,12 +1,32 @@
 <div id="transport">
   <div class="row">
     <div class="col-1">
-      <div class="component transport-button box-shadow-dark" (click)="toggleTimeline()">
-        <i *ngIf="showTimeline" class="fa fa-music"></i>
-        <i *ngIf="!showTimeline" class="fa fa-braille"></i>
+      <div
+        class="component transport-button box-shadow-dark"
+        [ngClass]="{'active': itemSelected === menuItems.RACK}"
+        (click)="changeItem(menuItems.RACK)"
+        >
+        <i class="fa fa-music"></i>
       </div>
     </div>
-    <div class="col-3"></div>
+    <div class="col-1">
+      <div
+        class="component transport-button box-shadow-dark"
+        [ngClass]="{'active': itemSelected === menuItems.TIMELINE}"
+        (click)="changeItem(menuItems.TIMELINE)"
+        >
+        <i class="fa fa-braille"></i>
+      </div>
+    </div>
+    <div class="col-1">
+      <div
+        class="component transport-button box-shadow-dark"
+        [ngClass]="{'active': itemSelected === menuItems.MIXER}"
+        (click)="changeItem(menuItems.MIXER)">
+        <i class="fa fa-sliders"></i>
+      </div>
+    </div>
+    <div class="col-1"></div>
     <div class="col-2">
       <div class="component tempo">
         BPM <input type="number" min="0" max="999" [(ngModel)]="tempo" (ngModelChange)="setTempo()">

@@ -1,11 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { SynthService } from 'src/app/shared/synth.service';
 
 @Component({
   selector: 'app-delay',
   templateUrl: './delay.component.html',
   styleUrls: ['./delay.component.scss']
 })
-export class DelayComponent implements OnInit {
+export class DelayComponent implements OnInit, AfterViewInit {
 
 
   @Output() delayChanged = new EventEmitter<any>();
@@ -15,23 +16,27 @@ export class DelayComponent implements OnInit {
     feedback: 0,
   };
   enabled = false;
+  customGeneratedId = this.synthService.generateRandomNumber();
 
-  constructor() { }
+  constructor(private synthService: SynthService) { }
 
   ngOnInit() {
-    $(".delay .time").roundSlider({
+  }
+
+  ngAfterViewInit() {
+    $(`#${this.customGeneratedId} .time`).roundSlider({
       radius: 40,
-      circleShape: "default",
-      sliderType: "min-range",
+      circleShape: 'default',
+      sliderType: 'min-range',
       showTooltip: true,
       value: this.delayConfig.delayTime,
       min: 0,
       max: 100
     });
-    $(".delay .feedback").roundSlider({
+    $(`#${this.customGeneratedId} .feedback`).roundSlider({
       radius: 40,
-      circleShape: "default",
-      sliderType: "min-range",
+      circleShape: 'default',
+      sliderType: 'min-range',
       showTooltip: true,
       value: this.delayConfig.feedback,
       min: 0,
@@ -40,8 +45,8 @@ export class DelayComponent implements OnInit {
   }
 
   changes() {
-    this.delayConfig.delayTime = parseInt($(".time .rs-tooltip").eq(0).text());
-    this.delayConfig.feedback = parseInt($(".feedback .rs-tooltip").eq(0).text());
+    this.delayConfig.delayTime = parseInt($(`#${this.customGeneratedId} .time .rs-tooltip`).eq(0).text());
+    this.delayConfig.feedback = parseInt($(`#${this.customGeneratedId} .feedback .rs-tooltip`).eq(0).text());
     this.delayChanged.emit(this.delayConfig);
   }
 
