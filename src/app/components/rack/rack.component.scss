@@ -1,47 +1,56 @@
 @import '../../variables.scss';
-.component {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-.new-instrument {
-    height: 55px;
-    background-color: $lightestGray;
-    h3 {
-        line-height: 15px;
+.rack {
+    height: 600px;
+    overflow-y: scroll;
+    background-color: $lighterGray;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    border: 1px solid $grayBg;
+    .component {
+        padding-top: 0;
+        padding-bottom: 0;
     }
-    &.component {
-        border: 1px solid $grayBg;
-        color: $grayBg;
-    }
-    .beep-blaster, .boom-boom {
-        font-size: 12px;
-        line-height: 30px;
-        padding: 5px 0;
-        cursor: pointer;
-        transition: 0.3s background-color;
-        color: $lightestGray;
-        .component {
-            height: 30px;
-            width: 30px;
-            margin: auto;
-            padding: 0;
-            text-align: center;
+    .new-instrument {
+        height: 55px;
+        background-color: $lightestGray;
+        h3 {
+            line-height: 15px;
         }
-        .col-4 {
-            padding: 0;
+        &.component {
+            border: 1px solid $grayBg;
+            color: $grayBg;
         }
-    }
-    .beep-blaster .component {
-        background: linear-gradient(to bottom right, $synthBlue, $pink);
-    }
-    .beep-blaster:hover {
-        background: linear-gradient(to bottom right, $pink, $synthBlue);
-    }
-    .boom-boom:hover {
-        background: linear-gradient(to bottom right, $closeToBlack, $drumMachineRed);
-    }
-
-    .boom-boom .component {
-        background: linear-gradient(to bottom right, $drumMachineRed, $closeToBlack);
+        .beep-blaster, .boom-boom {
+            font-size: 12px;
+            line-height: 30px;
+            padding: 5px 0;
+            cursor: pointer;
+            transition: 0.3s background-color;
+            color: $lightestGray;
+            .component {
+                height: 30px;
+                width: 30px;
+                margin: auto;
+                padding: 0;
+                text-align: center;
+            }
+            .col-4 {
+                padding: 0;
+            }
+        }
+        .beep-blaster .component {
+            background: linear-gradient(to bottom right, $synthBlue, $pink);
+        }
+        .beep-blaster:hover {
+            background: linear-gradient(to bottom right, $pink, $synthBlue);
+        }
+        .boom-boom:hover {
+            background: linear-gradient(to bottom right, $closeToBlack, $drumMachineRed);
+        }
+    
+        .boom-boom .component {
+            background: linear-gradient(to bottom right, $drumMachineRed, $closeToBlack);
+        }
     }
 }
