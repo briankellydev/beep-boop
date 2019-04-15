@@ -1,13 +1,16 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FalseRows, NoteSequence, NullSequence } from 'src/app/constants';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
+import { NoteSequence } from 'src/app/constants';
 import { NoteRow, Pattern } from 'src/app/interfaces';
+import { SynthService } from 'src/app/shared/synth.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-sequencer',
   templateUrl: './sequencer.component.html',
   styleUrls: ['./sequencer.component.scss']
 })
-export class SequencerComponent implements OnInit {
+export class SequencerComponent implements OnInit, OnDestroy {
 
   @Output() patternsChanged = new EventEmitter<Pattern[]>();
   @Output() togglePlay = new EventEmitter<boolean>();
@@ -20,21 +23,35 @@ export class SequencerComponent implements OnInit {
 
   activePattern: Pattern = null;
   patterns: Pattern[] = [];
+  cellWidth: string;
 
-  constructor() { }
+  private destroy$ = new Subject<any>();
+  private nullSequence: string[];
+  private falseSequence: boolean[];
+
+  constructor(private synthService: SynthService) { }
 
   ngOnInit() {
-    this.initNoteRows();
-    for (let i = 0; i < 9; i++) {
-      this.patterns.push({
-        num: i,
-        lowestNote: 'C',
-        lowestOctave: '3',
-        sequence: Object.assign([], NullSequence),
-      });
-    }
-    this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
-    this.setPattern(0);
+    this.synthService.numberOfStepsPerMeasure.pipe(takeUntil(this.destroy$)).subscribe((num: number) => {
+      this.patterns = [];
+      this.nullSequence = this.synthService.createNullSequence(num);
+      this.falseSequence = this.synthService.createFalseSequence(num);
+      this.initNoteRows();
+      for (let i = 0; i < 9; i++) {
+        this.patterns.push({
+          num: i,
+          lowestNote: 'C',
+          lowestOctave: '3',
+          sequence: Object.assign([], this.nullSequence),
+        });
+      }
+      this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
+      this.setPattern(0);
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
   }
 
   // Bottom note/octave
@@ -75,7 +92,7 @@ export class SequencerComponent implements OnInit {
   }
 
   checkForBlueBorder(idx: number) {
-    return [0, 4, 8, 12].indexOf(idx) !== -1;
+    return idx % 4 === 0;
   }
 
   setPattern(pattern: number) {
@@ -104,7 +121,7 @@ export class SequencerComponent implements OnInit {
     this.initNoteRows();
     this.setNotes(this.activePattern.lowestNote, this.activePattern.lowestOctave);
     this.noteRows.forEach((row: NoteRow) => {
-      row.sequence = Object.assign([], FalseRows);
+      row.sequence = Object.assign([], this.falseSequence);
     });
     this.activePattern.sequence.forEach((note: string, index: number) => {
       const noteRowIndex = this.noteRows.findIndex((noteRow: NoteRow) => {
@@ -118,32 +135,37 @@ export class SequencerComponent implements OnInit {
 
   private initNoteRows() {
     this.noteRows = [
-      {note: 'C', octave: '5', sequence: Object.assign([], FalseRows)},
-      {note: 'B', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'A#', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'A', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'G#', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'G', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'F#', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'F', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'E', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'D#', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'D', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'C#', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'C', octave: '4', sequence: Object.assign([], FalseRows)},
-      {note: 'B', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'A#', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'A', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'G#', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'G', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'F#', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'F', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'E', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'D#', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'D', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'C#', octave: '3', sequence: Object.assign([], FalseRows)},
-      {note: 'C', octave: '3', sequence: Object.assign([], FalseRows)},
+      {note: 'C', octave: '5', sequence: Object.assign([], this.falseSequence)},
+      {note: 'B', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'A#', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'A', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'G#', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'G', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'F#', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'F', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'E', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'D#', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'D', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'C#', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'C', octave: '4', sequence: Object.assign([], this.falseSequence)},
+      {note: 'B', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'A#', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'A', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'G#', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'G', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'F#', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'F', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'E', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'D#', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'D', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'C#', octave: '3', sequence: Object.assign([], this.falseSequence)},
+      {note: 'C', octave: '3', sequence: Object.assign([], this.falseSequence)},
     ];
+    this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
+  }
+
+  private calculateRowWidth(length: number) {
+    return `${42.5 * (length)}px`;
   }
 
 }

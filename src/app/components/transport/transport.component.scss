@@ -22,17 +22,22 @@
             background-color: $paleYellow;
         }
     }
-    .tempo {
+    .tempo, .time-sig {
         color: $closeToBlack;
         background-color: $lightGray;
         padding: 5px;
         margin-top: 8px;
         text-align: center;
-        input {
+        input, select {
             background-color: $closeToBlack;
             border: 1px solid $grayBg;
             color: $lightestGray;
-            font-size: 20px;
         }
+    }
+    .tempo input {
+        font-size: 20px;
+    }
+    .time-sig {
+        padding: 8px 5px;
     }
 }

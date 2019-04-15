@@ -17,6 +17,8 @@ export class TransportComponent implements OnInit, OnDestroy {
   playing = false;
   tempo = 120;
   menuItems = MENU_SCREENS;
+  timeSigNumerator = 4;
+  timeSigDenominator = 4;
 
   private destroy$ = new Subject<any>();
 
@@ -47,6 +49,12 @@ export class TransportComponent implements OnInit, OnDestroy {
 
   changeItem(item: string) {
     this.showItem.emit(item);
+  }
+
+  setTimeSig() {
+    Tone.Transport.timeSignature = [this.timeSigNumerator, this.timeSigDenominator];
+    const stepsPerMeasure = this.synthService.calculateNumberOfStepsPerMeasure(this.timeSigNumerator, this.timeSigDenominator);
+    this.synthService.numberOfStepsPerMeasure.next(stepsPerMeasure);
   }
 
 }

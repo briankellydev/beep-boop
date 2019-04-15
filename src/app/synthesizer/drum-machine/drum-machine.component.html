@@ -29,17 +29,27 @@
           </div>
         </div>
       </div>
-      <div class="sequencer component">
-        <div class="note-row component" *ngFor="let row of noteRows; let rowIdx = index">
-          <div class="note component">
-            {{row.drum}}
+      <div class="component">
+        <div class="row no-gutters">
+          <div class="col-1">
+            <div class="note-row notes component" *ngFor="let row of noteRows; let rowIdx = index">
+              <div class="note component">
+                {{row.drum}}
+              </div>
+            </div>
           </div>
-          <div
-            class="step component"
-            *ngFor="let step of row.sequence; let stepIdx = index"
-            [ngClass]="{'active': step === true, 'border': checkForBorder(stepIdx)}"
-            (click)="toggleStep(rowIdx, stepIdx)"
-          >
+          <div class="col-11">
+            <div class="sequencer">
+              <div class="note-row component" *ngFor="let row of noteRows; let rowIdx = index" [ngStyle]="{'width': cellWidth}">
+                <div
+                  class="step component"
+                  *ngFor="let step of row.sequence; let stepIdx = index"
+                  [ngClass]="{'active': step === true, 'border': checkForBorder(stepIdx)}"
+                  (click)="toggleStep(rowIdx, stepIdx)"
+                >
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

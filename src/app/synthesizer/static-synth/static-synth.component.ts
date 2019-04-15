@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, DoCheck } from '@angular/core';
 import { Oscillator, Envelope, LFO, Filter, TimelineTrack, Pattern } from '../../interfaces';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { takeUntil, take } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { SynthService } from 'src/app/shared/synth.service';
-import { NullSequence } from 'src/app/constants';
 
 @Component({
   selector: 'app-static-synth',

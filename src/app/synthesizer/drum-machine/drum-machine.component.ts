@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, } from '@angular/core';
 import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack } from 'src/app/interfaces';
-import { FalseRows, NullSequence } from 'src/app/constants';
 import { SynthService } from 'src/app/shared/synth.service';
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -48,67 +47,28 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   ];
 
   // TODO const
-  noteRows: DrumRow[] = [
-    {
-      drum: 'PERC',
-      note: 'A',
-      octave: '0',
-      sequence: Object.assign([], FalseRows)
-    },
-    {
-      drum: 'CYM',
-      note: 'G',
-      octave: '0',
-      sequence: Object.assign([], FalseRows)
-    },
-    {
-      drum: 'OH',
-      note: 'F',
-      octave: '0',
-      sequence: Object.assign([], FalseRows)
-    },
-    {
-      drum: 'CH',
-      note: 'E',
-      octave: '0',
-      sequence: Object.assign([], FalseRows)
-    },
-    {
-      drum: 'SD',
-      note: 'D',
-      octave: '0',
-      sequence: Object.assign([], FalseRows)
-    },
-    {
-      drum: 'BD',
-      note: 'C',
-      octave: '0',
-      sequence: Object.assign([], FalseRows)
-    },
-  ];
-
-
+  noteRows: DrumRow[];
   activePattern: PolyPattern = null;
   patterns: PolyPattern[] = [];
   globalPlaying = null;
   collapsed = false;
-
   drumMachine: any[];
-
   DRUM_KITS = {
     '707': '707',
     '808': '808',
     '909': '909',
   };
-
   selectedKit: string;
   parts: any[] = [];
   tracks: TimelineTrack[] = [];
+  cellWidth: string;
 
   private destroy$ = new Subject<any>();
   private tracksIndex: number;
   private volume: any;
   private volVal = 0;
+  private nullSequence: string[];
+  private falseSequence: boolean[];
 
   constructor(private synthService: SynthService) { }
 
@@ -118,21 +78,65 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     this.drumMachine.forEach((drum) => {
       drum.connect(this.volume);
     });
-    for (let i = 0; i < 9; i++) {
-      this.patterns.push({
-        num: i,
-        sequence: [
-          Object.assign([], NullSequence),
-          Object.assign([], NullSequence),
-          Object.assign([], NullSequence),
-          Object.assign([], NullSequence),
-          Object.assign([], NullSequence),
-          Object.assign([], NullSequence)
-        ],
-      });
-    }
-    this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
-    this.setPattern(0);
+    this.synthService.numberOfStepsPerMeasure.pipe(takeUntil(this.destroy$)).subscribe((num: number) => {
+      this.nullSequence = this.synthService.createNullSequence(num);
+      this.falseSequence = this.synthService.createFalseSequence(num);
+      this.noteRows = [
+        {
+          drum: 'PERC',
+          note: 'A',
+          octave: '0',
+          sequence: Object.assign([], this.falseSequence)
+        },
+        {
+          drum: 'CYM',
+          note: 'G',
+          octave: '0',
+          sequence: Object.assign([], this.falseSequence)
+        },
+        {
+          drum: 'OH',
+          note: 'F',
+          octave: '0',
+          sequence: Object.assign([], this.falseSequence)
+        },
+        {
+          drum: 'CH',
+          note: 'E',
+          octave: '0',
+          sequence: Object.assign([], this.falseSequence)
+        },
+        {
+          drum: 'SD',
+          note: 'D',
+          octave: '0',
+          sequence: Object.assign([], this.falseSequence)
+        },
+        {
+          drum: 'BD',
+          note: 'C',
+          octave: '0',
+          sequence: Object.assign([], this.falseSequence)
+        },
+      ];
+      for (let i = 0; i < 9; i++) {
+        this.patterns.push({
+          num: i,
+          sequence: [
+            Object.assign([], this.nullSequence),
+            Object.assign([], this.nullSequence),
+            Object.assign([], this.nullSequence),
+            Object.assign([], this.nullSequence),
+            Object.assign([], this.nullSequence),
+            Object.assign([], this.nullSequence)
+          ],
+        });
+      }
+      this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
+      this.setPattern(0);
+      this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
+    });
+
     this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
       this.tracks = tracks;
       this.tracksIndex = tracks.findIndex((track) => {
@@ -283,7 +287,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       break;
     }
   }
-  
+
   toggleStep(rowIdx: number, noteIdx: number) {
     this.noteRows[rowIdx].sequence[noteIdx] = !this.noteRows[rowIdx].sequence[noteIdx];
     this.activePattern.sequence[rowIdx][noteIdx] = this.noteRows[rowIdx].sequence[noteIdx] ?
@@ -309,7 +313,6 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
             part.stop(`${index + 1}m`);
           }
         });
-        
       }
     });
   }
@@ -328,7 +331,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   }
 
   checkForBorder(idx: number) {
-    return [0, 4, 8, 12].indexOf(idx) !== -1;
+    return idx % 4 === 0;
   }
 
   private compile() {
@@ -344,7 +347,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   private convertPatternToSequencer() {
     this.noteRows.forEach((row: DrumRow) => {
-      row.sequence = Object.assign([], FalseRows);
+      row.sequence = Object.assign([], this.falseSequence);
     });
     for (let i = 0; i < 6; i++) {
       this.activePattern.sequence[i].forEach((note: string, index: number) => {
@@ -356,6 +359,10 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  private calculateRowWidth(length: number) {
+    return `${42.5 * (length)}px`;
   }
 
 }

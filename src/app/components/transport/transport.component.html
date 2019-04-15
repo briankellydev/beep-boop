@@ -26,17 +26,32 @@
         <i class="fa fa-sliders"></i>
       </div>
     </div>
+    <div class="col-2"></div>
+    <div class="col-1">
+      <div class="component transport-button box-shadow-dark" (click)="togglePlay()">
+        <i *ngIf="playing" class="fa fa-stop"></i>
+        <i *ngIf="!playing" class="fa fa-play"></i>
+      </div>
+    </div>
     <div class="col-1"></div>
     <div class="col-2">
       <div class="component tempo">
         BPM <input type="number" min="0" max="999" [(ngModel)]="tempo" (ngModelChange)="setTempo()">
       </div>
     </div>
+    <div class="col-2">
+      <div class="component time-sig">
+          Time Sig.
+          <input type="number" min="0" max="16" [(ngModel)]="timeSigNumerator" (ngModelChange)="setTimeSig()"> / 
+          <select [(ngModel)]="timeSigDenominator" (ngModelChange)="setTimeSig()">
+            <option *ngFor="let denominator of [2, 4, 8, 16]">
+              {{denominator}}
+            </option>
+          </select>
+        </div>
+    </div>
     <div class="col-1">
-      <div class="component transport-button box-shadow-dark" (click)="togglePlay()">
-        <i *ngIf="playing" class="fa fa-stop"></i>
-        <i *ngIf="!playing" class="fa fa-play"></i>
-      </div>
+
     </div>
   </div>
 </div>

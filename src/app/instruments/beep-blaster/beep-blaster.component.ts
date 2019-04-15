@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { SynthService } from 'src/app/shared/synth.service';
-import { NullSequence } from 'src/app/constants';
 import { Pattern } from 'src/app/interfaces';
 
 @Component({
