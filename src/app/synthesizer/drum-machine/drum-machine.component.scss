@@ -1,6 +1,13 @@
 @import '../../variables.scss';
 .left-menu {
     background-color: $gray;
+    .pattern-length {
+        text-align: center;
+        input {
+            font-size: 16px;
+            border: 1px solid $drumMachineRed;
+        }
+    }
     .pattern-button {
         background-color: $drumMachineRed;
         border: 1px solid $closeToBlack;
@@ -13,17 +20,6 @@
             color: $closeToBlack;
         }
     }
-    .play {
-        background: $closeToBlack;
-        border-radius: 50%;
-        height: 70px;
-        width: 70px;
-        border: 1px solid $drumMachineRed;
-        margin: auto;
-        padding-top: 10px;
-        cursor: pointer;
-        text-align: center;
-      }
 }
 .kits {
     label {
@@ -72,12 +68,16 @@
     .step {
         cursor: pointer;
         float: left;
+        border: 1px solid $closeToBlack;
         &.active {
             background-color: $drumMachineRed;
         }
     }
     .border {
         border: 2px solid $drumMachineOrange;
+    }
+    .white-border {
+        border: 2px solid $lightestGray;
     }
     &.notes {
         width: 100%;

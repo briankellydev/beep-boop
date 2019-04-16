@@ -43,11 +43,13 @@ export interface Pattern {
   num: number;
   lowestNote?: string;
   lowestOctave?: string;
+  numberOfMeasures: number;
   sequence: string[];
 }
 
 export interface PolyPattern {
   num: number;
+  numberOfMeasures: number;
   sequence: Array<string[]>
 }
 
@@ -66,4 +68,5 @@ export interface TimelineTrack {
   instanceNumber: number;
   volume: number;
   patternPerMeasure: number[];
+  patternLengths: number[];
 }

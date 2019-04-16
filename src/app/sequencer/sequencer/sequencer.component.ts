@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { NoteSequence } from 'src/app/constants';
-import { NoteRow, Pattern } from 'src/app/interfaces';
+import { NoteRow, Pattern, TimelineTrack } from 'src/app/interfaces';
 import { SynthService } from 'src/app/shared/synth.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 })
 export class SequencerComponent implements OnInit, OnDestroy {
 
+  @Input() deviceNumberIndex: number;
   @Output() patternsChanged = new EventEmitter<Pattern[]>();
   @Output() togglePlay = new EventEmitter<boolean>();
 
@@ -28,25 +29,32 @@ export class SequencerComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
   private nullSequence: string[];
   private falseSequence: boolean[];
+  private numberOfStepsPerMeasure: number;
+  private tracks: TimelineTrack[];
 
   constructor(private synthService: SynthService) { }
 
   ngOnInit() {
     this.synthService.numberOfStepsPerMeasure.pipe(takeUntil(this.destroy$)).subscribe((num: number) => {
+      this.numberOfStepsPerMeasure = num;
       this.patterns = [];
-      this.nullSequence = this.synthService.createNullSequence(num);
-      this.falseSequence = this.synthService.createFalseSequence(num);
+      this.nullSequence = this.synthService.createNullSequence(this.numberOfStepsPerMeasure, 1);
+      this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, 1);
       this.initNoteRows();
       for (let i = 0; i < 9; i++) {
         this.patterns.push({
           num: i,
           lowestNote: 'C',
           lowestOctave: '3',
+          numberOfMeasures: 1,
           sequence: Object.assign([], this.nullSequence),
         });
       }
       this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
       this.setPattern(0);
+    });
+    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
+      this.tracks = tracks;
     });
   }
 
@@ -95,14 +103,39 @@ export class SequencerComponent implements OnInit, OnDestroy {
     return idx % 4 === 0;
   }
 
+  checkForWhiteBorder(idx: number) {
+    return idx % 16 === 0;
+  }
+
   setPattern(pattern: number) {
     // Send active pattern into its corresponding this.patterns
     this.patterns[this.activePattern.num] = JSON.parse(JSON.stringify(this.activePattern));
     // Set the new active pattern
     this.activePattern = JSON.parse(JSON.stringify(this.patterns[pattern]));
     // Build the sequencer from the new pattern
+    this.initNoteRows();
     this.convertPatternToSequencer();
     // Emit the new sequence to the instrument
+    this.patternsChanged.emit(this.patterns);
+  }
+
+  changeNumberOfMeasures() {
+    const diffInMeasures = this.activePattern.numberOfMeasures - (this.activePattern.sequence.length / 16);
+    if (diffInMeasures < 0) {
+      for (let i = 0; i < diffInMeasures * -1 * this.numberOfStepsPerMeasure; i++) {
+        this.activePattern.sequence.pop();
+      }
+    } else if (diffInMeasures > 0) {
+      for (let i = 0; i < diffInMeasures * this.numberOfStepsPerMeasure; i++) {
+        this.activePattern.sequence.push(null);
+      }
+    }
+    this.patterns[this.activePattern.num] = JSON.parse(JSON.stringify(this.activePattern));
+    this.nullSequence = this.synthService.createNullSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
+    this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
+    this.convertPatternToSequencer();
+    this.tracks[this.deviceNumberIndex].patternLengths[this.activePattern.num] = this.activePattern.numberOfMeasures;
+    this.synthService.tracks.next(this.tracks);
     this.patternsChanged.emit(this.patterns);
   }
 

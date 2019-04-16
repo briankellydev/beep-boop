@@ -21,6 +21,10 @@
           </button>
         </div>
       </div>
+      <div class="component pattern-length">
+        <h5>Pattern Length (m)</h5>
+        <input type="number" min="0" max="9" [(ngModel)]="activePattern.numberOfMeasures" (ngModelChange)="changeNumberOfMeasures()">
+      </div>
       <div class="component">
         <h5>Pattern</h5>
         <div class="row no-gutters" *ngFor="let row of [0, 1, 2]">
@@ -57,7 +61,7 @@
             <div
               class="step component"
               *ngFor="let step of row.sequence; let stepIdx = index"
-              [ngClass]="{'active': step === true, 'blue-border': checkForBlueBorder(stepIdx)}"
+              [ngClass]="{'active': step === true, 'blue-border': checkForBlueBorder(stepIdx), 'white-border': checkForWhiteBorder(stepIdx)}"
               (click)="toggleStep(rowIdx, stepIdx)"
             >
             </div>

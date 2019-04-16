@@ -15,7 +15,7 @@
         label {
             font-size: 12px;
         }
-        select {
+        select, input {
             border: 1px solid $synthBlue;
         }
         button {
@@ -35,17 +35,12 @@
                 background-color: $lightestGray;
             }
         }
-        .play {
-            background: $lightestGray;
-            border-radius: 50%;
-            height: 70px;
-            width: 70px;
-            border: 1px solid $synthBlue;
-            margin: auto;
-            padding-top: 10px;
-            cursor: pointer;
+        .pattern-length {
             text-align: center;
-          }
+            input {
+                font-size: 16px;
+            }
+        }
     }
 
     .sequence {
@@ -66,7 +61,6 @@
         .note, .step {
             height: 15px;
             margin: 5px;
-            float: left;
             padding: 0;
             font-size: 10px;
             width: 32px;
@@ -77,16 +71,22 @@
             color: $grayBg;
             line-height: 15px;
             margin-top: 5px;
-            margin-left: 13px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .step {
             cursor: pointer;
+            float: left;
+            border: 1px solid $closeToBlack;
             &.active {
                 background-color: $pink;
             }
         }
         .blue-border {
             border: 2px solid $synthBlue;
+        }
+        .white-border {
+            border: 2px solid $lightestGray;
         }
         &.notes {
             width: 100%;

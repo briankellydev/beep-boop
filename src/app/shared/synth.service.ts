@@ -23,17 +23,17 @@ export class SynthService {
     return numerator * (16 / denominator);
   }
 
-  createNullSequence(numOfSteps: number) {
+  createNullSequence(numOfSteps: number, numberOfMeasures: number) {
     const nullSequence = [];
-    for (let i = 0; i < numOfSteps; i++) {
+    for (let i = 0; i < numOfSteps * numberOfMeasures; i++) {
       nullSequence.push(null);
     }
     return nullSequence;
   }
 
-  createFalseSequence(numOfSteps: number) {
+  createFalseSequence(numOfSteps: number, numberOfMeasures: number) {
     const falseSequence = [];
-    for (let i = 0; i < numOfSteps; i++) {
+    for (let i = 0; i < numOfSteps * numberOfMeasures; i++) {
       falseSequence.push(false);
     }
     return falseSequence;

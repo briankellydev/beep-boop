@@ -12,6 +12,7 @@ export class BoomBoomComponent implements OnInit {
   playing = false;
   showSequencer = false;
   instanceNumber: number;
+  deviceNumberIndex: number;
 
   constructor(private synthService: SynthService) { }
 

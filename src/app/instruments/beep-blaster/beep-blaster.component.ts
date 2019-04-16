@@ -14,6 +14,7 @@ export class BeepBlasterComponent implements OnInit, OnDestroy {
   showSequencer = false;
   collapsed = true;
   instanceNumber: number;
+  deviceNumberIndex: number;
   destroy$ = new Subject<any>();
 
   constructor(private synthService: SynthService) { }

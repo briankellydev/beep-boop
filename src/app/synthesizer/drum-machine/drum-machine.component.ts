@@ -12,41 +12,8 @@ import { Subject } from 'rxjs';
 export class DrumMachineComponent implements OnInit, OnDestroy {
 
   @Input() instanceNumber: number;
+  @Input() deviceNumberIndex: number;
 
-  drumMachineSamples: DrumMachineSample[] = [
-    {
-      trackName: 'BD',
-      sampleName: 'abc',
-      possibleSamples: ['abc', 'def']
-    },
-    {
-      trackName: 'SD',
-      sampleName: 'abc',
-      possibleSamples: ['abc', 'def']
-    },
-    {
-      trackName: 'CH',
-      sampleName: 'abc',
-      possibleSamples: ['abc', 'def']
-    },
-    {
-      trackName: 'OH',
-      sampleName: 'abc',
-      possibleSamples: ['abc', 'def']
-    },
-    {
-      trackName: 'CYM',
-      sampleName: 'abc',
-      possibleSamples: ['abc', 'def']
-    },
-    {
-      trackName: 'PERC',
-      sampleName: 'abc',
-      possibleSamples: ['abc', 'def']
-    },
-  ];
-
-  // TODO const
   noteRows: DrumRow[];
   activePattern: PolyPattern = null;
   patterns: PolyPattern[] = [];
@@ -69,6 +36,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   private volVal = 0;
   private nullSequence: string[];
   private falseSequence: boolean[];
+  private numberOfStepsPerMeasure: number;
 
   constructor(private synthService: SynthService) { }
 
@@ -79,49 +47,14 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       drum.connect(this.volume);
     });
     this.synthService.numberOfStepsPerMeasure.pipe(takeUntil(this.destroy$)).subscribe((num: number) => {
-      this.nullSequence = this.synthService.createNullSequence(num);
-      this.falseSequence = this.synthService.createFalseSequence(num);
-      this.noteRows = [
-        {
-          drum: 'PERC',
-          note: 'A',
-          octave: '0',
-          sequence: Object.assign([], this.falseSequence)
-        },
-        {
-          drum: 'CYM',
-          note: 'G',
-          octave: '0',
-          sequence: Object.assign([], this.falseSequence)
-        },
-        {
-          drum: 'OH',
-          note: 'F',
-          octave: '0',
-          sequence: Object.assign([], this.falseSequence)
-        },
-        {
-          drum: 'CH',
-          note: 'E',
-          octave: '0',
-          sequence: Object.assign([], this.falseSequence)
-        },
-        {
-          drum: 'SD',
-          note: 'D',
-          octave: '0',
-          sequence: Object.assign([], this.falseSequence)
-        },
-        {
-          drum: 'BD',
-          note: 'C',
-          octave: '0',
-          sequence: Object.assign([], this.falseSequence)
-        },
-      ];
+      this.nullSequence = this.synthService.createNullSequence(num, 1);
+      this.falseSequence = this.synthService.createFalseSequence(num, 1);
+      this.numberOfStepsPerMeasure = num;
+      this.initNoteRows();
       for (let i = 0; i < 9; i++) {
         this.patterns.push({
           num: i,
+          numberOfMeasures: 1,
           sequence: [
             Object.assign([], this.nullSequence),
             Object.assign([], this.nullSequence),
@@ -160,6 +93,30 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       part.dispose();
     });
     this.destroy$.next();
+  }
+
+  changeNumberOfMeasures() {
+    const diffInMeasures = this.activePattern.numberOfMeasures - (this.activePattern.sequence.length / 16);
+    this.activePattern.sequence.forEach((sequence) => {
+      if (diffInMeasures < 0) {
+        for (let i = 0; i < diffInMeasures * -1 * this.numberOfStepsPerMeasure; i++) {
+          sequence.pop();
+        }
+      } else if (diffInMeasures > 0) {
+        for (let i = 0; i < diffInMeasures * this.numberOfStepsPerMeasure; i++) {
+          sequence.push(null);
+        }
+      }
+      this.patterns[this.activePattern.num] = JSON.parse(JSON.stringify(this.activePattern));
+    });
+    
+    this.nullSequence = this.synthService.createNullSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
+    this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
+    this.initNoteRows();
+    this.convertPatternToSequencer();
+    this.tracks[this.deviceNumberIndex].patternLengths[this.activePattern.num] = this.activePattern.numberOfMeasures;
+    this.synthService.tracks.next(this.tracks);
+    this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
   }
 
   selectKit(kit: string) {
@@ -304,21 +261,23 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
             // the events will be given to the callback with the time they occur
             this.drumMachine[i].triggerAttackRelease(note, '16n', time);
           }, this.patterns[pattern - 1].sequence[i], '16n'));
-        }
-        this.parts.forEach((part) => {
-          part.loop = false;
+          this.parts[i].loop = false;
           if (this.globalPlaying) {
-            part.start(`${index}m`);
+            this.parts[i].start(`${index}m`);
           } else {
-            part.stop(`${index + 1}m`);
+            this.parts[i].stop(`${index + 1}m`);
           }
-        });
+        }
       }
     });
   }
 
   checkForBlueBorder(idx: number) {
-    return [0, 4, 8, 12].indexOf(idx) !== -1;
+    return idx % 4 === 0;
+  }
+
+  checkForWhiteBorder(idx: number) {
+    return idx % 16 === 0;
   }
 
   setPattern(pattern: number) {
@@ -363,6 +322,47 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   private calculateRowWidth(length: number) {
     return `${42.5 * (length)}px`;
+  }
+
+  private initNoteRows() {
+    this.noteRows = [
+      {
+        drum: 'PERC',
+        note: 'A',
+        octave: '0',
+        sequence: Object.assign([], this.falseSequence)
+      },
+      {
+        drum: 'CYM',
+        note: 'G',
+        octave: '0',
+        sequence: Object.assign([], this.falseSequence)
+      },
+      {
+        drum: 'OH',
+        note: 'F',
+        octave: '0',
+        sequence: Object.assign([], this.falseSequence)
+      },
+      {
+        drum: 'CH',
+        note: 'E',
+        octave: '0',
+        sequence: Object.assign([], this.falseSequence)
+      },
+      {
+        drum: 'SD',
+        note: 'D',
+        octave: '0',
+        sequence: Object.assign([], this.falseSequence)
+      },
+      {
+        drum: 'BD',
+        note: 'C',
+        octave: '0',
+        sequence: Object.assign([], this.falseSequence)
+      },
+    ];
   }
 
 }

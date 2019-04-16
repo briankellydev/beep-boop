@@ -23,6 +23,7 @@
     </app-static-synth>
     <app-sequencer
       [ngStyle]="{'display': showSequencer ? 'block' : 'none'}"
+      [deviceNumberIndex]="deviceNumberIndex"
       (patternsChanged)="changePatterns($event)"
       (togglePlay)="play()">
     </app-sequencer>

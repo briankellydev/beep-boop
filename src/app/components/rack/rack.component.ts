@@ -60,6 +60,7 @@ export class RackComponent implements OnInit, OnDestroy {
       instrument: component,
       instanceNumber: null,
       volume: 0,
+      patternLengths: [1, 1, 1, 1, 1, 1, 1, 1, 1],
       patternPerMeasure: []
     };
     switch(component) {
@@ -77,6 +78,7 @@ export class RackComponent implements OnInit, OnDestroy {
       track.patternPerMeasure.push(null);
     }
     this.timelineTracks.push(track);
+    componentRef.instance.deviceNumberIndex = this.timelineTracks.length - 1;
     this.synthService.tracks.next(this.timelineTracks);
     this.components.push(componentRef);
     this.currentInstanceNumber++;
