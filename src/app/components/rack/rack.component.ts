@@ -60,6 +60,10 @@ export class RackComponent implements OnInit, OnDestroy {
       instrument: component,
       instanceNumber: null,
       volume: 0,
+      pan: 0,
+      mute: false,
+      solo: false,
+      collapsed: true,
       patternLengths: [1, 1, 1, 1, 1, 1, 1, 1, 1],
       patternPerMeasure: []
     };

@@ -1,13 +1,215 @@
 @import '../../variables.scss';
 #timeline {
-    height: 600px;
-    overflow-y: scroll;
-    background-color: $lighterGray;
-    padding: 5px;
-    border-radius: 5px;
-    margin: 5px;
-    border: 1px solid $grayBg;
-    h2 {
+    height: 650px;
+    overflow: scroll;
+    background: linear-gradient(to bottom right, $lighterGray, $gray);
+    .track-column {
+        width: 150px;
+        min-height: 650px;
+        border: 1px solid $lightestGray;
+        border-bottom: none;
+        background: linear-gradient(to bottom right, $closeToBlack, $lightGray);
+        position: sticky;
+        left: 0px;
+        top: 0px;
+        float: left;
+        z-index: 10;
+        .spacer {
+            width: 150px;
+            height: 30px;
+            position: sticky;
+            top: 0px;
+            background: $lighterGray;
+        }
+        .track {
+            background-color: $closeToBlack;
+            color: $lightestGray;
+            width: 100%;
+            i {
+                float: right;
+                margin-right: 5px;
+                margin-top: 3px;
+                cursor: pointer;
+            }
+            .BOOMBOOM, .BEEPBLASTER {
+                border: 1px solid $closeToBlack;
+                width: 100%;
+                text-align: center;
+                height: 25px
+            }
+            .BOOMBOOM {
+                background: linear-gradient(to bottom right, $closeToBlack, $drumMachineRed);
+            }
+            .BEEPBLASTER {
+                background: linear-gradient(to bottom right, $synthBlue, $pink);
+            }
+            .track-stuff {
+                padding: 0 5px;
+                color: $lightestGray;
+                .vol-slider, .pan-slider {
+                    .label {
+                        padding-top: 3px;
+                        float: right;
+                    }
+                    input {
+                        -webkit-appearance: none;
+                        border-radius: 5px;   
+                        background: $lightestGray;
+                        outline: none;
+                        opacity: 0.7;
+                        height: 5px;
+                        -webkit-transition: .2s;
+                        transition: opacity .2s;
+                        &::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            appearance: none;
+                            width: 15px;
+                            height: 15px;
+                            border-radius: 50%; 
+                            background: $closeToBlack;
+                            border: 1px solid $lighterGray;
+                            cursor: pointer;
+                          }
+                          &::-moz-range-thumb {
+                            width: 15px;
+                            height: 15px;
+                            border-radius: 50%;
+                            background: $closeToBlack;
+                            border: 1px solid $gray;
+                            cursor: pointer;
+                          }
+                    }
+                    .meter {
+                        .levels {
+                            background-color: limegreen;
+                            height: 10px;
+
+                        }
+                    }
+                }
+                .vol-slider {
+                    margin-bottom: 3px;
+                    .label, input {
+                        transform: translateY(-10px);
+                    }
+                    input {
+                        width: 100px;
+                    }
+                    .label {
+                        width: 25px;
+                    }
+                }
+                .pan-slider {
+                    width: 80px;
+                    float: left;
+                    input {
+                        width: 37px;
+                    }
+                    .label {
+                        width: 12px;
+                    }
+                    .label:first-of-type {
+                        float: left;
+                        width: 25px;
+                    }
+                }
+                .sm-button {
+                    width: 25px;
+                    float: left;
+                    background-color: $lightGray;
+                    color: $closeToBlack;
+                    border: 1px solid $lightestGray;
+                    border-radius: 3px;
+                    cursor: pointer;
+                    text-align: center;
+                    font-size: 12px;
+                    margin: 2px;
+                    &.active {
+                        background-color: $paleYellow;
+                    }
+                }
+            }
+        }
+    }
+    .measure-column {
+        height: 650px;
+        margin-left: 151px;
+        .measures {
+            position: sticky;
+            top: 0px;
+            width: 100%;
+            .measure {
+                width: 52px;
+                float: left;
+                height: 30px;
+                border: 1px solid $closeToBlack;
+                background-color: $lightGray;
+                color: $closeToBlack;
+                padding: 5px;
+                &.active {
+                    background-color: $paleYellow;
+                }
+            }
+        }
+        .pattern-measure {
+            float: left;
+            border-right: 1px solid $lighterGray;
+            border-left: 1px solid $lighterGray;
+            border-bottom: 1px solid $closeToBlack;
+            border-top: 1px solid $closeToBlack;
+            position: relative;
+            background-color: $grayBg;
+            cursor: cell;
+            font-size: 10px;
+            &:hover {
+                    background-color: $pink;
+                    color: $closeToBlack;
+            }
+            .pattern {
+                height: 40px;
+                margin-top: 5px;
+                border-radius: 5px;
+                &.active {
+                    background-color: $synthBlue;
+                    color: $closeToBlack;
+                    border: 1px solid $closeToBlack;
+                    .pattern-header {
+                        background-color: $synthBlueDarker;
+                        padding: 2px 5px;
+                        border-radius: 5px 5px 0 0;
+                    }
+                }
+            }
+            .dropdown {
+                position: absolute;
+                top: 18px;
+                left: 15px;
+                background-color: $lightestGray;
+                font-size: 12px;
+                border: 1px solid $grayBg;
+                z-index: 100;
+                div {
+                    width: 50px;
+                    cursor: pointer;
+                    background-color: $lightestGray;
+                    color: $closeToBlack;
+                    padding: 5px;
+                    &:hover {
+                        background-color: $synthBlue;
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
+
+
+
+
+
+    /*h2 {
         margin: 0;
         &.component {
             background-color: $closeToBlack;
@@ -113,5 +315,5 @@
                 }
             }
         }
-    }
+    }*/
 }

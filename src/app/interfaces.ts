@@ -67,6 +67,10 @@ export interface TimelineTrack {
   instrument: string;
   instanceNumber: number;
   volume: number;
+  pan: number;
+  mute: boolean;
+  solo: boolean;
+  collapsed: boolean;
   patternPerMeasure: number[];
   patternLengths: number[];
 }

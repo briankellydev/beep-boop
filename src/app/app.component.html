@@ -4,6 +4,5 @@
 <div class="app">
   <app-rack [ngStyle]="{'display': itemToShow === menuScreens.RACK ? 'block' : 'none'}"></app-rack>
   <app-timeline [ngStyle]="{'display': itemToShow === menuScreens.TIMELINE ? 'block' : 'none'}"></app-timeline>
-  <app-mixer [ngStyle]="{'display': itemToShow === menuScreens.MIXER ? 'block' : 'none'}"></app-mixer>
   <app-transport [itemSelected]="itemToShow" (showItem)="showItem($event)"></app-transport>
 </div>

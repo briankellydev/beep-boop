@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, } from '@angular/core';
 import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack } from 'src/app/interfaces';
 import { SynthService } from 'src/app/shared/synth.service';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-drum-machine',
@@ -33,15 +33,21 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
   private tracksIndex: number;
   private volume: any;
-  private volVal = 0;
   private nullSequence: string[];
   private falseSequence: boolean[];
   private numberOfStepsPerMeasure: number;
+  private meter: any;
+  private thisNodeGain = new BehaviorSubject<number>(0);
 
   constructor(private synthService: SynthService) { }
 
   ngOnInit() {
-    this.volume = new Tone.Volume(this.volVal).toMaster();
+    this.meter = new Tone.Meter().toMaster();
+    this.synthService.trackMeterLevels.push(this.thisNodeGain);
+    this.synthService.tick.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.thisNodeGain.next(this.meter.getLevel());
+    });
+    this.volume = new Tone.Channel(0, 0).connect(this.meter);
     this.selectKit(this.DRUM_KITS['808']);
     this.drumMachine.forEach((drum) => {
       drum.connect(this.volume);
@@ -76,6 +82,9 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
         return track.instanceNumber === this.instanceNumber;
       });
       this.volume.volume.value = this.tracks[this.tracksIndex].volume;
+      this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
+      this.volume.mute = this.tracks[this.tracksIndex].mute;
+      this.volume.solo = this.tracks[this.tracksIndex].solo;
       if (this.globalPlaying === null) {
         this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
           this.globalPlaying = isPlaying;
@@ -253,19 +262,22 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   }
 
   toggle() {
+    this.parts.forEach((part: any) => {
+      part.dispose();
+    });
     this.parts = [];
     this.tracks[this.tracksIndex].patternPerMeasure.forEach((pattern: number, index: number) => {
-      if (pattern) {
+      if (pattern && pattern > 0) {
         for (let i = 0; i < 6; i++) {
           this.parts.push(new Tone.Sequence((time, note) => {
             // the events will be given to the callback with the time they occur
             this.drumMachine[i].triggerAttackRelease(note, '16n', time);
           }, this.patterns[pattern - 1].sequence[i], '16n'));
-          this.parts[i].loop = false;
+          this.parts[this.parts.length - 1].loop = false;
           if (this.globalPlaying) {
-            this.parts[i].start(`${index}m`);
+            this.parts[this.parts.length - 1].start(`${index}m`);
           } else {
-            this.parts[i].stop(`${index + 1}m`);
+            this.parts[this.parts.length - 1].stop(`${index + 1}m`);
           }
         }
       }
@@ -281,6 +293,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   }
 
   setPattern(pattern: number) {
+    this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
     // Compile active pattern into its corresponding this.patterns
     this.compile();
     // Set the new active pattern

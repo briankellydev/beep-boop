@@ -29,6 +29,10 @@ export class TransportComponent implements OnInit, OnDestroy {
       this.playing = isPlaying;
     });
     this.setTempo();
+    Tone.Transport.scheduleRepeat(() => {
+      const timeArray = Tone.Transport.position.split(':');
+      this.synthService.tick.next(parseInt(timeArray[0]));
+    }, '8n', 0);
   }
 
   ngOnDestroy() {
@@ -38,8 +42,6 @@ export class TransportComponent implements OnInit, OnDestroy {
   togglePlay() {
     this.playing = !this.playing;
     this.synthService.playing.next(this.playing);
-    // Tone.Transport.loop = true;
-    // Tone.Transport.loopEnd = '1m';
     Tone.Transport.toggle();
   }
 

@@ -125,20 +125,23 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
   }
 
   toggle() {
+    this.parts.forEach((part: any) => {
+      part.dispose();
+    });
     this.parts = [];
     this.tracks[this.tracksIndex].patternPerMeasure.forEach((pattern: number, index: number) => {
-      if (pattern) {
+      if (pattern && pattern > 0) {
         this.parts.push(new Tone.Sequence((time, note) => {
           // the events will be given to the callback with the time they occur
           this.synth.forEach((synth) => {
             synth.triggerAttackRelease(note, '16n', time);
           });
         }, this.patterns[pattern - 1].sequence, '16n'));
-        this.parts[index].loop = false;
+        this.parts[this.parts.length - 1].loop = false;
         if (this.globalPlaying) {
-          this.parts[index].start(`${index}m`);
+          this.parts[this.parts.length - 1].start(`${index}m`);
         } else {
-          this.parts[index].stop(`${index + 1}m`);
+          this.parts[this.parts.length - 1].stop(`${index + 1}m`);
         }
       }
     });

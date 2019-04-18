@@ -112,6 +112,7 @@ export class SequencerComponent implements OnInit, OnDestroy {
     this.patterns[this.activePattern.num] = JSON.parse(JSON.stringify(this.activePattern));
     // Set the new active pattern
     this.activePattern = JSON.parse(JSON.stringify(this.patterns[pattern]));
+    this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
     // Build the sequencer from the new pattern
     this.initNoteRows();
     this.convertPatternToSequencer();

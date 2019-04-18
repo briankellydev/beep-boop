@@ -12,6 +12,8 @@ export class SynthService {
   tracks = new BehaviorSubject<TimelineTrack[]>([]);
   numberOfMeasures = 20;
   numberOfStepsPerMeasure = new BehaviorSubject<number>(16);
+  trackMeterLevels: BehaviorSubject<number>[] = [];
+  tick = new BehaviorSubject<number>(null);
 
   constructor() { }
 

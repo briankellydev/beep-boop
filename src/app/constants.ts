@@ -4,6 +4,5 @@ export const NoteSequence: string[] = [
 
 export const MENU_SCREENS = {
 RACK: 'rack',
-TIMELINE: 'timeline',
-MIXER: 'mixer',
+TIMELINE: 'timeline'
 };
