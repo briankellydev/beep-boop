@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VolumeComponent } from './volume.component';
+import { RenderingModalComponent } from './rendering-modal.component';
 
-describe('VolumeComponent', () => {
-  let component: VolumeComponent;
-  let fixture: ComponentFixture<VolumeComponent>;
+describe('RenderingModalComponent', () => {
+  let component: RenderingModalComponent;
+  let fixture: ComponentFixture<RenderingModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VolumeComponent ]
+      declarations: [ RenderingModalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VolumeComponent);
+    fixture = TestBed.createComponent(RenderingModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

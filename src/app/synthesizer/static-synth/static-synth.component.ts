@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, DoCheck } from '@angular/core';
 import { Oscillator, Envelope, LFO, Filter, TimelineTrack, Pattern } from '../../interfaces';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SynthService } from 'src/app/shared/synth.service';
 
@@ -64,15 +64,23 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
   globalPlaying = null;
   parts: any[] = [];
   part: any;
+  meter: any;
 
   private destroy$ = new Subject<any>();
   private tracksIndex: number;
   private tracks: TimelineTrack[];
+  private thisNodeGain = new BehaviorSubject<number>(0);
 
   constructor(private synthService: SynthService) { }
 
   ngOnInit() {
-    this.volume = new Tone.Volume(this.volVal).toMaster();
+    this.meter = new Tone.Meter().toMaster();
+    this.synthService.trackMeterLevels.push(this.thisNodeGain);
+    this.synthService.tick.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.thisNodeGain.next(this.meter.getLevel());
+    });
+    this.volume = new Tone.Channel(0, 0).connect(this.meter);
+    this.volume.connect(this.synthService.dest);
     this.reverb = new Tone.JCReverb(this.reverbConfig).connect(this.volume);
     this.reverb.wet.value = 0;
     this.delay = new Tone.FeedbackDelay(this.delayConfig).connect(this.reverb);
@@ -94,9 +102,10 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
       this.tracksIndex = tracks.findIndex((track) => {
         return track.instanceNumber === this.instanceNumber;
       });
-      if (tracks[this.tracksIndex].volume !== this.volVal) {
-        this.changeVol(this.tracks[this.tracksIndex].volume);
-      }
+      this.volume.volume.value = this.tracks[this.tracksIndex].volume;
+      this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
+      this.volume.mute = this.tracks[this.tracksIndex].mute;
+      this.volume.solo = this.tracks[this.tracksIndex].solo;
       if (this.globalPlaying === null) {
         this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
           this.globalPlaying = isPlaying;
@@ -145,13 +154,6 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
         }
       }
     });
-  }
-
-  changeVol(vol: number) {
-    this.volume.volume.value = vol;
-    this.volVal = vol;
-    this.tracks[this.tracksIndex].volume = vol;
-    this.synthService.tracks.next(this.tracks);
   }
 
   changeOsc(osc: string, num: number) {

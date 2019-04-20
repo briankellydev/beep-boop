@@ -6,10 +6,8 @@ import { EnvelopeComponent } from './envelope/envelope.component';
 import { FilterComponent } from './filter/filter.component';
 import { LfoComponent } from './lfo/lfo.component';
 import { OscillatorComponent } from './oscillator/oscillator.component';
-import { PortamentoComponent } from './portamento/portamento.component';
 import { ReverbComponent } from './reverb/reverb.component';
 import { StaticSynthComponent } from './static-synth/static-synth.component';
-import { VolumeComponent } from './volume/volume.component';
 import { MatSlideToggleModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
@@ -31,10 +29,8 @@ import { DrumMachineComponent } from './drum-machine/drum-machine.component';
     FilterComponent,
     LfoComponent,
     OscillatorComponent,
-    PortamentoComponent,
     ReverbComponent,
     StaticSynthComponent,
-    VolumeComponent,
     DrumMachineComponent,
   ],
   exports: [

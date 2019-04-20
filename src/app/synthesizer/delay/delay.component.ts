@@ -6,7 +6,7 @@ import { SynthService } from 'src/app/shared/synth.service';
   templateUrl: './delay.component.html',
   styleUrls: ['./delay.component.scss']
 })
-export class DelayComponent implements OnInit, AfterViewInit {
+export class DelayComponent implements OnInit {
 
 
   @Output() delayChanged = new EventEmitter<any>();
@@ -16,39 +16,22 @@ export class DelayComponent implements OnInit, AfterViewInit {
     feedback: 0,
   };
   enabled = false;
-  customGeneratedId = this.synthService.generateRandomNumber();
 
-  constructor(private synthService: SynthService) { }
+  constructor() { }
 
   ngOnInit() {
   }
 
-  ngAfterViewInit() {
-    $(`#${this.customGeneratedId} .time`).roundSlider({
-      radius: 40,
-      circleShape: 'default',
-      sliderType: 'min-range',
-      showTooltip: true,
-      value: this.delayConfig.delayTime,
-      min: 0,
-      max: 100
-    });
-    $(`#${this.customGeneratedId} .feedback`).roundSlider({
-      radius: 40,
-      circleShape: 'default',
-      sliderType: 'min-range',
-      showTooltip: true,
-      value: this.delayConfig.feedback,
-      min: 0,
-      max: 100
-    });
-  }
-
-  changes() {
-    this.delayConfig.delayTime = parseInt($(`#${this.customGeneratedId} .time .rs-tooltip`).eq(0).text());
-    this.delayConfig.feedback = parseInt($(`#${this.customGeneratedId} .feedback .rs-tooltip`).eq(0).text());
+  changeTime(time: number) {
+    this.delayConfig.delayTime = time;
     this.delayChanged.emit(this.delayConfig);
   }
+
+  changeFeedback(feedback: number) {
+    this.delayConfig.feedback = feedback;
+    this.delayChanged.emit(this.delayConfig);
+  }
+
 
   toggle() {
     this.enabled = !this.enabled;

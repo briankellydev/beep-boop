@@ -15,7 +15,6 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "types": ["jquery"],
     "lib": [
       "es2018",
       "dom"

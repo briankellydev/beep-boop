@@ -15,14 +15,14 @@
         [ngClass]="{'active': itemSelected === menuItems.TIMELINE}"
         (click)="changeItem(menuItems.TIMELINE)"
         >
-        <i class="fa fa-braille"></i>
+        <i class="fa fa-clock-o"></i>
       </div>
     </div>
     <div class="col-1">
     </div>
     <div class="col-2"></div>
     <div class="col-1">
-      <div class="component transport-button box-shadow-dark" (click)="togglePlay()">
+      <div class="component transport-button box-shadow-dark" (click)="togglePlay(!playing)">
         <i *ngIf="playing" class="fa fa-stop"></i>
         <i *ngIf="!playing" class="fa fa-play"></i>
       </div>

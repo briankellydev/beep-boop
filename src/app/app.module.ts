@@ -9,6 +9,8 @@ import { InstrumentsModule } from './instruments/instruments.module';
 import { RackComponent } from './components/rack/rack.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { TransportComponent } from './components/transport/transport.component';
+import { RenderingModalComponent } from './rendering-modal/rendering-modal.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,7 @@ import { TransportComponent } from './components/transport/transport.component';
     RackComponent,
     TimelineComponent,
     TransportComponent,
+    RenderingModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -23,6 +26,10 @@ import { TransportComponent } from './components/transport/transport.component';
     AppRoutingModule,
     MatSlideToggleModule,
     InstrumentsModule,
+    SharedModule
+  ],
+  entryComponents: [
+    RenderingModalComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

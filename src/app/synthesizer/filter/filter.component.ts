@@ -7,7 +7,7 @@ import { SynthService } from 'src/app/shared/synth.service';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss']
 })
-export class FilterComponent implements OnInit, AfterViewInit {
+export class FilterComponent implements OnInit {
 
   @Output() filterChanged = new EventEmitter<Filter>();
 
@@ -17,43 +17,26 @@ export class FilterComponent implements OnInit, AfterViewInit {
     Q: 0
   };
   typeSelected = 'lowpass';
-  customGeneratedId = this.synthService.generateRandomNumber();
-  constructor(private synthService: SynthService) { }
+  constructor() { }
 
   ngOnInit() {
     
   }
 
-  ngAfterViewInit() {
-    $(`#${this.customGeneratedId} .q`).roundSlider({
-      radius: 40,
-      circleShape: `default`,
-      sliderType: `min-range`,
-      showTooltip: true,
-      value: this.filterConfig.Q,
-      min: 0,
-      max: 10
-    });
-    $(`#${this.customGeneratedId} .filt-freq`).roundSlider({
-      radius: 40,
-      circleShape: `default`,
-      sliderType: `min-range`,
-      showTooltip: true,
-      value: this.filterConfig.frequency,
-      min: 0,
-      max: 20000
-    });
-  }
-
-  changes() {
-    this.filterConfig.frequency = parseInt($(`#${this.customGeneratedId} .rs-tooltip`).eq(0).text());
-    this.filterConfig.Q = parseInt($(`#${this.customGeneratedId} .rs-tooltip`).eq(1).text());
-    this.filterConfig.type = this.typeSelected;
+  changeFreq(freq: number) {
+    this.filterConfig.frequency = freq;
     this.filterChanged.emit(this.filterConfig);
   }
 
+  changeQ(q: number) {
+    this.filterConfig.Q = q;
+    this.filterChanged.emit(this.filterConfig);
+  }
+
+
   selectType(type: string) {
     this.typeSelected = type;
-    this.changes();
+    this.filterConfig.type = this.typeSelected;
+    this.filterChanged.emit(this.filterConfig);
   }
 }

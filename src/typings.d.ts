@@ -1,4 +1,2 @@
 declare var Tone: any;
-interface JQuery {
-    roundSlider(options?: any): any;
-}
+declare var WebAudioRecorder: any;

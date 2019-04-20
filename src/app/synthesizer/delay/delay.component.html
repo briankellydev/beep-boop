@@ -1,13 +1,27 @@
-<div [id]="customGeneratedId" class="delay component">
+<div class="delay component">
   <h5>Delay <mat-slide-toggle [checked]="enabled" (change)="toggle()"></mat-slide-toggle></h5>
   <div class="row">
     <div class="col-6">
       <h5>Time</h5>
-      <div (mouseup)="changes()" class="time"></div>
+      <div class="time">
+        <app-knob
+          primaryColor="#54bbe0"
+          secondaryColor="#EEEEEE"
+          (valChanged)="changeTime($event)"
+        >
+        </app-knob>
+      </div>
     </div>
     <div class="col-6">
       <h5>Feedback</h5>
-      <div (mouseup)="changes()" class="feedback"></div>
+      <div class="feedback">
+          <app-knob
+            primaryColor="#54bbe0"
+            secondaryColor="#EEEEEE"
+            (valChanged)="changeFeedback($event)"
+          >
+          </app-knob>
+      </div>
     </div>
   </div>
 </div>

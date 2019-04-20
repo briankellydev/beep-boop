@@ -1,0 +1,17 @@
+<div class="knob-wrapper" [ngStyle]="{'width': (diameter + (diameter / 3)) + 'px', 'color': textColor}">
+  <div class="min">{{min}}</div>
+  <div class="max">{{getDisplayMax()}}</div>
+  <div
+    class="knob"
+    [ngStyle]="{'transform': 'rotate(' + (rotation - 125) + 'deg)', 'width': diameter + 'px', 'height': diameter + 'px', 'background-color': secondaryColor, 'padding-top': (diameter / 4) + 'px'}"
+    (mousedown)="setDragging($event, true)"
+    >
+    <div class="center-circle" [ngStyle]="{'width': (diameter / 2) + 'px', 'height': (diameter / 2) + 'px', 'background-color': primaryColor}">
+    </div>
+    <div
+      class="notch"
+      [ngStyle]="{'left': ((diameter / 2) - 2) + 'px', 'height': (diameter / 3) + 'px', 'background-color': primaryColor}"
+      >
+    </div>
+  </div>
+</div>

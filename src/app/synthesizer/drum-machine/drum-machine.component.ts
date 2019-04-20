@@ -48,6 +48,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       this.thisNodeGain.next(this.meter.getLevel());
     });
     this.volume = new Tone.Channel(0, 0).connect(this.meter);
+    this.volume.connect(this.synthService.dest);
     this.selectKit(this.DRUM_KITS['808']);
     this.drumMachine.forEach((drum) => {
       drum.connect(this.volume);

@@ -27,13 +27,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/round-slider/dist/roundslider.min.css"
+              "src/styles.scss"
             ],
             "scripts": [
               "node_modules/tone/build/Tone.js",
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/round-slider/dist/roundslider.min.js"
+              "src/assets/war/WebAudioRecorder.min.js",
+              "src/assets/war/WebAudioRecorderWav.min.js"
             ]
           },
           "configurations": {

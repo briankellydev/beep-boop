@@ -55,7 +55,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.meterChanged();
   }
 
-  getMeterWidth(level: number) {
+  // TODO this isn't very performant for meter showing, explore what's up
+  /*getMeterWidth(level: number) {
     // Gotta make it logarithmic as dB is log
     if (level === -Infinity) {
       return '0px';
@@ -64,7 +65,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     const width = 150 * pct;
     const scale = Math.log(150) / 100;
     return `${Math.exp(scale * Math.round(width))}px`;
-  }
+  }*/
 
   meterChanged() {
     this.synthService.tracks.next(this.timelineTracks);

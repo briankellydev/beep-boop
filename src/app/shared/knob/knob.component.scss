@@ -1,0 +1,37 @@
+@import '../../variables.scss';
+
+.knob-wrapper {
+    position: relative;
+    padding: 0 10px;
+    padding-bottom: 10px;
+    font-size: 12px;
+    margin: auto;
+    .min, .max {
+        position: absolute;
+        bottom: 0;
+    }
+    .min {
+        left: 0;
+    }
+    .max {
+        right: 0;
+    }
+    .knob {
+        border-radius: 50%;
+        position: relative;
+        border: 1px solid $closeToBlack;
+        .center-circle {
+            border-radius: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid $closeToBlack;
+        }
+        .notch {
+            width: 4px;
+            position: absolute;
+            top: -5px;
+            border: 1px solid $closeToBlack;
+            border-bottom: 0;
+        }
+    }
+}

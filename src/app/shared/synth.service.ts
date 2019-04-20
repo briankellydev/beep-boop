@@ -14,8 +14,14 @@ export class SynthService {
   numberOfStepsPerMeasure = new BehaviorSubject<number>(16);
   trackMeterLevels: BehaviorSubject<number>[] = [];
   tick = new BehaviorSubject<number>(null);
+  dest = Tone.context.createMediaStreamDestination();
+  recorder: any;
+  chunks = [];
 
-  constructor() { }
+  constructor() {
+      // Code in the constructor is a no-no in angular, but with tone there aren't a lot of choices here
+      // this.recorder = new MediaRecorder(this.dest.stream);
+   }
 
   generateRandomNumber() {
     return Math.round(Math.random() * 10000);

@@ -1,4 +1,4 @@
-<div [id]="customGeneratedId" class="lfo component">
+<div class="lfo component">
   <h5>LFO <mat-slide-toggle [checked]="enabled" (change)="toggle()"></mat-slide-toggle></h5>
   <div class="row">
     <div class="col-6">
@@ -49,11 +49,27 @@
   <div class="row">
     <div class="col-6">
       <h5>Depth</h5>
-      <div (mouseup)="changes()" class="depth"></div>
+      <div class="depth">
+        <app-knob
+          primaryColor="#54bbe0"
+          secondaryColor="#EEEEEE"
+          [max]="5000"
+          (valChanged)="changeDepth($event)"
+        >
+        </app-knob>
+      </div>
     </div>
     <div class="col-6">
       <h5>Rate</h5>
-      <div (mouseup)="changes()" class="lfo-freq"></div>
+      <div class="lfo-freq">
+        <app-knob
+          primaryColor="#54bbe0"
+          secondaryColor="#EEEEEE"
+          [max]="30"
+          (valChanged)="changeFreq($event)"
+        >
+        </app-knob>
+      </div>
     </div>
     
   </div>

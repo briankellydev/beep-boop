@@ -1,6 +1,10 @@
 <div id="timeline" class="box-shadow">
     <div class="track-column">
-      <div class="spacer"></div>
+      <div class="spacer">
+        Measures
+        <div class="icon" (click)="addMeasure()"><i class="fa fa-plus"></i></div>
+        <div class="icon" (click)="deleteMeasure()"><i class="fa fa-minus"></i></div>
+      </div>
       <div class="track" *ngFor="let track of timelineTracks; let i = index" [ngStyle]="{'height': track.collapsed ? '25px' : '90px'}">
         <div [ngClass]="track.instrument">
           {{track.instrument}}
@@ -9,9 +13,9 @@
         </div>
         <div class="track-stuff" *ngIf="!track.collapsed">
           <div class="vol-slider">
-            <div class="meter">
+            <!---<div class="meter">
               <div class="levels" [ngStyle]="{'width': getMeterWidth(synthService.trackMeterLevels[i] | async)}"></div>
-            </div>
+            </div>-->
             <input type="range" min="-50" max="6" class="slider" [(ngModel)]="track.volume" (change)="meterChanged()"> <div class="label">{{track.volume}}</div>
           </div>
           <div class="pan-slider">
@@ -42,7 +46,7 @@
           <div
             class="pattern"
             [ngClass]="{'active': track.patternPerMeasure[i] !== null}"
-            [ngStyle]="{'height': track.collapsed ? '25px' : '40px'}"
+            [ngStyle]="{'height': track.collapsed ? '20px' : '60px'}"
             >
             <div class="pattern-header">{{track.patternPerMeasure[i]}}</div>
             </div>
