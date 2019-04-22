@@ -1,0 +1,63 @@
+<div class="dashboard">
+  <div class="card">
+      <header>
+        <h1>BeepBoop <span class="subtitle">Audio Synthesis Workstation</span></h1>
+      </header>
+      <div class="card-body">
+          <mat-accordion>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                  About the Author
+              </mat-expansion-panel-header>
+              <img src="assets/portrait.png">
+              <p>Brian Kelly started coding when he was 12, learning HTML, VRML, and a little JavaScript from college textbooks his mom rented him from the library. This has led him to a life of passion for technology and programming, with ever-developing interests in the intersectional possibilities of art and technology.</p>
+              <p>In college, he received a Bachelor of Arts in Music Education and went on to complete a Master of Music Composition (specializing in electronic music composition and technology) from the University of Georgia. He spent 4 years working on his Doctorate of Musical Arts in the same at the University of Colorado Boulder, but ultimately dropped out because.. well.. the job market sucks. Don't worry, he's a lot happier now and he makes a lot more money being a front-end web developer specializing in Angular than he did from the paltry checks ASCAP cuts.</p>
+                <p>During his tenure in graduate school he became an expert in audio programming languages like MaxMSP and SuperCollider, and taught multiple courses on electronic music and music technology. Throughout his studies he managed to keep up with web development and do some freelancing for extra cash.
+                As you can imagine, this application represents the intersection of multiple of his interests.</p>
+              <p>
+                <a href="http://www.briankellydev.com" target="_blank">Portfolio</a> | 
+                <a href="https://github.com/briankellydev" target="_blank">GitHub</a> | 
+                <a href="https://www.linkedin.com/in/briankellydev/" target="_blank">LinkedIn</a>
+              </p>
+              <p>
+                Academic Electronic Music: 
+                <a href="https://www.youtube.com/watch?v=HIpGsNr7MJw" target="_blank">root_glitch</a> | 
+                <a href="https://www.youtube.com/watch?v=GXoXf5HRKdY" target="_blank">Winter Meditation</a> | 
+                <a href="https://www.youtube.com/watch?v=LcGv7Hip9as" target="_blank">Desert Song</a>
+              </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                About BeepBoop
+              </mat-expansion-panel-header>
+                <p>BeepBoop is, in this first iteration, a pretty simple DAW (Digital Audio Workstation) with two instrument types available: an analog-style synthesizer and a drum machine. You can make patterns combining any number of these, arrange them in the timeline, and export to WAV. You can even use a USB MIDI keyboard!</p>
+                <p>Future iterations will be more fully functional. Plans include: the ability to login/save your work/collaborate with other users, sample-based instruments like samplers and granular synths, recording your own audio, and more.</p>
+                <p>The app is built in Angular 7 and uses Tone.js to generate sound via the Web Audio API. It is optimized for Chrome and because of compatibility issues with the Web Audio API, you may encounter issues on mobile, Safari, and older browsers.</p>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                Begin Tutorial
+              </mat-expansion-panel-header>
+              <div class="begin-tutorial">
+                <h2>Have you used synthesizers/digital audio workstations before?</h2>
+                <div class="row no-gutters">
+                  <div class="col-2"></div>
+                  <div class="col-4">
+                    <div class="component transport-button" [routerLink]="['basic']">
+                      Yep, just show me where everything is!
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="component transport-button" [routerLink]="['noob']">
+                      I'm a n00b, teach me about audio synthesis!
+                    </div>
+                  </div>
+                  <div class="col-2"></div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+      </div>
+    </div>
+</div>
+

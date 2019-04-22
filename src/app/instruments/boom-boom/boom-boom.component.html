@@ -5,8 +5,11 @@
       <i *ngIf="!collapsed" class="fa fa-lg fa-chevron-down"></i>
       <i *ngIf="collapsed" class="fa fa-lg fa-chevron-right"></i>
     </div>
-    <div class="icon" (click)="destroy()">
+    <div class="icon transport-button" (click)="destroy()">
       <i class="fa fa-lg fa-trash"></i>
+    </div>
+    <div class="icon transport-button" [ngClass]="{'active': instanceNumber === synthService.instanceMidiActivated}" (click)="enableMidi()">
+      <i class="fa fa-gamepad fa-lg"></i>
     </div>
   </h2>
   <div [ngStyle]="{'display': collapsed ? 'none' : 'block'}">

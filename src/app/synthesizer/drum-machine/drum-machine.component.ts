@@ -48,7 +48,6 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       this.thisNodeGain.next(this.meter.getLevel());
     });
     this.volume = new Tone.Channel(0, 0).connect(this.meter);
-    this.volume.connect(this.synthService.dest);
     this.selectKit(this.DRUM_KITS['808']);
     this.drumMachine.forEach((drum) => {
       drum.connect(this.volume);
@@ -93,6 +92,35 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
         });
       }
     });
+
+    this.synthService.midiMessage.pipe(takeUntil(this.destroy$)).subscribe((midiMessage: any) => {
+      if (midiMessage && this.instanceNumber === this.synthService.instanceMidiActivated) {
+        // If it's not a note off message
+        // Eventually velocity and duration will be implemented
+        if (midiMessage.data[2] !== 127) {
+          switch(midiMessage.data[1]) {
+            case(48):
+              this.drumMachine[5].triggerAttackRelease(Tone.Midi(48).toFrequency(), '16n');
+            break;
+            case(50):
+              this.drumMachine[4].triggerAttackRelease(Tone.Midi(50).toFrequency(), '16n');
+            break;
+            case(52):
+              this.drumMachine[3].triggerAttackRelease(Tone.Midi(52).toFrequency(), '16n');
+            break;
+            case(53):
+              this.drumMachine[2].triggerAttackRelease(Tone.Midi(53).toFrequency(), '16n');
+            break;
+            case(55):
+              this.drumMachine[1].triggerAttackRelease(Tone.Midi(55).toFrequency(), '16n');
+            break;
+            case(57):
+              this.drumMachine[0].triggerAttackRelease(Tone.Midi(57).toFrequency(), '16n');
+            break;
+          }
+        }
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -135,37 +163,37 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       case this.DRUM_KITS['707']:
       this.drumMachine = [
         new Tone.Sampler({
-          'A0': '/707/CLP.mp3',
+          'A3': '/707/CLP.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'G0': '/707/CYM.mp3',
+          'G3': '/707/CYM.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'F0': '/707/OH.mp3',
+          'F3': '/707/OH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'E0': '/707/CH.mp3',
+          'E3': '/707/CH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'D0': '/707/SD.mp3',
+          'D3': '/707/SD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'C0': '/707/BD.mp3',
+          'C3': '/707/BD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
@@ -175,37 +203,37 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       case this.DRUM_KITS['808']:
       this.drumMachine = [
         new Tone.Sampler({
-          'A0': '/808/CL.mp3',
+          'A3': '/808/CL.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'G0': '/808/CYM.mp3',
+          'G3': '/808/CYM.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'F0': '/808/OH.mp3',
+          'F3': '/808/OH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'E0': '/808/CH.mp3',
+          'E3': '/808/CH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'D0': '/808/SD.mp3',
+          'D3': '/808/SD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'C0': '/808/BD.mp3',
+          'C3': '/808/BD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
@@ -215,37 +243,37 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       case this.DRUM_KITS['909']:
       this.drumMachine = [
         new Tone.Sampler({
-          'A0': '/909/CLP.mp3',
+          'A3': '/909/CLP.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'G0': '/909/CYM.mp3',
+          'G3': '/909/CYM.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'F0': '/909/OH.mp3',
+          'F3': '/909/OH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'E0': '/909/CH.mp3',
+          'E3': '/909/CH.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'D0': '/909/SD.mp3',
+          'D3': '/909/SD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
         }),
         new Tone.Sampler({
-          'C0': '/909/BD.mp3',
+          'C3': '/909/BD.mp3',
         }, {
           'release' : 1,
           'baseUrl' : '../../assets/samples'
@@ -343,37 +371,37 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       {
         drum: 'PERC',
         note: 'A',
-        octave: '0',
+        octave: '3',
         sequence: Object.assign([], this.falseSequence)
       },
       {
         drum: 'CYM',
         note: 'G',
-        octave: '0',
+        octave: '3',
         sequence: Object.assign([], this.falseSequence)
       },
       {
         drum: 'OH',
         note: 'F',
-        octave: '0',
+        octave: '3',
         sequence: Object.assign([], this.falseSequence)
       },
       {
         drum: 'CH',
         note: 'E',
-        octave: '0',
+        octave: '3',
         sequence: Object.assign([], this.falseSequence)
       },
       {
         drum: 'SD',
         note: 'D',
-        octave: '0',
+        octave: '3',
         sequence: Object.assign([], this.falseSequence)
       },
       {
         drum: 'BD',
         note: 'C',
-        octave: '0',
+        octave: '3',
         sequence: Object.assign([], this.falseSequence)
       },
     ];

@@ -1,0 +1,29 @@
+@import "../../variables.scss";
+
+header {
+    width: 100%;
+    background-color: $grayBg;
+    border-bottom: 1px solid $lightGray;
+    color: $lightestGray;
+    padding: 10px;
+    h2, h1 {
+        margin: 0;
+        color: $lightestGray;
+    }
+    .subtitle {
+        color: $lightestGray;
+    }
+}
+img {
+    float: left;
+    width: 250px;
+    border-radius: 5px;
+    margin: 10px 10px 10px 0;
+}
+.begin-tutorial {
+    text-align: center;
+}
+.component {
+    cursor: pointer;
+    border: 1px solid $closeToBlack;
+}

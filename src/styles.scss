@@ -5,6 +5,10 @@
 @import './app/variables.scss';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
+a, a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  color: $synthBlue;
+}
 
   h5 {
     margin-top: 0;
@@ -62,4 +66,41 @@
     float: right;
     margin-right: 10px;
     cursor: pointer;
+}
+
+.transport-button {
+  cursor: pointer;
+  background-color: $lightestGray;
+  transition: 0.2s background-color;
+  text-align: center;
+  color: $grayBg;
+  &.active {
+      background-color: $drumMachineYellow;
+  }
+  &:hover {
+      background-color: $paleYellow;
+  }
+}
+
+.card {
+  width: 100%;
+  border: 1px solid $closeToBlack;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px $grayBg;
+  margin-bottom: 10px;
+  header {
+    width: 100%;
+    padding: 10px;
+    background-color: $grayBg;
+    color: $lightestGray;
+    h1, h2, h3 {
+      margin: 0;
+    }
+  }
+  .card-body {
+    padding: 10px;
+  }
+}
+.dashboard {
+  padding: 10px;
 }

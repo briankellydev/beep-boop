@@ -1,0 +1,34 @@
+@import '../../variables.scss';
+
+header {
+    height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: $grayBg;
+    border-bottom: 1px solid $lightGray;
+    color: $lightestGray;
+    padding: 0 10px;
+    z-index: 100;
+    h1 {
+        margin: 0;
+        color: $lightestGray;
+    }
+    .subtitle {
+        color: $lightestGray;
+    }
+    .transport-button {
+        padding: 5px 10px;
+        border: 1px solid $closeToBlack;
+        border-radius: 3px;
+        font-size: 22px;
+        margin-top: 3px;
+    }
+}
+.app {
+    height: 100vh;
+    overflow-y: scroll;
+    padding: 50px 0;
+    background-color: $lightestGray;
+}

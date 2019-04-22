@@ -1,0 +1,68 @@
+<div class="dashboard">
+  <div class="card">
+    <header>
+      <h1>BeepBoop <span class="subtitle">Audio Synthesis Workstation</span></h1>
+    </header>
+    <div class="card-body">
+      <div class="card">
+        <header><h2>Navigation</h2></header>
+        <div class="card-body">
+          <div>The application has top and bottom nav bars with various ways to get around the app.</div>
+          <div class="line-item">
+            <div class="icon transport-button" title="Export to File">
+              <i class="fa fa-download"></i>
+            </div>
+            <span>Exports your current song on the timeline to a WAV file</span>
+          </div>
+          <div class="line-item">
+            <a class="icon transport-button" title="Help!" target="_blank">
+              <i class="fa fa-question-circle-o"></i>
+            </a>
+            <span>Brings you back to this tutorial</span>
+          </div>
+          <div class="line-item">
+            <div class="transport-button icon">
+              <i class="fa fa-music"></i>
+            </div>
+            <span>Navigate to the rack, where all your instruments are created and your patterns are sequenced</span>
+          </div>
+          <div class="line-item">
+            <div class="transport-button icon">
+              <i class="fa fa-clock-o"></i>
+            </div>
+            <span>Navigate to the timline, where you do your mixing and arrange your patterns into a song.</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <header><h2>Rack</h2></header>
+        <div class="card-body">
+          <div>Where you create your instruments and sequence your patterns. The basics of each device should be pretty straightforward if you've used synths before.<br><br></div>
+          <div>Each instrument has a step sequencer (sometimes hidden behind the <i class="fa fa-braille"></i> icon). Each step is a 1/16th note. Note-based instruments can deal with patterns up to 2 octaves in range. You can change the starting note of this range on the left, as well as the number of measures in the pattern you're on, and switch between patterns.<br><br></div>
+          <div>If you have a USB MIDI keyboard, plug it in! Clicking the <i class="fa fa-gamepad"></i> icon activates this instrument to listen to your MIDI input.<br><br></div>
+          <div>For the drum machine, the drums are set to white keys starting on C3 (e.g. D3, E3, etc).</div>
+        </div>
+      </div>
+      <div class="card">
+        <header><h2>Timeline</h2></header>
+        <div class="card-body">
+          <div>Where you mix your sounds and arrange your patterns into a song.<br><br></div>
+          <div>On the left, you'll see each of the instruments you've created. If you expand the track, you get volume, panning, solo, and mute controls.<br><br></div>
+          <div>On the right is the timeline, a record of what happens in each measure. Click on a measure you want to add a pattern to on a particular track. It'll present you with numbers 1-9, corresponding with the pattern number. If the pattern is more than one measure, the timeline will show it at the proper length. In this way, you can create a complicated song with multiple different parts.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="row no-gutters">
+            <div class="col-3"></div>
+            <div class="col-6">
+              <div class="component transport-button" [routerLink]="['/tutorial', 'noob']">
+                Woah, this is way too complicated for me. Take me to the beginners' tutorial.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

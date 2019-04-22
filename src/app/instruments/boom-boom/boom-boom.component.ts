@@ -27,4 +27,8 @@ export class BoomBoomComponent implements OnInit {
     this.synthService.instanceToDelete.next(this.instanceNumber);
   }
 
+  enableMidi() {
+    this.synthService.instanceMidiActivated = this.synthService.instanceMidiActivated === this.instanceNumber ? null : this.instanceNumber;
+  }
+
 }

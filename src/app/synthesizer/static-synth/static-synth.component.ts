@@ -80,7 +80,6 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
       this.thisNodeGain.next(this.meter.getLevel());
     });
     this.volume = new Tone.Channel(0, 0).connect(this.meter);
-    this.volume.connect(this.synthService.dest);
     this.reverb = new Tone.JCReverb(this.reverbConfig).connect(this.volume);
     this.reverb.wet.value = 0;
     this.delay = new Tone.FeedbackDelay(this.delayConfig).connect(this.reverb);
@@ -110,6 +109,17 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
         this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
           this.globalPlaying = isPlaying;
           this.toggle();
+        });
+      }
+    });
+    this.synthService.midiMessage.pipe(takeUntil(this.destroy$)).subscribe((midiMessage: any) => {
+      if (midiMessage && this.instanceNumber === this.synthService.instanceMidiActivated) {
+        this.synth.forEach((synth: any) => {
+          // If it's not a note off message
+          // Eventually velocity and duration will be implemented
+          if (midiMessage.data[2] !== 127) {
+            synth.triggerAttackRelease(Tone.Midi(midiMessage.data[1]).toFrequency(), '16n');
+          }
         });
       }
     });

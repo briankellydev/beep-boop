@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { TimelineTrack } from '../interfaces';
 
 @Injectable({
@@ -14,18 +14,11 @@ export class SynthService {
   numberOfStepsPerMeasure = new BehaviorSubject<number>(16);
   trackMeterLevels: BehaviorSubject<number>[] = [];
   tick = new BehaviorSubject<number>(null);
-  dest = Tone.context.createMediaStreamDestination();
   recorder: any;
-  chunks = [];
+  midiMessage = new Subject<any>();
+  instanceMidiActivated = 0;
 
-  constructor() {
-      // Code in the constructor is a no-no in angular, but with tone there aren't a lot of choices here
-      // this.recorder = new MediaRecorder(this.dest.stream);
-   }
-
-  generateRandomNumber() {
-    return Math.round(Math.random() * 10000);
-  }
+  constructor() {}
 
   calculateNumberOfStepsPerMeasure(numerator: number, denominator: number) {
     return numerator * (16 / denominator);

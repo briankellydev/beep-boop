@@ -1,0 +1,16 @@
+img {
+    margin: 10px;
+    border-radius: 5px;
+    &.left {
+        float: left;
+    }
+    &.right {
+        float: right;
+    }
+    &.vertical {
+        width: 250px;
+    }
+    &.horizontal {
+        width: 400px;
+    }
+}

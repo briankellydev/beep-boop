@@ -10,4 +10,10 @@
     .component {
         color: $synthBlue;
     }
+    .transport-button {
+        padding: 5px;
+        border: 1px solid $closeToBlack;
+        border-radius: 3px;
+        margin-top: -6px;
+    }
 }

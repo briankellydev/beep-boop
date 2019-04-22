@@ -9,19 +9,6 @@
     left: 0;
     border-top: 1px solid $lightGray;
     z-index: 100;
-    .transport-button {
-        cursor: pointer;
-        background-color: $lightestGray;
-        transition: 0.2s background-color;
-        text-align: center;
-        color: $grayBg;
-        &.active {
-            background-color: $drumMachineYellow;
-        }
-        &:hover {
-            background-color: $paleYellow;
-        }
-    }
     .tempo, .time-sig {
         color: $closeToBlack;
         background-color: $lightGray;

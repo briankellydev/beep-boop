@@ -1,0 +1,17 @@
+<header>
+  <h1>BeepBoop <span class="subtitle">Audio Synthesis Workstation</span>
+    <div class="icon transport-button" (click)="exportAudio()" title="Export to File">
+      <i class="fa fa-download"></i>
+    </div>
+    <a class="icon transport-button" title="Help!" target="_blank" [routerLink]="['tutorial']">
+      <i class="fa fa-question-circle-o"></i>
+    </a>
+  </h1>
+</header>
+<div class="app">
+  <app-rack [ngStyle]="{'display': itemToShow === menuScreens.RACK ? 'block' : 'none'}"></app-rack>
+  <app-timeline [ngStyle]="{'display': itemToShow === menuScreens.TIMELINE ? 'block' : 'none'}"></app-timeline>
+  <app-transport [itemSelected]="itemToShow" (showItem)="showItem($event)"></app-transport>
+  <a #audio></a>
+</div>
+<modal></modal>
