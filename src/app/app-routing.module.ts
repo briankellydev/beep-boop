@@ -6,7 +6,6 @@ import { BasicRundownComponent } from './tutorial/basic-rundown/basic-rundown.co
 import { NoobTutorialComponent } from './tutorial/noob-tutorial/noob-tutorial.component';
 import { HistoryComponent } from './tutorial/history/history.component';
 import { AudioBasicsComponent } from './tutorial/audio-basics/audio-basics.component';
-import { OscComponent } from './tutorial/osc/osc.component';
 import { FiltersTutorialComponent } from './tutorial/filters-tutorial/filters-tutorial.component';
 import { LfoTutorialComponent } from './tutorial/lfo-tutorial/lfo-tutorial.component';
 import { EnvelopeTutorialComponent } from './tutorial/envelope-tutorial/envelope-tutorial.component';
@@ -23,7 +22,6 @@ const routes: Routes = [
       {path: '', component: NoobTutorialComponent},
       {path: 'history', component: HistoryComponent},
       {path: 'audio-basics', component: AudioBasicsComponent},
-      {path: 'osc', component: OscComponent},
       {path: 'filters', component: FiltersTutorialComponent},
       {path: 'lfo', component: LfoTutorialComponent},
       {path: 'envelope', component: EnvelopeTutorialComponent},

@@ -12,4 +12,28 @@ export class AudioBasicsComponent implements OnInit {
   ngOnInit() {
   }
 
+  playSine() {
+    const sine = new Tone.Synth().toMaster();
+    sine.oscillator.type = 'sine';
+    sine.triggerAttackRelease(440, '1m');
+  }
+
+  playSquare() {
+    const sine = new Tone.Synth().toMaster();
+    sine.oscillator.type = 'square';
+    sine.triggerAttackRelease(440, '1m');
+  }
+
+  playTriangle() {
+    const sine = new Tone.Synth().toMaster();
+    sine.oscillator.type = 'triangle';
+    sine.triggerAttackRelease(440, '1m');
+  }
+
+  playSawtooth() {
+    const sine = new Tone.Synth().toMaster();
+    sine.oscillator.type = 'sawtooth';
+    sine.triggerAttackRelease(440, '1m');
+  }
+
 }

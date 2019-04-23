@@ -8,7 +8,6 @@ import { NoobTutorialComponent } from './noob-tutorial/noob-tutorial.component';
 import { RouterModule } from '@angular/router';
 import { HistoryComponent } from './history/history.component';
 import { AudioBasicsComponent } from './audio-basics/audio-basics.component';
-import { OscComponent } from './osc/osc.component';
 import { FiltersTutorialComponent } from './filters-tutorial/filters-tutorial.component';
 import { LfoTutorialComponent } from './lfo-tutorial/lfo-tutorial.component';
 import { EnvelopeTutorialComponent } from './envelope-tutorial/envelope-tutorial.component';
@@ -17,7 +16,19 @@ import { SequencingComponent } from './sequencing/sequencing.component';
 import { AdvancedComponent } from './advanced/advanced.component';
 
 @NgModule({
-  declarations: [TutorialLandingComponent, BasicRundownComponent, NoobTutorialComponent, HistoryComponent, AudioBasicsComponent, OscComponent, FiltersTutorialComponent, LfoTutorialComponent, EnvelopeTutorialComponent, FxComponent, SequencingComponent, AdvancedComponent],
+  declarations: [
+    TutorialLandingComponent,
+    BasicRundownComponent,
+    NoobTutorialComponent,
+    HistoryComponent,
+    AudioBasicsComponent,
+    FiltersTutorialComponent,
+    LfoTutorialComponent,
+    EnvelopeTutorialComponent,
+    FxComponent,
+    SequencingComponent,
+    AdvancedComponent
+  ],
   imports: [
     CommonModule,
     MatExpansionModule,

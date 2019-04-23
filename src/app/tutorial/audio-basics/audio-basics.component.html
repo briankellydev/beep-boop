@@ -1,3 +1,119 @@
-<p>
-  audio-basics works!
-</p>
+<div class="dashboard">
+  <div class="card">
+    <header><h2>Sound/Audio Basics</h2></header>
+    <div class="card-body">
+      <div class="card">
+        <header><h3>What Is Sound?</h3></header>
+        <div class="card-body">
+          <p>Sound is the vibration of air as it enters your ear, vibrates your eardrum, and is interpreted by your brain. That last part is a field called psychoacoustics, which is essentially the study of how we perceive sound. We won't get too much into that, so let's focus on the three core building blocks of every sound:</p>
+          <p>
+            1. Frequency - The rate of repetition of a soundwave per second, measured in Hz (hertz). We perceive this as pitch (the note that's being played)<br>
+            2. Amplitude - The height of the sound wave. When we're talking about a wave we're hearing, this might be thought of as the volume level, measured in dB (decibels).<br>
+            3. Timbre (pronounced TAMBER) - The tone quality of the sound. Timbre is how you hear the difference between a guitar and a cello. Every pitched sound is made up of multiple pure frequencies stacked on top of each other at different amplitude (volume) levels. The lowest of these frequencies is called the fundamental, and it is the pitch that we perceive the sound to be at. Everything on top of it adds tone color.
+          </p>
+          <div class="row">
+            <div class="col-4">
+              <img src="assets/tutorial/sine.JPG">
+            </div>
+            <div class="col-8">
+              <p>An oscillator is the basic form of sound generation on synthesis-based instruments. It repeats a signal in a certain waveform very quickly. If you look at the BeepBlaster 9000 in this app, you'll see oscillators on the top left.</p>
+              <p>Let's explore Frequency and Amplitude a bit more. To the left is a basic sine wave- which represents a single pure frequency. What you see below is one full repetition of the sine wave along the x-axis. If you were to send signal in that shape, 440 times per second, you would hear the musical note A. This is what we call frequency- in the previous case it would be 440Hz.</p>
+              <p>On the y-axis, you see amplitude, the height of the wave. For now you can think of this as volume. We can make the height taller or shorter.</p>
+              <p>What about Timbre? Remember I said that a sine wave is a pure tone, a single frequency. Listen by clicking play below to hear the sine wave at 440 Hz - playing an A. Notice the simple nature of the quality of the sound.</p>
+              <div class="transport-button component box-shadow" (click)="playSine()">
+                <i class="fa fa-play fa-lg"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <header><h3>More Complex Waves/Timbres</h3></header>
+        <div class="card-body">
+          <p>We can make more complex timbres by stacking multiple pure frequencies on top of each other- so, stacking multiple sine waves on top of each other at different amplitudes.</p>
+          <p>There are four basic waves that make up most synthesizers: <span class="text-bold">Sine, Triangle, Square, and Sawtooth</span>. The latter 3 are created by various combinations of stacked sine waves. These combinations are determined by the musical harmonic series.</p>
+          <p>I mentioned this as a musical idea you should know, but here's a quick refresher: the fundamental frequency, the lowest frequency, is the pitch we hear. Stack pure frequencies on top of that in this pattern:</p>
+          <p>f (fundamental), f * 2, f * 3, f * 4, f * 5, ...</p>
+          <p>Frequencies go up exponentially, so some of these overtones (frequencies above the fundamental) are nice harmonies with the fundamental, others clash a little bit. For the nerds, this goes up in a Pythagorean series, not in the equal-tempered series we know and love in the West.</p>
+          <p>Since frequency is exponential, let's take a note X, at 100 Hz. Here's what the beginning of the overtone series looks like with its corresponding musical interval:</p>
+          <p>
+            f - 100 Hz (X)<br>
+            f * 2 - 200 Hz (X + 1 octave)<br>
+            f * 3 - 300 Hz (X + 1 octave and a 5th)<br>
+            f * 4 - 400 Hz (X + 2 octaves)<br>
+            f * 5 - 500 Hz (X + 2 octaves + a major 3rd (14c flat))
+          </p>
+          <p>The more overtones, the brighter the sound. The overtones chosen and/or exempted also darken and brighten the sound. You can also alter the amplitude of individual overtones to create custom timbres (and this is what largely makes the difference in timbre between say, a saxophone and a cello)</p>
+          <p>In a perfect harmonic series (which our four basic waveforms follow), the amplitude (volume) of each overtone follows the following formula:</p>
+          <p>dB: 1 * Volume, Volume / 2, Volume / 3, Volume / 4, Volume / 5...</p>
+          <p>So there's an inverse relationship between the frequency and the amplitude of harmonic overtones. MIND BLOWN. MATH.</p>
+        </div>
+      </div>
+      <div class="card">
+          <header><h3>Ok.. Ok.. Enough Math. Let's make sounds.</h3></header>
+          <div class="card-body">
+              <p>Fine, but there's still gonna be some math, sorry dude.</p>
+              <p>Let's recall the four basic waveforms: <span class="text-bold">Sine, Triangle, Square, and Sawtooth</span>. I've ordered those in label of simplicity/darkness of timbre to brightness/complexity of timbre. You should become very familiar with the sound of each of these. Let's explore each and listen:</p>
+              <div class="row">
+                <div class="col-4">
+                  <img src="assets/tutorial/sine.JPG">
+                </div>
+                <div class="col-8">
+                  <p class="text-bold">Sine</p>
+                  <p>Mentioned above, a single pure frequency with no overtones above the fundamental.</p>
+                  <div class="transport-button component box-shadow" (click)="playSine()">
+                    <i class="fa fa-play fa-lg"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <img src="assets/tutorial/triangle.png">
+                </div>
+                <div class="col-8">
+                    <p class="text-bold">Triangle</p>
+                    <p>This wave is fairly simple and dark in tone. Its overtones are only made of the even harmonics in the harmonic series. So, similar to the frequency expression above, this is:</p>
+                    <p>f (fundamental), f * 2, f * 4, f * 6....</p>
+                    <div class="transport-button component box-shadow" (click)="playTriangle()">
+                      <i class="fa fa-play fa-lg"></i>
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <img src="assets/tutorial/square.png">
+                </div>
+                <div class="col-8">
+                    <p class="text-bold">Square</p>
+                    <p>A little bit dirtier and brighter in tone. The reason for this is that it's the triangle's sister wave: its overtones are made up of odd harmonics in the harmonic series (f, f * 3, f * 5...). This wave was quite popular in the 80s.</p>
+                    <div class="transport-button component box-shadow" (click)="playSquare()">
+                      <i class="fa fa-play fa-lg"></i>
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                    <img src="assets/tutorial/sawtooth.svg">
+                </div>
+                <div class="col-8">
+                    <p class="text-bold">Sawtooth</p>
+                    <p>The Ultimate Beast. This waveform's overtones are made up of all of the harmonic series, both odd and even. Thus its sound is richer and brighter than the other waveforms. It's commonly been used to emulate strings, it makes killer basslines, and massive chords. If you make EDM, you'll probably be using this more than any other waveform.</p>
+                    <div class="transport-button component box-shadow" (click)="playSawtooth()">
+                      <i class="fa fa-play fa-lg"></i>
+                    </div>
+                </div>
+              </div>
+              <p>Knowing these four waveforms- blindly knowing what they sound like, learning to pick them out of popular songs, etc.- will help you learn to craft the sounds you hear in your head on a synth. Other waveforms DO exist, but these are the big ones to know and are on virtually every synthesizer you'll ever see.</p>
+              <p>Congrats! You now know the basics of digital audio and sound. Let's keep rolling.</p>
+          </div>
+        </div>
+      <div class="card center">
+        <div class="card-body">
+            <a [routerLink]="['/tutorial', 'noob', 'history']">Previous: History</a> |
+            <a [routerLink]="['/tutorial', 'noob']">Table of Contents</a> | 
+            <a [routerLink]="['/tutorial','noob','filters']">Next: Filters</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
