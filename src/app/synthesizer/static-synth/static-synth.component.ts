@@ -173,6 +173,7 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
   changeLfo(lfo: LFO) {
     this.lfo.frequency.value = lfo.frequency;
     this.lfo.max = lfo.max;
+    this.lfo.type = lfo.type;
   }
 
   toggleDist(enabled: boolean) {

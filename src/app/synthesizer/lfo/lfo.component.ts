@@ -40,6 +40,7 @@ export class LfoComponent implements OnInit {
 
   selectOsc(osc: string) {
     this.oscillatorSelected = osc;
+    this.lfoConfig.type = osc;
     this.lfoChanged.emit(this.lfoConfig);
   }
 

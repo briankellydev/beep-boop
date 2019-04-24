@@ -14,6 +14,7 @@ import { EnvelopeTutorialComponent } from './envelope-tutorial/envelope-tutorial
 import { FxComponent } from './fx/fx.component';
 import { SequencingComponent } from './sequencing/sequencing.component';
 import { AdvancedComponent } from './advanced/advanced.component';
+import { SynthesizerModule } from '../synthesizer/synthesizer.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AdvancedComponent } from './advanced/advanced.component';
     CommonModule,
     MatExpansionModule,
     BrowserAnimationsModule,
-    RouterModule
+    RouterModule,
+    SynthesizerModule
   ]
 })
 export class TutorialModule { }

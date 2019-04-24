@@ -1,3 +1,63 @@
-<p>
-  lfo-tutorial works!
-</p>
+<div class="dashboard">
+  <div class="card">
+    <header><h2>LFOs (Low-Frequency Oscillators)</h2></header>
+    <div class="card-body">
+      <p>LFOs, or Low-Frequency Oscillators, along with Envelopes, are a couple of the tougher concepts to get a grasp on. Hang on tight, I'll try to give some super explicit examples.</p>
+      <div class="row">
+        <div class="col-4">
+          <img src="assets/tutorial/waveforms.png">
+        </div>
+        <div class="col-8">
+          <p>You'll probably recall the term Oscillator from an earlier lesson. Oscillators so far have been the thing that generates sound for us in the shapes Sine, Triangle, Square, and Sawtooth. We're now going to use those shapes to modulate sounds cyclically. Check out the diagram to remind yourself of what these waveforms look like.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-8">
+            <p>What if we took the humble sine wave and changed the pitch of a tone in its shape, going up in pitch and down in pitch once per second? It would sound something like the play button on the right.</p>
+        </div>
+        <div class="col-4">
+          <div class="transport-button component box-shadow" (click)="playPitchModulation()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+        </div>
+      </div>
+      <p>An LFO is just this: a repeating shape that changes a parameter of something else, over and over. In the case above, the LFO changes the frequency of the pitch, in the shape of a sine wave. But LFOs can change the shape of ANY parameter!</p>
+      <div class="row">
+        <div class="col-4">
+          <div class="transport-button component box-shadow" (click)="playFiltModulation()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+          <div class="transport-button component box-shadow" (click)="playWubwub()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+        </div>
+        <div class="col-8">
+          <p>Let's use the same LFO sine shape and modulate the cutoff frequency of a lowpass filter. So, in the top play button on the left we're going to be slowly raising and lowering the cutoff frequency- gradually adding and removing frequencies, slowly brightening and darkening the sound.</p>
+          <p>The lower play button does something a little more fun. The same basic principle is applied with an LFO modulating the filter cutoff frequency. But this time it's on a bass sound, it's quicker (the LFO frequency is 8 times per second, or 8Hz), and the initial cutoff is lower. What do you get? Dat wubwub bass.</p>
+        </div>
+      </div>
+      <p>Remember, you can hook an LFO up to any parameter! An LFO could control the Q of the filter. It could control the volume of a signal. Think of it as turning a knob up and down repeatedly in the shape of the LFO waveform.</p>
+      <div class="row">
+        <div class="col-6">
+            <p>Thus far we've been using the shape of a sine wave for our LFO, but we can use any of the four waveforms above as the shape that modulates a parameter. Here is an LFO with all waveforms possible. This LFO is hooked up to the pitch of the Oscillator. Start by keeping the LFO speed slow (around 1 Hz) so you can really hear the shape of the modulation. You'll notice a second knob- Depth. This modifies the amplitude of the LFO wave, or how much the sound is affected (different than how fast). Since this is hooked up to pitch, that means the greater the depth, the greater the distance between the highest note reached and the lowest note. Experiment with all the waveforms and turn some knobs!</p>
+        </div>
+        <div class="col-2">
+          <div class="transport-button component box-shadow" (click)="playMainLfo()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+        </div>
+        <div class="col-4">
+          <app-lfo (lfoChanged)="changeLfo($event)"></app-lfo>
+        </div>
+      </div>
+      <p>Congrats, you now know about how LFOs work! You've got enough in you to make some decent sounds with the BeepBlaster 9000 already. The LFO on that machine is connected to both the volume of the synth and the filter cutoff frequency. Go on, go back and have some fun, you've earned it. Plus, the LFO's equally shapely but less repetetive cousin, the Envelope, is next.</p>
+      <div class="card">
+        <div class="card-body center">
+            <a [routerLink]="['/tutorial', 'noob', 'filters']">Previous: Filters</a> |
+            <a [routerLink]="['/tutorial', 'noob']">Table of Contents</a> | 
+            <a [routerLink]="['/tutorial','noob','envelope']">Next: Envelopes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

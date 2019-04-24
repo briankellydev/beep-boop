@@ -25,6 +25,9 @@ header {
         font-size: 22px;
         margin-top: 3px;
     }
+    a, a:link, a:visited, a:hover, a:active {
+        color: $grayBg;
+    }
 }
 .app {
     height: 100vh;

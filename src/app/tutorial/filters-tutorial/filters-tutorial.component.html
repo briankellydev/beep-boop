@@ -1,3 +1,38 @@
-<p>
-  filters-tutorial works!
-</p>
+<div class="dashboard">
+  <div class="card">
+    <header><h2>Filters</h2></header>
+    <div class="card-body">
+      <p>Filters do what the name implies- they filter out frequencies from a sound (and occasionally emphasize some). This can darken or brighten a sound dramatically.</p>
+      <p>There are three main types of filters we'll focus on today:</p>
+      <p>
+        1. Lowpass - Allows frequencies below the cutoff frequency to pass (and fiters out those above the cutoff frequency)<br>
+        2. Hipass - Allows frequencies above the cutoff frequency to pass (and fiters out those below the cutoff frequency)<br>
+        3. Bandpass - Allows frequencies within a narrow band to pass (and filters out those above and below that band)
+      </p>
+      <p>If it sounds confusing, it will become clear as soon as you hear it.</p>
+      <p>The sawtooth wave below is sent through the filter. This filter has two controls: Frequency (cutoff frequency) and Q (aka resonance). Let's skip Q for the moment and instead play with the filter, changing the filter type and cutoff frequency to hear what happens and how each one sounds.</p>
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-4">
+          <div class="transport-button component box-shadow" (click)="playSawtooth()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+        </div>
+        <div class="col-4">
+          <app-filter (filterChanged)="changeFilter($event)"></app-filter>
+        </div>
+      </div>
+      <p>Make sense? If not, reread above and play with it, absorbing how the sound is changing.</p>
+      <p>Let's talk about Q- it's a little bit tricky. The Q adds a small boost in frequency at the frequency cutoff, right before the filter begins taking frequencies out. This has the effect of emphasizing the cutoff frequency. In practice, I find myself most often using it to achieve some iconic EDM bass sounds, with the filter set to Lowpass, a low cutoff frequency, and some Q. The higher the Q value, the more pronounced this little bump boost is.</p>
+      <p>In a bandpass filter, Q effects how narrow the frequency band that's allowed through is.</p>
+      <p>Play with the Q now and do some experimenting. The best way to learn these things is to hear them in action.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body center">
+        <a [routerLink]="['/tutorial', 'noob', 'audio-basics']">Previous: Sound/Audio Basics</a> |
+        <a [routerLink]="['/tutorial', 'noob']">Table of Contents</a> | 
+        <a [routerLink]="['/tutorial','noob','lfo']">Next: LFOs</a>
+    </div>
+  </div>
+</div>
