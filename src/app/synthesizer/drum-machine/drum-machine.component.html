@@ -1,6 +1,6 @@
 <div class="drum-machine">
   <div class="row no-gutters">
-    <div class="col-2">
+    <div class="col-2" *ngIf="!isTutorialMode">
       <div class="left-menu component">
         <div class="component pattern-length">
           <h5>Pattern Length (m)</h5>
@@ -22,8 +22,13 @@
         </div>
       </div>
     </div>
+    <div class="col-2" *ngIf="isTutorialMode">
+      <div class="transport-button component box-shadow" (click)="playTutorialPattern()">
+          <i class="fa fa-play fa-lg"></i>
+      </div>
+    </div>
     <div class="col-10">
-      <div class="component kits">
+      <div class="component kits" *ngIf="!isTutorialMode">
         <label>Kit</label>
         <div class="row">
           <div class="col-2" *ngFor="let kit of ['707', '808', '909']">

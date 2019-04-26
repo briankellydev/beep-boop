@@ -11,7 +11,6 @@ import { LfoTutorialComponent } from './tutorial/lfo-tutorial/lfo-tutorial.compo
 import { EnvelopeTutorialComponent } from './tutorial/envelope-tutorial/envelope-tutorial.component';
 import { FxComponent } from './tutorial/fx/fx.component';
 import { SequencingComponent } from './tutorial/sequencing/sequencing.component';
-import { AdvancedComponent } from './tutorial/advanced/advanced.component';
 
 const routes: Routes = [
   {path: '', component: AppWrapperComponent},
@@ -27,7 +26,6 @@ const routes: Routes = [
       {path: 'envelope', component: EnvelopeTutorialComponent},
       {path: 'fx', component: FxComponent},
       {path: 'sequencing', component: SequencingComponent},
-      {path: 'advanced', component: AdvancedComponent}
     ]}
   ]}
 ];

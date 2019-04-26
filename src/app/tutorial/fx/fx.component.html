@@ -1,3 +1,63 @@
-<p>
-  fx works!
-</p>
+<div class="dashboard">
+  <div class="card">
+    <header><h2>Effects</h2></header>
+    <div class="card-body">
+      <p>We've covered the most technical parts of your average synthesizer, believe it or not! The following lesson is not specific to synthesizers- in fact guitars, vocals, and all sorts of stuff can have effects put on them. If this isn't your first rodeo with basic effects, you can skip this section. This is also not a comprehensive list by any means- there are thousands of different types and combinations of effects. This covers the ones in this application.</p>
+      <p>We won't be doing in-depth examples of each, just a simple explanation and listening examples. If you want to play around with them more, go check out the BeepBlaster 9000 in this app.</p>
+    
+    <div class="card">
+      <header><h3>Reverb</h3></header>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-2">
+            <div class="transport-button component box-shadow" (click)="playReverb()">
+              <i class="fa fa-play fa-lg"></i>
+            </div>
+          </div>
+          <div class="col-10">
+            <p>Reverb simulates the effect of being in a room where the sound is bouncing off the walls. An extreme case of reverb might be how it'd sound if you yelled something in a large church. <span class="text-bold">[DISCLAIMER: BRIAN KELLY DOES NOT CONDONE YELLING LOUDLY IN CHURCHES UNLESS PERMISSION HAS BEEN GRANTED]</span> It's most commonly used to add a little ambience to sounds, to soften them a bit, or to make them sound far away. This is probably the most common effect in music.</p>
+            <p>Different reverb units have different levels of control. Room size, dry/wet (mix between pure signal and affected signal), and tail length are common parameters. Some of them even let you use a waveform as the basis for the reverberations (Impulse Reverb)... but let's not get into that.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header><h3>Delay</h3></header>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-10">
+            <p>Delay creates a repetition of everything that's played into it. It's also commonly referred to as "echo." You can ordinarily control the time between echoes as well as feedback. Feedback causes the output of the delay to feed back into itself and create even more delay.</p>
+          </div>
+          <div class="col-2">
+            <div class="transport-button component box-shadow" (click)="playDelay()">
+              <i class="fa fa-play fa-lg"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <header><h3>Distortion</h3></header>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-2">
+            <div class="transport-button component box-shadow" (click)="playDistortion()">
+              <i class="fa fa-play fa-lg"></i>
+            </div>
+          </div>
+          <div class="col-10">
+            <p>Distortion takes the signal and cranks it so high that the device can no longer determine what it actually sounds like- a phenomenon known as clipping. Distortion can be an unwanted artifact in your sounds, but you can also intentionally distort a sound to give it a crunchy quality. Different distortion units have different controls. Amount of distortion is usually there. Sometimes color of the distortion is an option.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body center">
+          <a [routerLink]="['/tutorial', 'noob', 'envelope']">Previous: Envelopes</a> |
+          <a [routerLink]="['/tutorial', 'noob']">Table of Contents</a> | 
+          <a [routerLink]="['/tutorial','noob','sequencing']">Next: Step Sequencing</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

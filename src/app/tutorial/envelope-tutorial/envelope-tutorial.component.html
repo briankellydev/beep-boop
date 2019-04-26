@@ -1,3 +1,64 @@
-<p>
-  envelope-tutorial works!
-</p>
+<div class="dashboard">
+  <div class="card">
+    <header><h2>Envelopes</h2></header>
+    <div class="card-body">
+      <p>Envelopes, as I mentioned before, are one of the tougher concepts to learn early on in synthesis. But fundamentally they are similar to LFOs- they are a shape that modulates some parameter over time. The first key difference between them I'd like to point out to you is that while LFOs are cyclical and repeat a certain number of times per second, envelopes do not repeat this way. The envelope shape to change a parameter is triggered when a note is played, and finishes its cycle when a note ends. For clarity, the envelope happens this way on every single note.</p>
+      <div class="row">
+        <div class="col-4">
+          <img src="assets/tutorial/envelope.png">
+        </div>
+        <div class="col-8">
+          <p>Envelopes modulate a parameter based on the shape to the left. It goes up, comes down a bit, stays there for a while, then when the note is released it goes down. The envelope is made up of four periods: Attack, Decay, Sustain, and Release.</p>
+          <p>Attack is the the time it takes from the start of the note for the shape to ramp up from 0 amplitude all the way up to 1. If this envelope were tied to the volume, that would mean that the sound would fade in over the course of the Attack time.</p>
+          <p>Decay is also a time measurement. After the envelope shape reaches its maximum, it will come down a bit to another value (the Sustain level). The Decay setting is the time it takes to go from maximum amplitude to the Sustain amplitude.</p>
+          <p>Sustain, unlike the others, is not a time value- it is an amplitude value. The higher it is, the less amplitude is lost over the Decay time. Once the Sustain amplitude has been reached, the envelope stops modulating the sound any further and stays stationary until the note is released (e.g. the piano key is lifted). As long as you're holding down the note, it will remain at the sustain level. You could hypothetically keep it at the sustain level for 100 years (but they might find your corpse at the keyboard if you did).</p>
+          <p>Release is a time measurement. Once you raise the piano key (or, in the case above, you die and fall back from the keyboard), the envelope shape modulates the sound from the Sustain level back down to 0. If it were connected to volume, this would be a fade out.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <p>As with other examples, listening can help make the concept clearer. I've hooked the top play button on the right up to a synth with an envelope controlling the pitch of the synthesizer. So you'll hear the pitch follow the shape above: When the note is triggered the pitch will slowly rise to a maximum (Attack). It will then come down slightly over the course of the Decay until it reaches the Sustain level. It will remain at the Sustain level until the note is released, then it will slowly fall over the course of the Release time. (Note: I had to add some volume release for you to also hear the release pitch shape).</p>
+          <p>The lower play button has the envelope hooked up only to the volume of the signal. So you'll hear the volume follow the same shape as described above, instead of the pitch.</p>
+        </div>
+        <div class="col-4">
+          <div class="transport-button component box-shadow" (click)="playPitchEnv()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+          <div class="transport-button component box-shadow" (click)="playVolEnv()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <div class="transport-button component box-shadow" (click)="playMultiNoteEnv()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+        </div>
+        <div class="col-8">
+          <p>Remember, the envelope's shape is triggered with the triggering of a note and then releasing that note. So what if we throw an envelope on the volume like the second example above and play multiple notes? Check it out. (Please note- Tone.js is often very opinionated, and one area seems to be that for notes which are directly next to each other, it won't retrigger the envelope. It will on the first and last notes, though).</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <p>All four values of Attack, Decay, Sustain, and Release are fully adjustable. I've hooked this synth up to a filter, and the envelope to the cutoff frequency of that filter. So, the filter's frequency will open and close following the shape, over the time you set here in the envelope. Do some experimenting!</p>
+        </div>
+        <div class="col-1">
+          <div class="transport-button component box-shadow" (click)="playMainEnv()">
+            <i class="fa fa-play fa-lg"></i>
+          </div>
+        </div>
+        <div class="col-5">
+          <app-envelope (envChanged)="changeEnv($event)"></app-envelope>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body center">
+            <a [routerLink]="['/tutorial', 'noob', 'lfo']">Previous: LFOs</a> |
+            <a [routerLink]="['/tutorial', 'noob']">Table of Contents</a> | 
+            <a [routerLink]="['/tutorial','noob','fx']">Next: Effects</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

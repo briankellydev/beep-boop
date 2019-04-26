@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack } from 'src/app/interfaces';
 import { SynthService } from 'src/app/shared/synth.service';
 import { takeUntil } from 'rxjs/operators';
@@ -13,6 +13,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   @Input() instanceNumber: number;
   @Input() deviceNumberIndex: number;
+  @Input() isTutorialMode = false;
 
   noteRows: DrumRow[];
   activePattern: PolyPattern = null;
@@ -75,23 +76,24 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       this.setPattern(0);
       this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
     });
-
-    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
-      this.tracks = tracks;
-      this.tracksIndex = tracks.findIndex((track) => {
-        return track.instanceNumber === this.instanceNumber;
-      });
-      this.volume.volume.value = this.tracks[this.tracksIndex].volume;
-      this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
-      this.volume.mute = this.tracks[this.tracksIndex].mute;
-      this.volume.solo = this.tracks[this.tracksIndex].solo;
-      if (this.globalPlaying === null) {
-        this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
-          this.globalPlaying = isPlaying;
-          this.toggle();
+    if (!this.isTutorialMode) {
+      this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
+        this.tracks = tracks;
+        this.tracksIndex = tracks.findIndex((track) => {
+          return track.instanceNumber === this.instanceNumber;
         });
-      }
-    });
+        this.volume.volume.value = this.tracks[this.tracksIndex].volume;
+        this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
+        this.volume.mute = this.tracks[this.tracksIndex].mute;
+        this.volume.solo = this.tracks[this.tracksIndex].solo;
+        if (this.globalPlaying === null) {
+          this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
+            this.globalPlaying = isPlaying;
+            this.toggle();
+          });
+        }
+      });
+    }
 
     this.synthService.midiMessage.pipe(takeUntil(this.destroy$)).subscribe((midiMessage: any) => {
       if (midiMessage && this.instanceNumber === this.synthService.instanceMidiActivated) {
@@ -131,6 +133,28 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       part.dispose();
     });
     this.destroy$.next();
+  }
+
+  playTutorialPattern() {
+    this.parts.forEach((part: any) => {
+      part.dispose();
+    });
+    this.parts = [];
+    for (let i = 0; i < 6; i++) {
+      this.parts.push(new Tone.Sequence((time, note) => {
+        // the events will be given to the callback with the time they occur
+        this.drumMachine[i].triggerAttackRelease(note, '16n', time);
+      }, this.patterns[0].sequence[i], '16n'));
+      this.parts[this.parts.length - 1].loop = false;
+      this.parts[this.parts.length - 1].start(0);
+    }
+    Tone.Transport.scheduleOnce(() => {
+      Tone.Transport.stop();
+      this.parts.forEach((part: any) => {
+        part.dispose();
+      });
+    }, '1m', '1m');
+    Tone.Transport.start();
   }
 
   changeNumberOfMeasures() {

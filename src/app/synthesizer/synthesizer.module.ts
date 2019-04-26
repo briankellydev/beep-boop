@@ -37,7 +37,8 @@ import { DrumMachineComponent } from './drum-machine/drum-machine.component';
     StaticSynthComponent,
     DrumMachineComponent,
     FilterComponent,
-    LfoComponent
+    LfoComponent,
+    EnvelopeComponent
   ]
 })
 export class SynthesizerModule { }

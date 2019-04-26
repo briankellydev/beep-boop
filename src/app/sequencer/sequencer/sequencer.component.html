@@ -1,6 +1,6 @@
 <div class="sequencer component">
   <div class="row no-gutters">
-    <div class="col-2 left-menu">
+    <div class="col-2 left-menu" *ngIf="!isTutorialMode">
       <h5 class="component">Sequencer</h5>
       <div class="component">
         <label>Bottom Note</label>
@@ -38,6 +38,11 @@
               </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="col-2 left-menu tutorial" *ngIf="isTutorialMode">
+      <div class="transport-button component box-shadow" (click)="playTutorialPattern()">
+        <i class="fa fa-play fa-lg"></i>
       </div>
     </div>
     <div class="col-10 sequence">

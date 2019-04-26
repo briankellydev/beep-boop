@@ -93,7 +93,10 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
       new Tone.Synth(this.oscConfig),
     ];
     this.lfo = new Tone.LFO(this.lfoConfig);
-    this.envelope = new Tone.Envelope(this.envConfig).connect(this.filter);
+    this.envelope = new Tone.ScaledEnvelope(this.envConfig.attack, this.envConfig.decay, this.envConfig.sustain, this.envConfig.release)
+      .connect(this.filter.frequency);
+    this.envelope.min = 0;
+    this.envelope.max = 500;
     this.lfo.connect(this.filter.frequency);
 
     this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
@@ -121,6 +124,7 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
             synth.triggerAttackRelease(Tone.Midi(midiMessage.data[1]).toFrequency(), '16n');
           }
         });
+        this.envelope.triggerAttackRelease('16n');
       }
     });
   }
@@ -155,6 +159,7 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
           this.synth.forEach((synth) => {
             synth.triggerAttackRelease(note, '16n', time);
           });
+          this.envelope.triggerAttackRelease('16n');
         }, this.patterns[pattern - 1].sequence, '16n'));
         this.parts[this.parts.length - 1].loop = false;
         if (this.globalPlaying) {

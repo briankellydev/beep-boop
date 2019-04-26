@@ -1,3 +1,35 @@
-<p>
-  sequencing works!
-</p>
+<div class="dashboard">
+  <div class="card">
+    <header><h2>Step Sequencing</h2></header>
+    <div class="card-body">
+      <p>Congrats, this is the last tutorial you need to know how to use all the parts of this app. We'll focus on the step sequencers in the instruments.</p>
+      <p>Step sequencers allow you to specify which notes should be played at which rhythmic place. Think of them as having an x and y axis. On the x axis is time. Each cell is a 16th note, and the 1/4 notes (and measures in this app) are highlighted with a different color. If you enabled every 4 cells, starting with the first, you'd get four notes on the beat. Every 2 cells would be eight eighth notes, etc.</p>
+      <p>The y axis comprises the different notes that are possible to sequence. On the C row, enable the first and 9th cells and on the G row enable the 5th and 13th, and you'll get 1/4 notes alternating between C and G.</p>
+      <p>Try the patterns I just mentioned on the sequencer below and it'll start to make more sense. The pattern you see represents 1 measure. The highlights on each 1/4 note will serve as a guide.</p>
+      <div>
+          <app-sequencer
+          [deviceNumberIndex]="99"
+          [isTutorialMode]="true"
+          (patternsChanged)="setPattern($event)"
+          (togglePlay)="playSynth()">
+        </app-sequencer>
+      </div>
+      <p>A drum machine sequencer works basically the same way. The only difference is the y axis. Instead of notes, we get different drums that we can trigger at different rhythmic values.</p>
+      <p>On the drum machine below, sequence the following pattern: The bass drum on all 4 quarter notes; The snare drum on the second and fourth quarter notes; The closed hat on all 4 beats; The open hat on the eighth notes in between quarters. If you can do that, you definitely understand step sequencing. Also you've made the basic disco techno beat.</p>
+      <div>
+          <app-drum-machine
+          [instanceNumber]="99"
+          [deviceNumberIndex]="98"
+          [isTutorialMode]="true"
+        >
+        </app-drum-machine>
+      </div>
+      <p>Feel free to play around with these until you feel like you've got a decent grasp on the concept. Other than that, go make some music!</p>
+      <div class="card">
+        <div class="card-body center">
+            <a [routerLink]="['/tutorial', 'noob']">Table of Contents</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

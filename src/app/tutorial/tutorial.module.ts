@@ -13,8 +13,8 @@ import { LfoTutorialComponent } from './lfo-tutorial/lfo-tutorial.component';
 import { EnvelopeTutorialComponent } from './envelope-tutorial/envelope-tutorial.component';
 import { FxComponent } from './fx/fx.component';
 import { SequencingComponent } from './sequencing/sequencing.component';
-import { AdvancedComponent } from './advanced/advanced.component';
 import { SynthesizerModule } from '../synthesizer/synthesizer.module';
+import { SequencerModule } from '../sequencer/sequencer.module';
 
 @NgModule({
   declarations: [
@@ -28,14 +28,14 @@ import { SynthesizerModule } from '../synthesizer/synthesizer.module';
     EnvelopeTutorialComponent,
     FxComponent,
     SequencingComponent,
-    AdvancedComponent
   ],
   imports: [
     CommonModule,
     MatExpansionModule,
     BrowserAnimationsModule,
     RouterModule,
-    SynthesizerModule
+    SynthesizerModule,
+    SequencerModule,
   ]
 })
 export class TutorialModule { }

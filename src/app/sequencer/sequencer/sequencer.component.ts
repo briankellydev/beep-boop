@@ -13,6 +13,7 @@ import { Subject } from 'rxjs';
 export class SequencerComponent implements OnInit, OnDestroy {
 
   @Input() deviceNumberIndex: number;
+  @Input() isTutorialMode = false;
   @Output() patternsChanged = new EventEmitter<Pattern[]>();
   @Output() togglePlay = new EventEmitter<boolean>();
 
@@ -105,6 +106,10 @@ export class SequencerComponent implements OnInit, OnDestroy {
 
   checkForWhiteBorder(idx: number) {
     return idx % 16 === 0;
+  }
+
+  playTutorialPattern() {
+    this.togglePlay.emit();
   }
 
   setPattern(pattern: number) {
