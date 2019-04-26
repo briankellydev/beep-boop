@@ -7,12 +7,12 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 })
 export class OscillatorComponent implements OnInit {
 
-  @Input() oscNumber: number;
+  @Input() oscNumber: string;
   @Output() oscChanged = new EventEmitter<string>();
   @Output() oscToggled = new EventEmitter<boolean>();
 
   oscillatorSelected = 'sine';
-  enabled = this.oscNumber === 1 ? true : false;
+  enabled = this.oscNumber === '1' ? true : false;
 
   constructor() { }
 

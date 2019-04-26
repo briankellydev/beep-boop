@@ -14,7 +14,7 @@ export class BoomBoomComponent implements OnInit {
   instanceNumber: number;
   deviceNumberIndex: number;
 
-  constructor(private synthService: SynthService) { }
+  constructor(public synthService: SynthService) { }
 
   ngOnInit() {
   }
