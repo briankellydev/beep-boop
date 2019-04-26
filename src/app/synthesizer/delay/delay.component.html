@@ -5,6 +5,7 @@
       <h5>Time</h5>
       <div class="time">
         <app-knob
+          [value]="delayConfig.delayTime"
           primaryColor="#54bbe0"
           secondaryColor="#EEEEEE"
           (valChanged)="changeTime($event)"
@@ -16,6 +17,7 @@
       <h5>Feedback</h5>
       <div class="feedback">
           <app-knob
+            [value]="delayConfig.feedback"
             primaryColor="#54bbe0"
             secondaryColor="#EEEEEE"
             (valChanged)="changeFeedback($event)"

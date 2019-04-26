@@ -7,6 +7,7 @@ import { Component, OnInit, HostListener, Input, Output, EventEmitter } from '@a
 })
 export class KnobComponent implements OnInit {
 
+  @Input() value: number;
   @Input() diameter = 75;
   @Input() min = 0;
   @Input() max = 100;
@@ -39,6 +40,7 @@ export class KnobComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.calculateRotationFromValue();
   }
 
   setDragging(event: any, isDragging: boolean) {
@@ -64,6 +66,14 @@ export class KnobComponent implements OnInit {
     } else {
       return this.max;
     }
+  }
+
+  private calculateRotationFromValue() {
+    let newRot = 0;
+    const maxLog = Math.log(250);
+    const scaleLog = maxLog / (this.max);
+    newRot = Math.exp(this.value * scaleLog);
+    this.rotation = newRot;
   }
 
 }

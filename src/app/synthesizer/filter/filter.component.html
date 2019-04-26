@@ -41,6 +41,7 @@
       <h5>Freq</h5>
       <div class="filt-freq">
         <app-knob
+          [value]="filterConfig.frequency"
           primaryColor="#54bbe0"
           secondaryColor="#EEEEEE"
           [max]="20000"
@@ -53,6 +54,7 @@
       <h5>Q</h5>
       <div class="q">
         <app-knob
+          [value]="filterConfig.Q"
           primaryColor="#54bbe0"
           secondaryColor="#EEEEEE"
           [max]="10"

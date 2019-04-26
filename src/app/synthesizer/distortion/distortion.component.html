@@ -2,6 +2,7 @@
   <h5>Distortion <mat-slide-toggle [checked]="enabled" (change)="toggle()"></mat-slide-toggle></h5>
   <div class="distortion">
     <app-knob
+      [value]="distortion"
       primaryColor="#54bbe0"
       secondaryColor="#EEEEEE"
       (valChanged)="changeDist($event)"

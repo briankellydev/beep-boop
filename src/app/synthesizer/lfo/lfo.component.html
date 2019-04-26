@@ -51,6 +51,7 @@
       <h5>Depth</h5>
       <div class="depth">
         <app-knob
+          [value]="lfoConfig.max"
           primaryColor="#54bbe0"
           secondaryColor="#EEEEEE"
           [max]="5000"
@@ -63,6 +64,7 @@
       <h5>Rate</h5>
       <div class="lfo-freq">
         <app-knob
+          [value]="lfoConfig.frequency"
           primaryColor="#54bbe0"
           secondaryColor="#EEEEEE"
           [max]="30"

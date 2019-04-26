@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { LFO } from '../../interfaces';
 
 @Component({
@@ -8,24 +8,16 @@ import { LFO } from '../../interfaces';
 })
 export class LfoComponent implements OnInit {
 
+  @Input() lfoConfig: LFO;
   @Output() lfoChanged = new EventEmitter<LFO>();
   @Output() toggleChanged = new EventEmitter<boolean>();
 
-  lfoConfig: LFO = {
-    type: 'sine',
-    min: 0,
-    max: 1000,
-    phase: 0,
-    frequency: 1,
-    amplitude: 1
-  };
   oscillatorSelected = 'sine';
   enabled = false;
 
   constructor() { }
 
   ngOnInit() {
-    
   }
 
   changeDepth(depth: number) {

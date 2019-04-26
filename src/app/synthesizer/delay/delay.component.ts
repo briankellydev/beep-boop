@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, AfterViewInit, Input } from '@angular/core';
 import { SynthService } from 'src/app/shared/synth.service';
 
 @Component({
@@ -8,13 +8,10 @@ import { SynthService } from 'src/app/shared/synth.service';
 })
 export class DelayComponent implements OnInit {
 
-
+  @Input() delayConfig: any;
   @Output() delayChanged = new EventEmitter<any>();
   @Output() toggleChanged = new EventEmitter<boolean>();
-  delayConfig = {
-    delayTime: 0,
-    feedback: 0,
-  };
+
   enabled = false;
 
   constructor() { }

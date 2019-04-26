@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { Envelope } from '../../interfaces';
 
 @Component({
@@ -8,18 +8,20 @@ import { Envelope } from '../../interfaces';
 })
 export class EnvelopeComponent implements OnInit {
 
+  @Input() envConfig: Envelope;
   @Output() envChanged = new EventEmitter<Envelope>();
-
-  envConfig: Envelope = {
-    attack: 1,
-    decay: 1,
-    sustain: 30,
-    release: 1
-  };
 
   constructor() { }
 
   ngOnInit() {
+    Object.keys(this.envConfig).forEach((key: string) => {
+      if (key === 'sustain') {
+        this.envConfig[key] *= 100;
+      } else {
+        this.envConfig[key] *= 1000;
+      }
+      
+    });
   }
 
   changes() {

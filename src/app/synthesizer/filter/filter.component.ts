@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, AfterViewInit, Input } from '@angular/core';
 import { Filter } from '../../interfaces';
 import { SynthService } from 'src/app/shared/synth.service';
 
@@ -9,13 +9,9 @@ import { SynthService } from 'src/app/shared/synth.service';
 })
 export class FilterComponent implements OnInit {
 
+  @Input() filterConfig: Filter;
   @Output() filterChanged = new EventEmitter<Filter>();
 
-  filterConfig: Filter = {
-    frequency: 300,
-    type: 'lowpass',
-    Q: 0
-  };
   typeSelected = 'lowpass';
   constructor() { }
 

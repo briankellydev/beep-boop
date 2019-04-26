@@ -2,6 +2,7 @@
   <h5>Reverb <mat-slide-toggle [checked]="enabled" (change)="toggle()"></mat-slide-toggle></h5>
   <div class="decay">
     <app-knob
+      [value]="decayVal"
       primaryColor="#54bbe0"
       secondaryColor="#EEEEEE"
       (valChanged)="changeDecay($event)"

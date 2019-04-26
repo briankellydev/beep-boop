@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, AfterViewInit, Input } from '@angular/core';
 import { SynthService } from 'src/app/shared/synth.service';
 
 @Component({
@@ -8,10 +8,10 @@ import { SynthService } from 'src/app/shared/synth.service';
 })
 export class DistortionComponent implements OnInit {
 
+  @Input() distortion: number;
   @Output() distChanged = new EventEmitter<number>();
   @Output() toggleChanged = new EventEmitter<boolean>();
-  
-  distortion = 0;
+
   enabled = false;
 
   constructor() { }
