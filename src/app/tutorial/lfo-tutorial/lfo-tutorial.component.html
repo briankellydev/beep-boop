@@ -47,7 +47,7 @@
           </div>
         </div>
         <div class="col-4">
-          <app-lfo (lfoChanged)="changeLfo($event)"></app-lfo>
+          <app-lfo [lfoConfig]="lfoConfig" (lfoChanged)="changeLfo($event)"></app-lfo>
         </div>
       </div>
       <p>Congrats, you now know about how LFOs work! You've got enough in you to make some decent sounds with the BeepBlaster 9000 already. The LFO on that machine is connected to both the volume of the synth and the filter cutoff frequency. Go on, go back and have some fun, you've earned it. Plus, the LFO's equally shapely but less repetetive cousin, the Envelope, is next.</p>

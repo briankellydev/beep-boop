@@ -242,10 +242,4 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     }
   }
 
-  changePort(port: number) {
-    this.synth.forEach((synth) => {
-      synth.portamento = port / 2;
-    });
-  }
-
 }

@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="col-4">
-          <app-filter (filterChanged)="changeFilter($event)"></app-filter>
+          <app-filter [filterConfig]="filterConfig" (filterChanged)="changeFilter($event)"></app-filter>
         </div>
       </div>
       <p>Make sense? If not, reread above and play with it, absorbing how the sound is changing.</p>

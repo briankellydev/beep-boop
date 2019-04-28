@@ -10,6 +10,11 @@ export class FiltersTutorialComponent implements OnInit {
 
   synth: any;
   filter: any;
+  filterConfig: Filter = {
+    frequency: 300,
+    type: 'lowpass',
+    Q: 0
+  };
 
   constructor() { }
 

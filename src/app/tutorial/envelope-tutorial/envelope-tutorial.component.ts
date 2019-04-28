@@ -11,6 +11,12 @@ export class EnvelopeTutorialComponent implements OnInit {
   envelope: any;
   synth: any;
   filter: any;
+  envConfig: Envelope = {
+    attack: 0.001,
+    decay: 0.001,
+    sustain: 0.3,
+    release: 0.001
+  };
 
   constructor() { }
 

@@ -1,3 +1,5 @@
+import { DRUM_KITS } from './constants';
+
 export interface Envelope {
   attack: number;
   decay: number;
@@ -12,17 +14,16 @@ export interface LFO {
   phase: number;
   frequency: string | number;
   amplitude: number;
-}
-
-export interface Synth {
+  enabled?: boolean;
 }
 
 export interface Oscillator {
   oscillator: {
     frequency: number;
     type: string;
-  }
+  };
   envelope?: Envelope;
+  enabled?: boolean;
 }
 
 export interface Filter {
@@ -73,4 +74,32 @@ export interface TimelineTrack {
   collapsed: boolean;
   patternPerMeasure: number[];
   patternLengths: number[];
+}
+
+export interface BeepBlaster {
+  envConfig: Envelope;
+  oscillators: Oscillator[];
+  lfoConfig: LFO;
+  filterConfig: Filter;
+  distortionConfig: {
+    distortion: number;
+    enabled: boolean;
+  };
+  reverbConfig: {
+    roomSize: number;
+    enabled: boolean;
+  };
+  delayConfig: {
+    delayTime: number;
+    feedback: number;
+    enabled: boolean;
+  };
+  track: TimelineTrack;
+  patterns: Pattern[];
+}
+
+export interface BoomBoom {
+  kit: typeof DRUM_KITS;
+  patterns: PolyPattern[];
+  track: TimelineTrack;
 }

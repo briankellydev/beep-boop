@@ -10,6 +10,14 @@ export class LfoTutorialComponent implements OnInit {
 
   lfo: any;
   synth: any;
+  lfoConfig: LFO = {
+    type: 'sine',
+    min: 0,
+    max: 1000,
+    phase: 0,
+    frequency: 1,
+    amplitude: 1
+  };
 
   constructor() { }
 

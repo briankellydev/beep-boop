@@ -3,6 +3,7 @@ import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack } from 'src/app/
 import { SynthService } from 'src/app/shared/synth.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject, BehaviorSubject } from 'rxjs';
+import { DRUM_KITS } from 'src/app/constants';
 
 @Component({
   selector: 'app-drum-machine',
@@ -21,11 +22,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   globalPlaying = null;
   collapsed = false;
   drumMachine: any[];
-  DRUM_KITS = {
-    '707': '707',
-    '808': '808',
-    '909': '909',
-  };
+  DRUM_KITS = DRUM_KITS;
   selectedKit: string;
   parts: any[] = [];
   tracks: TimelineTrack[] = [];
