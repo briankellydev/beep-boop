@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { NoteSequence } from 'src/app/constants';
 import { NoteRow, Pattern, TimelineTrack } from 'src/app/interfaces';
-import { SynthService } from 'src/app/shared/synth.service';
+import { SynthService } from 'src/app/shared/services/synth.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 

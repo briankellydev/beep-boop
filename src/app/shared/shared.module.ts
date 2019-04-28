@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RedLightComponent } from './red-light/red-light.component';
-import { SynthService } from './synth.service';
-import { KnobComponent } from './knob/knob.component';
-import { ModalService } from './modal/modal.service';
-import { ModalComponent } from './modal/modal.component';
+import { SynthService } from './services/synth.service';
+import { KnobComponent } from './components/knob/knob.component';
+import { ModalService } from './services/modal.service';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [

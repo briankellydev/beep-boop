@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, AfterViewInit, Input } from '@angular/core';
 import { Filter } from '../../interfaces';
-import { SynthService } from 'src/app/shared/synth.service';
+import { SynthService } from 'src/app/shared/services/synth.service';
 
 @Component({
   selector: 'app-filter',

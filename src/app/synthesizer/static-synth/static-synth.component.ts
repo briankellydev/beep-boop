@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, DoCheck } from '@angular/core';
-import { Oscillator, Envelope, LFO, Filter, TimelineTrack, Pattern } from '../../interfaces';
+import { Oscillator, Envelope, LFO, Filter, TimelineTrack, Pattern, BeepBlaster, Distortion, Reverb, Delay } from '../../interfaces';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SynthService } from 'src/app/shared/synth.service';
+import { SynthService } from 'src/app/shared/services/synth.service';
 
 @Component({
   selector: 'app-static-synth',
@@ -13,6 +13,7 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
 
   @Input() patterns: Pattern[];
   @Input() instanceNumber: number;
+  @Input() config: BeepBlaster;
   @Output() togglePlay = new EventEmitter<boolean>();
 
   synth: any[]; // TODO typing?
@@ -24,42 +25,13 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
   reverb: any;
   delay: any;
   volVal = 0;
-  envConfig: Envelope = {
-    attack: 0.001,
-    decay: 0.001,
-    sustain: 0.3,
-    release: 0.001
-  };
-  oscConfig: Oscillator = {
-    oscillator: {
-      frequency: 440,
-      type: 'sine',
-    },
-    envelope: this.envConfig,
-  };
-  lfoConfig: LFO = {
-    type: 'sine',
-    min: 0,
-    max: 1000,
-    phase: 0,
-    frequency: 1,
-    amplitude: 1
-  };
-  filterConfig: Filter = {
-    frequency: 300,
-    type: 'lowpass',
-    Q: 0
-  };
-  distortionConfig = {
-    distortion: 0
-  };
-  reverbConfig = {
-    roomSize: 0,
-  };
-  delayConfig = {
-    delayTime: 0,
-    feedback: 0,
-  };
+  envConfig: Envelope;
+  oscConfig: Oscillator[] = [];
+  lfoConfig: LFO;
+  filterConfig: Filter;
+  distortionConfig: Distortion;
+  reverbConfig: Reverb;
+  delayConfig: Delay;
 
   globalPlaying = null;
   parts: any[] = [];
@@ -74,8 +46,54 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
   constructor(private synthService: SynthService) { }
 
   ngOnInit() {
+    this.envConfig = this.config.envConfig || {
+      attack: 0.001,
+      decay: 0.001,
+      sustain: 0.3,
+      release: 0.001
+    };
+    this.lfoConfig = this.config.lfoConfig || {
+      type: 'sine',
+      min: 0,
+      max: 1000,
+      phase: 0,
+      frequency: 1,
+      amplitude: 1
+    };
+    this.filterConfig = this.config.filterConfig || {
+      frequency: 300,
+      type: 'lowpass',
+      Q: 0
+    };
+    this.distortionConfig = this.config.distortionConfig || {
+      distortion: 0,
+      enabled: false
+    };
+    this.reverbConfig = this.config.reverbConfig || {
+      roomSize: 0,
+      enabled: false
+    };
+    this.delayConfig = this.config.delayConfig || {
+      delayTime: 0,
+      feedback: 0,
+      enabled: false
+    };
+    if (this.config.oscillators.length > 0) {
+      this.oscConfig = this.config.oscillators;
+    } else {
+      for (let i = 0; i < 3; i++) {
+        this.oscConfig.push({
+          oscillator: {
+            frequency: 440,
+            type: 'sine',
+          },
+          envelope: this.envConfig,
+          enabled: i === 0 ? true : false
+        })
+      }
+    }
     this.meter = new Tone.Meter().toMaster();
-    this.synthService.trackMeterLevels.push(this.thisNodeGain);
+    // this.synthService.trackMeterLevels.push(this.thisNodeGain);
     this.synthService.tick.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.thisNodeGain.next(this.meter.getLevel());
     });
@@ -88,9 +106,9 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     this.distortion.wet.value = 0;
     this.filter = new Tone.Filter(this.filterConfig).connect(this.distortion);
     this.synth = [
-      new Tone.Synth(this.oscConfig).connect(this.filter),
-      new Tone.Synth(this.oscConfig),
-      new Tone.Synth(this.oscConfig),
+      new Tone.Synth(this.oscConfig[0]).connect(this.filter),
+      new Tone.Synth(this.oscConfig[1]),
+      new Tone.Synth(this.oscConfig[2]),
     ];
     this.lfo = new Tone.LFO(this.lfoConfig);
     this.envelope = new Tone.ScaledEnvelope(this.envConfig.attack, this.envConfig.decay, this.envConfig.sustain, this.envConfig.release)

@@ -22,11 +22,13 @@
       [ngStyle]="{'display': showSequencer ? 'none' : 'block'}"
       [patterns]="patterns"
       [instanceNumber]="instanceNumber"
+      [config]="config"
       (togglePlay)="play()">
     </app-static-synth>
     <app-sequencer
       [ngStyle]="{'display': showSequencer ? 'block' : 'none'}"
       [deviceNumberIndex]="deviceNumberIndex"
+      [config]="config"
       (patternsChanged)="changePatterns($event)">
     </app-sequencer>
   </div>

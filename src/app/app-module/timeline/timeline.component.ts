@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { SynthService } from 'src/app/shared/synth.service';
+import { SynthService } from 'src/app/shared/services/synth.service';
 import { takeUntil } from 'rxjs/operators';
 import { TimelineTrack } from 'src/app/interfaces';
 import { Subject } from 'rxjs';

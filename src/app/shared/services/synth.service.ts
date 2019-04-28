@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { TimelineTrack } from '../interfaces';
+import { TimelineTrack, Instrument } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,12 @@ export class SynthService {
   tracks = new BehaviorSubject<TimelineTrack[]>([]);
   numberOfMeasures = 20;
   numberOfStepsPerMeasure = new BehaviorSubject<number>(16);
-  trackMeterLevels: BehaviorSubject<number>[] = [];
+  trackMeterLevels = new BehaviorSubject<number[]>([]);
   tick = new BehaviorSubject<number>(null);
   recorder: any;
   midiMessage = new Subject<any>();
   instanceMidiActivated = 0;
+  instruments = new BehaviorSubject<Instrument[]>([]);
 
   constructor() {}
 

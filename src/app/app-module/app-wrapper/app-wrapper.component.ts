@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MENU_SCREENS } from '../../constants';
-import { SynthService } from '../../shared/synth.service';
-import { ModalService } from '../../shared/modal/modal.service';
+import { SynthService } from '../../shared/services/synth.service';
+import { ModalService } from '../../shared/services/modal.service';
 import { RenderingModalComponent } from '../rendering-modal/rendering-modal.component';
 
 @Component({

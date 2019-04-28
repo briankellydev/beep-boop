@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy, Input, ChangeDetectorRef } from '@angular/core';
-import { SynthService } from 'src/app/shared/synth.service';
+import { SynthService } from 'src/app/shared/services/synth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MENU_SCREENS } from 'src/app/constants';

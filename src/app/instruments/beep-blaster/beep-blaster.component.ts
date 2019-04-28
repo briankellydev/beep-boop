@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SynthService } from 'src/app/shared/synth.service';
-import { Pattern } from 'src/app/interfaces';
+import { SynthService } from 'src/app/shared/components/services/synth.service';
+import { Pattern, BeepBlaster } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-beep-blaster',
@@ -15,6 +15,7 @@ export class BeepBlasterComponent implements OnInit, OnDestroy {
   collapsed = true;
   instanceNumber: number;
   deviceNumberIndex: number;
+  config: BeepBlaster;
   destroy$ = new Subject<any>();
 
   constructor(public synthService: SynthService) { }

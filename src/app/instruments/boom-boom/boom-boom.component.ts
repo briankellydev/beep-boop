@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ComponentRef } from '@angular/core';
-import { SynthService } from 'src/app/shared/synth.service';
+import { SynthService } from 'src/app/shared/services/synth.service';
+import { BoomBoom } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-boom-boom',
@@ -13,6 +14,7 @@ export class BoomBoomComponent implements OnInit {
   showSequencer = false;
   instanceNumber: number;
   deviceNumberIndex: number;
+  config: BoomBoom;
 
   constructor(public synthService: SynthService) { }
 

@@ -1,4 +1,3 @@
-import { DRUM_KITS } from './constants';
 
 export interface Envelope {
   attack: number;
@@ -81,25 +80,36 @@ export interface BeepBlaster {
   oscillators: Oscillator[];
   lfoConfig: LFO;
   filterConfig: Filter;
-  distortionConfig: {
-    distortion: number;
-    enabled: boolean;
-  };
-  reverbConfig: {
-    roomSize: number;
-    enabled: boolean;
-  };
-  delayConfig: {
-    delayTime: number;
-    feedback: number;
-    enabled: boolean;
-  };
+  distortionConfig: Distortion;
+  reverbConfig: Reverb;
+  delayConfig: Delay;
   track: TimelineTrack;
   patterns: Pattern[];
 }
 
+export interface Distortion {
+  distortion: number;
+  enabled: boolean;
+}
+
 export interface BoomBoom {
-  kit: typeof DRUM_KITS;
+  kit: string;
   patterns: PolyPattern[];
   track: TimelineTrack;
+}
+
+export interface Reverb {
+  roomSize: number;
+  enabled: boolean;
+}
+
+export interface Delay {
+  delayTime: number;
+  feedback: number;
+  enabled: boolean;
+}
+
+export interface Instrument {
+  name: string;
+  instrument: BeepBlaster | BoomBoom;
 }

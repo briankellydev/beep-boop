@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack } from 'src/app/interfaces';
-import { SynthService } from 'src/app/shared/synth.service';
+import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack, BoomBoom } from 'src/app/interfaces';
+import { SynthService } from 'src/app/shared/services/synth.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { DRUM_KITS } from 'src/app/constants';
@@ -14,6 +14,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   @Input() instanceNumber: number;
   @Input() deviceNumberIndex: number;
+  @Input() config: BoomBoom;
   @Input() isTutorialMode = false;
 
   noteRows: DrumRow[];
@@ -41,12 +42,12 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.meter = new Tone.Meter().toMaster();
-    this.synthService.trackMeterLevels.push(this.thisNodeGain);
+    // this.synthService.trackMeterLevels.push(this.thisNodeGain);
     this.synthService.tick.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.thisNodeGain.next(this.meter.getLevel());
     });
     this.volume = new Tone.Channel(0, 0).connect(this.meter);
-    this.selectKit(this.DRUM_KITS['808']);
+    this.selectKit(this.config.kit || this.DRUM_KITS['808']);
     this.drumMachine.forEach((drum) => {
       drum.connect(this.volume);
     });
@@ -97,6 +98,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
         // If it's not a note off message
         // Eventually velocity and duration will be implemented
         if (midiMessage.data[2] !== 127) {
+          // TODO is there some math I can use to automate this? Doubtful since the 1-2 semitone difference between certain notes
           switch(midiMessage.data[1]) {
             case(48):
               this.drumMachine[5].triggerAttackRelease(Tone.Midi(48).toFrequency(), '16n');
