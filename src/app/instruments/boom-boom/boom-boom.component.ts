@@ -1,13 +1,15 @@
-import { Component, OnInit, Input, ComponentRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SynthService } from 'src/app/shared/services/synth.service';
-import { BoomBoom } from 'src/app/interfaces';
+import { BoomBoom, Instrument } from 'src/app/interfaces';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-boom-boom',
   templateUrl: './boom-boom.component.html',
   styleUrls: ['./boom-boom.component.scss']
 })
-export class BoomBoomComponent implements OnInit {
+export class BoomBoomComponent implements OnInit, OnDestroy {
 
   collapsed = true;
   playing = false;
@@ -16,9 +18,20 @@ export class BoomBoomComponent implements OnInit {
   deviceNumberIndex: number;
   config: BoomBoom;
 
+  private destroy$ = new Subject<any>();
+
   constructor(public synthService: SynthService) { }
 
   ngOnInit() {
+    this.synthService.instruments.pipe(takeUntil(this.destroy$)).subscribe((instruments: Instrument<BoomBoom>[]) => {
+      this.deviceNumberIndex = instruments.findIndex((instrument) => {
+        return instrument.instrument.track.instanceNumber === this.instanceNumber;
+      });
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
   }
 
   toggleCollapsed() {

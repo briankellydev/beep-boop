@@ -109,7 +109,7 @@ export interface Delay {
   enabled: boolean;
 }
 
-export interface Instrument {
+export interface Instrument<T> {
   name: string;
-  instrument: BeepBlaster | BoomBoom;
+  instrument: T;
 }

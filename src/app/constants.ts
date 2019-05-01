@@ -20,7 +20,7 @@ export const INSTRUMENTS = {
     BOOMBOOM: 'BOOMBOOM',
 };
 
-export const BLANK_BEEPBLASTER: Instrument = {
+export const BLANK_BEEPBLASTER: Instrument<BeepBlaster> = {
     name: INSTRUMENTS.BEEPBLASTER,
     instrument: {
         envConfig: null,
@@ -35,7 +35,7 @@ export const BLANK_BEEPBLASTER: Instrument = {
     }
 };
 
-export const BLANK_BOOMBOOM: Instrument = {
+export const BLANK_BOOMBOOM: Instrument<BoomBoom> = {
     name: INSTRUMENTS.BOOMBOOM,
     instrument: {
         kit: '808',

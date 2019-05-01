@@ -9,7 +9,6 @@ export class SynthService {
 
   instanceToDelete = new BehaviorSubject<number>(null);
   playing = new BehaviorSubject<boolean>(false);
-  tracks = new BehaviorSubject<TimelineTrack[]>([]);
   numberOfMeasures = 20;
   numberOfStepsPerMeasure = new BehaviorSubject<number>(16);
   trackMeterLevels = new BehaviorSubject<number[]>([]);
@@ -17,7 +16,7 @@ export class SynthService {
   recorder: any;
   midiMessage = new Subject<any>();
   instanceMidiActivated = 0;
-  instruments = new BehaviorSubject<Instrument[]>([]);
+  instruments = new BehaviorSubject<Instrument<any>[]>([]);
 
   constructor() {}
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack, BoomBoom } from 'src/app/interfaces';
+import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack, BoomBoom, Instrument } from 'src/app/interfaces';
 import { SynthService } from 'src/app/shared/services/synth.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject, BehaviorSubject } from 'rxjs';
@@ -26,7 +26,6 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   DRUM_KITS = DRUM_KITS;
   selectedKit: string;
   parts: any[] = [];
-  tracks: TimelineTrack[] = [];
   cellWidth: string;
 
   private destroy$ = new Subject<any>();
@@ -37,6 +36,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   private numberOfStepsPerMeasure: number;
   private meter: any;
   private thisNodeGain = new BehaviorSubject<number>(0);
+  private instruments: Instrument<BoomBoom>[] = [];
 
   constructor(private synthService: SynthService) { }
 
@@ -54,36 +54,71 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     this.synthService.numberOfStepsPerMeasure.pipe(takeUntil(this.destroy$)).subscribe((num: number) => {
       this.nullSequence = this.synthService.createNullSequence(num, 1);
       this.falseSequence = this.synthService.createFalseSequence(num, 1);
-      this.numberOfStepsPerMeasure = num;
-      this.initNoteRows();
-      for (let i = 0; i < 9; i++) {
-        this.patterns.push({
-          num: i,
-          numberOfMeasures: 1,
-          sequence: [
-            Object.assign([], this.nullSequence),
-            Object.assign([], this.nullSequence),
-            Object.assign([], this.nullSequence),
-            Object.assign([], this.nullSequence),
-            Object.assign([], this.nullSequence),
-            Object.assign([], this.nullSequence)
-          ],
-        });
+      if (this.instruments[this.deviceNumberIndex]) {
+        const difference = num - this.numberOfStepsPerMeasure;
+        this.numberOfStepsPerMeasure = num;
+        if (difference > 0) {
+          this.patterns.forEach((pattern: PolyPattern) => {
+            for (let i = 0; i < difference; i++) {
+              pattern.sequence.forEach((sequence: string[]) => {
+                sequence.push(null);
+              });
+            }
+          });
+        } else if (difference < 0) {
+          this.patterns.forEach((pattern: PolyPattern) => {
+            for (let i = 0; i < Math.abs(difference); i++) {
+              pattern.sequence.forEach((sequence: string[]) => {
+                sequence.pop();
+              });
+            }
+          });
+        }
+        this.instruments[this.deviceNumberIndex].instrument.patterns = this.patterns;
+        this.synthService.instruments.next(this.instruments);
+      } else {
+        this.numberOfStepsPerMeasure = num;
       }
-      this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
-      this.setPattern(0);
       this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
     });
     if (!this.isTutorialMode) {
-      this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
-        this.tracks = tracks;
-        this.tracksIndex = tracks.findIndex((track) => {
-          return track.instanceNumber === this.instanceNumber;
+      this.synthService.instruments.pipe(takeUntil(this.destroy$)).subscribe((instruments: Instrument<BoomBoom>[]) => {
+        this.instruments = JSON.parse(JSON.stringify(instruments));
+        this.tracksIndex = instruments.findIndex((instrument) => {
+          return instrument.instrument.track.instanceNumber === this.instanceNumber;
         });
-        this.volume.volume.value = this.tracks[this.tracksIndex].volume;
-        this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
-        this.volume.mute = this.tracks[this.tracksIndex].mute;
-        this.volume.solo = this.tracks[this.tracksIndex].solo;
+        this.volume.volume.value = this.instruments[this.tracksIndex].instrument.track.volume;
+        this.volume.pan.value = this.instruments[this.tracksIndex].instrument.track.pan / 100;
+        this.volume.mute = this.instruments[this.tracksIndex].instrument.track.mute;
+        this.volume.solo = this.instruments[this.tracksIndex].instrument.track.solo;
+        if (this.patterns.length === 0) {
+          if (!this.config.patterns || this.config.patterns.length === 0) {
+            for (let i = 0; i < 9; i++) {
+              this.patterns.push({
+                num: i,
+                numberOfMeasures: 1,
+                sequence: [
+                  Object.assign([], this.nullSequence),
+                  Object.assign([], this.nullSequence),
+                  Object.assign([], this.nullSequence),
+                  Object.assign([], this.nullSequence),
+                  Object.assign([], this.nullSequence),
+                  Object.assign([], this.nullSequence)
+                ],
+              });
+            }
+          } else {
+            this.patterns = this.config.patterns;
+          }
+        }
+        this.initNoteRows();
+        if (!this.activePattern) {
+          this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
+          this.setPattern(0);
+        } else {
+          this.activePattern = JSON.parse(JSON.stringify(this.patterns[this.activePattern.num]));
+          this.convertPatternToSequencer();
+        }
         if (this.globalPlaying === null) {
           this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
             this.globalPlaying = isPlaying;
@@ -157,7 +192,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   }
 
   changeNumberOfMeasures() {
-    const diffInMeasures = this.activePattern.numberOfMeasures - (this.activePattern.sequence.length / 16);
+    const diffInMeasures = this.activePattern.numberOfMeasures - (this.activePattern.sequence.length / this.numberOfStepsPerMeasure);
     this.activePattern.sequence.forEach((sequence) => {
       if (diffInMeasures < 0) {
         for (let i = 0; i < diffInMeasures * -1 * this.numberOfStepsPerMeasure; i++) {
@@ -175,13 +210,17 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
     this.initNoteRows();
     this.convertPatternToSequencer();
-    this.tracks[this.deviceNumberIndex].patternLengths[this.activePattern.num] = this.activePattern.numberOfMeasures;
-    this.synthService.tracks.next(this.tracks);
+    this.instruments[this.deviceNumberIndex].instrument.track.patternLengths[this.activePattern.num] = this.activePattern.numberOfMeasures;
+    this.synthService.instruments.next(this.instruments);
     this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
   }
 
   selectKit(kit: string) {
     this.selectedKit = kit;
+    if (this.instruments[this.deviceNumberIndex]) {
+      this.instruments[this.deviceNumberIndex].instrument.kit = kit;
+      this.synthService.instruments.next(this.instruments);
+    }
     switch(kit) {
       case this.DRUM_KITS['707']:
       this.drumMachine = [
@@ -311,6 +350,8 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     this.activePattern.sequence[rowIdx][noteIdx] = this.noteRows[rowIdx].sequence[noteIdx] ?
       this.noteRows[rowIdx].note + this.noteRows[rowIdx].octave : null;
     this.compile();
+    this.instruments[this.deviceNumberIndex].instrument.patterns = this.patterns;
+    this.synthService.instruments.next(this.instruments);
   }
 
   toggle() {
@@ -318,7 +359,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       part.dispose();
     });
     this.parts = [];
-    this.tracks[this.tracksIndex].patternPerMeasure.forEach((pattern: number, index: number) => {
+    this.instruments[this.tracksIndex].instrument.track.patternPerMeasure.forEach((pattern: number, index: number) => {
       if (pattern && pattern > 0) {
         for (let i = 0; i < 6; i++) {
           this.parts.push(new Tone.Sequence((time, note) => {

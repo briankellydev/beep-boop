@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, DoCheck } from '@angular/core';
-import { Oscillator, Envelope, LFO, Filter, TimelineTrack, Pattern, BeepBlaster, Distortion, Reverb, Delay } from '../../interfaces';
+import { Oscillator, Envelope, LFO, Filter, TimelineTrack, Pattern, BeepBlaster, Distortion, Reverb, Delay, Instrument, BoomBoom } from '../../interfaces';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SynthService } from 'src/app/shared/services/synth.service';
@@ -40,8 +40,8 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<any>();
   private tracksIndex: number;
-  private tracks: TimelineTrack[];
   private thisNodeGain = new BehaviorSubject<number>(0);
+  private instruments: Instrument<BeepBlaster>[];
 
   constructor(private synthService: SynthService) { }
 
@@ -78,7 +78,7 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
       feedback: 0,
       enabled: false
     };
-    if (this.config.oscillators.length > 0) {
+    if (this.config.oscillators && this.config.oscillators.length > 0) {
       this.oscConfig = this.config.oscillators;
     } else {
       for (let i = 0; i < 3; i++) {
@@ -117,15 +117,15 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     this.envelope.max = 500;
     this.lfo.connect(this.filter.frequency);
 
-    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
-      this.tracks = tracks;
-      this.tracksIndex = tracks.findIndex((track) => {
-        return track.instanceNumber === this.instanceNumber;
+    this.synthService.instruments.pipe(takeUntil(this.destroy$)).subscribe((instruments: Instrument<BeepBlaster>[]) => {
+      this.instruments = JSON.parse(JSON.stringify(instruments));
+      this.tracksIndex = instruments.findIndex((instrument) => {
+        return instrument.instrument.track.instanceNumber === this.instanceNumber;
       });
-      this.volume.volume.value = this.tracks[this.tracksIndex].volume;
-      this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
-      this.volume.mute = this.tracks[this.tracksIndex].mute;
-      this.volume.solo = this.tracks[this.tracksIndex].solo;
+      this.volume.volume.value = this.instruments[this.tracksIndex].instrument.track.volume;
+      this.volume.pan.value = this.instruments[this.tracksIndex].instrument.track.pan / 100;
+      this.volume.mute = this.instruments[this.tracksIndex].instrument.track.mute;
+      this.volume.solo = this.instruments[this.tracksIndex].instrument.track.solo;
       if (this.globalPlaying === null) {
         this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
           this.globalPlaying = isPlaying;
@@ -170,7 +170,7 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
       part.dispose();
     });
     this.parts = [];
-    this.tracks[this.tracksIndex].patternPerMeasure.forEach((pattern: number, index: number) => {
+    this.instruments[this.tracksIndex].instrument.track.patternPerMeasure.forEach((pattern: number, index: number) => {
       if (pattern && pattern > 0) {
         this.parts.push(new Tone.Sequence((time, note) => {
           // the events will be given to the callback with the time they occur
@@ -191,16 +191,22 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
 
   changeOsc(osc: string, num: number) {
     this.synth[num].oscillator.type = osc;
+    this.instruments[this.tracksIndex].instrument.oscillators[num].oscillator.type = osc;
+    this.synthService.instruments.next(this.instruments);
   }
 
   changeLfo(lfo: LFO) {
     this.lfo.frequency.value = lfo.frequency;
     this.lfo.max = lfo.max;
     this.lfo.type = lfo.type;
+    this.instruments[this.tracksIndex].instrument.lfoConfig = lfo;
+    this.synthService.instruments.next(this.instruments);
   }
 
   toggleDist(enabled: boolean) {
     this.distortion.wet.value = enabled ? 1 : 0;
+    this.instruments[this.tracksIndex].instrument.distortionConfig.enabled = enabled;
+    this.synthService.instruments.next(this.instruments);
   }
 
   changeEnv(env: Envelope) {
@@ -214,17 +220,24 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
       this.synth[i].envelope.decay = env.decay / 1000;
       this.synth[i].envelope.sustain = env.sustain / 100;
       this.synth[i].envelope.release = env.release / 1000;
+      this.instruments[this.tracksIndex].instrument.oscillators[i].envelope = env;
     }
+    this.instruments[this.tracksIndex].instrument.envConfig = env;
+    this.synthService.instruments.next(this.instruments);
   }
 
   changeFilter(filter: Filter) {
     this.filter.frequency.value = filter.frequency;
     this.filter.Q.value = filter.Q;
     this.filter.type = filter.type;
+    this.instruments[this.tracksIndex].instrument.filterConfig = filter;
+    this.synthService.instruments.next(this.instruments);
   }
 
   changeDist(dist: number) {
     this.distortion.distortion = dist;
+    this.instruments[this.tracksIndex].instrument.distortionConfig.distortion = dist;
+    this.synthService.instruments.next(this.instruments);
   }
 
   toggleLfo(enabled: boolean) {
@@ -233,23 +246,34 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     } else {
       this.lfo.stop();
     }
+    this.instruments[this.tracksIndex].instrument.lfoConfig.enabled = enabled;
+    this.synthService.instruments.next(this.instruments);
   }
 
   changeVerb(roomSize: number) {
     this.reverb.roomSize.value = roomSize / 200;
+    this.instruments[this.tracksIndex].instrument.reverbConfig.roomSize = roomSize;
+    this.synthService.instruments.next(this.instruments);
   }
 
   toggleVerb(enabled: boolean) {
     this.reverb.wet.value = enabled ? 0.5 : 0;
+    this.instruments[this.tracksIndex].instrument.reverbConfig.enabled = enabled;
+    this.synthService.instruments.next(this.instruments);
   }
 
   changeDelay(config: any) {
     this.delay.delayTime.value = config.delayTime / 100;
     this.delay.feedback.value = config.feedback / 100;
+    this.instruments[this.tracksIndex].instrument.delayConfig.delayTime = config.delayConfig;
+    this.instruments[this.tracksIndex].instrument.delayConfig.feedback = config.feedback;
+    this.synthService.instruments.next(this.instruments);
   }
 
   toggleDelay(enabled: boolean) {
     this.delay.wet.value = enabled ? 0.5 : 0;
+    this.instruments[this.tracksIndex].instrument.delayConfig.enabled = enabled;
+    this.synthService.instruments.next(this.instruments);
   }
 
   toggleOsc(toggled: boolean, num: number) {
@@ -258,6 +282,8 @@ export class StaticSynthComponent implements OnInit, OnDestroy {
     } else {
       this.synth[num].disconnect();
     }
+    this.instruments[this.tracksIndex].instrument.oscillators[num].enabled = toggled;
+    this.synthService.instruments.next(this.instruments);
   }
 
 }

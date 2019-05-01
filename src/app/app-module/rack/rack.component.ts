@@ -18,11 +18,10 @@ export class RackComponent implements OnInit, OnDestroy {
 
   INSTRUMENTS = INSTRUMENTS;
   currentInstanceNumber = 0;
-  
+
   private destroy$ = new Subject<any>();
   private components: ComponentRef<any>[] = [];
-  private timelineTracks: TimelineTrack[] = [];
-  private instruments: Instrument[] = [];
+  private instruments: Instrument<any>[] = [];
   private BLANK_TRACK: TimelineTrack = {
     instrument: '',
     instanceNumber: null,
@@ -40,34 +39,33 @@ export class RackComponent implements OnInit, OnDestroy {
     private synthService: SynthService,
     ) { }
 
-    // Need a trigger for meta here to make the instruments
   ngOnInit() {
-    this.synthService.instanceToDelete.pipe(takeUntil(this.destroy$)).subscribe((numToDel: number) => {
-      if (numToDel !== null) {
-        const idxToDelete = this.timelineTracks.findIndex((track) => {
-          return track.instanceNumber === numToDel;
-        });
-        this.timelineTracks.splice(idxToDelete, 1);
-
-        this.components.forEach((component) => {
-          if (numToDel === component.instance.instanceNumber) {
-            component.destroy();
-          }
-        });
-      }
-    });
-    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
-      this.timelineTracks = tracks;
-    });
-    this.synthService.instruments.pipe(takeUntil(this.destroy$)).subscribe((instruments: Instrument[]) => {
-      const newInstrumentCount = instruments.length - this.instruments.length;
-      this.instruments = instruments;
-      if (newInstrumentCount > 0) {
-        for (let i = (this.instruments.length - newInstrumentCount - 1); i < this.instruments.length; i++) {
-          this.createComponent(this.instruments[i].name, this.instruments[i].instrument.track, this.instruments[i].instrument);
+    
+      this.synthService.instanceToDelete.pipe(takeUntil(this.destroy$)).subscribe((numToDel: number) => {
+        if (numToDel !== null) {
+          const idxToDelete = this.instruments.findIndex((instrument) => {
+            return instrument.instrument.track.instanceNumber === numToDel;
+          });
+          this.instruments.splice(idxToDelete, 1);
+  
+          this.components.forEach((component) => {
+            if (numToDel === component.instance.instanceNumber) {
+              component.destroy();
+            }
+          });
+          this.synthService.instruments.next(this.instruments);
         }
-      }
-    });
+      });
+  
+      this.synthService.instruments.pipe(takeUntil(this.destroy$)).subscribe((instruments: Instrument<any>[]) => {
+        const newInstrumentCount = instruments.length - this.instruments.length;
+        this.instruments = JSON.parse(JSON.stringify(instruments));
+        if (newInstrumentCount > 0) {
+          for (let i = (this.instruments.length - newInstrumentCount); i < this.instruments.length; i++) {
+            this.createComponent(this.instruments[i].name, this.instruments[i].instrument.track, this.instruments[i].instrument);
+          }
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -77,12 +75,15 @@ export class RackComponent implements OnInit, OnDestroy {
   createInstrument(component: string) {
     const inst = component === INSTRUMENTS.BEEPBLASTER ? BLANK_BEEPBLASTER : BLANK_BOOMBOOM;
     this.instruments.push(inst);
+    this.createComponent(component);
+    this.synthService.instruments.next(this.instruments);
   }
 
-  private createComponent(component: string, track?:TimelineTrack, config?:BoomBoom | BeepBlaster) {
+  private createComponent(component: string, track?: TimelineTrack, config?: BoomBoom | BeepBlaster) {
     let factory;
     const thisTrack: TimelineTrack = track ? track : JSON.parse(JSON.stringify(this.BLANK_TRACK));
 
+    thisTrack.instrument = component;
     switch(component) {
       case this.INSTRUMENTS.BEEPBLASTER:
       factory = this.resolver.resolveComponentFactory(BeepBlasterComponent);
@@ -97,10 +98,14 @@ export class RackComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.synthService.numberOfMeasures; i++) {
       thisTrack.patternPerMeasure.push(null);
     }
-    this.timelineTracks.push(thisTrack);
-    componentRef.instance.deviceNumberIndex = this.timelineTracks.length - 1;
 
-    this.synthService.tracks.next(this.timelineTracks);
+    if (!config) {
+      componentRef.instance.config = component === this.INSTRUMENTS.BEEPBLASTER ?
+        JSON.parse(JSON.stringify(BLANK_BEEPBLASTER)) : JSON.parse(JSON.stringify(BLANK_BOOMBOOM));
+    } else {
+      componentRef.instance.config = config;
+    }
+    this.instruments[this.instruments.length - 1].instrument.track = JSON.parse(JSON.stringify(thisTrack));
     this.components.push(componentRef);
     this.currentInstanceNumber++;
   }

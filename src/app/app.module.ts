@@ -13,6 +13,7 @@ import { RenderingModalComponent } from './app-module/rendering-modal/rendering-
 import { SharedModule } from './shared/shared.module';
 import { AppWrapperComponent } from './app-module/app-wrapper/app-wrapper.component';
 import { TutorialModule } from './tutorial/tutorial.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { TutorialModule } from './tutorial/tutorial.module';
     InstrumentsModule,
     SharedModule,
     TutorialModule,
+    HttpClientModule
   ],
   entryComponents: [
     RenderingModalComponent

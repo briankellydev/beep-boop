@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { NoteSequence } from 'src/app/constants';
-import { NoteRow, Pattern, TimelineTrack } from 'src/app/interfaces';
+import { NoteRow, Pattern, TimelineTrack, BeepBlaster, Instrument, BoomBoom } from 'src/app/interfaces';
 import { SynthService } from 'src/app/shared/services/synth.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -14,7 +14,7 @@ export class SequencerComponent implements OnInit, OnDestroy {
 
   @Input() deviceNumberIndex: number;
   @Input() isTutorialMode = false;
-  @Output() patternsChanged = new EventEmitter<Pattern[]>();
+  @Input() config: BeepBlaster;
   @Output() togglePlay = new EventEmitter<boolean>();
 
   notes = Object.assign([], NoteSequence).reverse();
@@ -31,31 +31,62 @@ export class SequencerComponent implements OnInit, OnDestroy {
   private nullSequence: string[];
   private falseSequence: boolean[];
   private numberOfStepsPerMeasure: number;
-  private tracks: TimelineTrack[];
+  private instruments: Instrument<BeepBlaster>[] = [];
 
   constructor(private synthService: SynthService) { }
 
   ngOnInit() {
     this.synthService.numberOfStepsPerMeasure.pipe(takeUntil(this.destroy$)).subscribe((num: number) => {
-      this.numberOfStepsPerMeasure = num;
-      this.patterns = [];
-      this.nullSequence = this.synthService.createNullSequence(this.numberOfStepsPerMeasure, 1);
-      this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, 1);
-      this.initNoteRows();
-      for (let i = 0; i < 9; i++) {
-        this.patterns.push({
-          num: i,
-          lowestNote: 'C',
-          lowestOctave: '3',
-          numberOfMeasures: 1,
-          sequence: Object.assign([], this.nullSequence),
-        });
+      this.nullSequence = this.synthService.createNullSequence(num, 1);
+      this.falseSequence = this.synthService.createFalseSequence(num, 1);
+      if (this.instruments[this.deviceNumberIndex]) {
+        const difference = num - this.numberOfStepsPerMeasure;
+        this.numberOfStepsPerMeasure = num;
+        if (difference > 0) {
+          this.patterns.forEach((pattern: Pattern) => {
+            for (let i = 0; i < difference; i++) {
+              pattern.sequence.push(null);
+            }
+          });
+        } else if (difference < 0) {
+          this.patterns.forEach((pattern: Pattern) => {
+            for (let i = 0; i < Math.abs(difference); i++) {
+              pattern.sequence.pop();
+            }
+          });
+        }
+        this.instruments[this.deviceNumberIndex].instrument.patterns = this.patterns;
+        this.synthService.instruments.next(this.instruments);
+      } else {
+        this.numberOfStepsPerMeasure = num;
       }
-      this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
-      this.setPattern(0);
+      this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
     });
-    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
-      this.tracks = tracks;
+    this.synthService.instruments.pipe(takeUntil(this.destroy$)).subscribe((instruments: Instrument<BeepBlaster>[]) => {
+      this.instruments = JSON.parse(JSON.stringify(instruments));
+      if (this.patterns.length === 0) {
+        if (!this.config.patterns || this.config.patterns.length === 0) {
+          for (let i = 0; i < 9; i++) {
+            this.patterns.push({
+              num: i,
+              lowestNote: 'C',
+              lowestOctave: '3',
+              numberOfMeasures: 1,
+              sequence: Object.assign([], this.nullSequence),
+            });
+          }
+        } else {
+          this.patterns = this.config.patterns;
+        }
+      }
+      this.initNoteRows();
+      if (!this.activePattern) {
+        this.activePattern = JSON.parse(JSON.stringify(this.patterns[0]));
+        this.setPattern(0);
+      } else {
+        this.activePattern = JSON.parse(JSON.stringify(this.patterns[this.activePattern.num]));
+        this.convertPatternToSequencer();
+      }
     });
   }
 
@@ -81,7 +112,6 @@ export class SequencerComponent implements OnInit, OnDestroy {
     this.activePattern.lowestNote = startingNote;
     this.activePattern.lowestOctave = octave;
     this.compile();
-    this.patternsChanged.emit(this.patterns);
   }
 
   toggleStep(rowIdx: number, noteIdx: number) {
@@ -97,7 +127,8 @@ export class SequencerComponent implements OnInit, OnDestroy {
       this.activePattern.sequence[noteIdx] = null;
     }
     this.compile();
-    this.patternsChanged.emit(this.patterns);
+    this.instruments[this.deviceNumberIndex].instrument.patterns = this.patterns;
+    this.synthService.instruments.next(this.instruments);
   }
 
   checkForBlueBorder(idx: number) {
@@ -122,7 +153,8 @@ export class SequencerComponent implements OnInit, OnDestroy {
     this.initNoteRows();
     this.convertPatternToSequencer();
     // Emit the new sequence to the instrument
-    this.patternsChanged.emit(this.patterns);
+    this.instruments[this.deviceNumberIndex].instrument.patterns = JSON.parse(JSON.stringify(this.patterns));
+    this.synthService.instruments.next(this.instruments);
   }
 
   changeNumberOfMeasures() {
@@ -140,9 +172,8 @@ export class SequencerComponent implements OnInit, OnDestroy {
     this.nullSequence = this.synthService.createNullSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
     this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
     this.convertPatternToSequencer();
-    this.tracks[this.deviceNumberIndex].patternLengths[this.activePattern.num] = this.activePattern.numberOfMeasures;
-    this.synthService.tracks.next(this.tracks);
-    this.patternsChanged.emit(this.patterns);
+    this.instruments[this.deviceNumberIndex].instrument.track.patternLengths[this.activePattern.num] = this.activePattern.numberOfMeasures;
+    this.synthService.instruments.next(this.instruments);
   }
 
   private compile() {
@@ -200,7 +231,6 @@ export class SequencerComponent implements OnInit, OnDestroy {
       {note: 'C#', octave: '3', sequence: Object.assign([], this.falseSequence)},
       {note: 'C', octave: '3', sequence: Object.assign([], this.falseSequence)},
     ];
-    this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
   }
 
   private calculateRowWidth(length: number) {

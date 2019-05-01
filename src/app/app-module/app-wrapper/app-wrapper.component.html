@@ -8,7 +8,7 @@
     </a>
   </h1>
 </header>
-<div class="app">
+<div class="app" *ngIf="!loading">
   <app-rack [ngStyle]="{'display': itemToShow === menuScreens.RACK ? 'block' : 'none'}"></app-rack>
   <app-timeline [ngStyle]="{'display': itemToShow === menuScreens.TIMELINE ? 'block' : 'none'}"></app-timeline>
   <app-transport [itemSelected]="itemToShow" (showItem)="showItem($event)"></app-transport>

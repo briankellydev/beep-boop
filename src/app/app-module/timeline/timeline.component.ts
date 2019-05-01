@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { SynthService } from 'src/app/shared/services/synth.service';
 import { takeUntil } from 'rxjs/operators';
-import { TimelineTrack } from 'src/app/interfaces';
+import { TimelineTrack, Instrument, BeepBlaster } from 'src/app/interfaces';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -15,6 +15,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   measures: any[] = [];
   dropdownShowing: string = null;
   currentMeasure = 0;
+  instruments: Instrument<BeepBlaster>[];
 
   private destroy$ = new Subject<any>();
 
@@ -27,7 +28,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.synthService.numberOfMeasures; i++) {
       this.measures.push({});
     }
-    this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
+    this.synthService.instruments.pipe(takeUntil(this.destroy$)).subscribe((instruments: Instrument<BeepBlaster>[]) => {
+      const tracks: TimelineTrack[] = [];
+      this.instruments = JSON.parse(JSON.stringify(instruments));
+      instruments.forEach((instrument) => {
+        tracks.push(JSON.parse(JSON.stringify(instrument.instrument.track)));
+      });
       this.timelineTracks = tracks;
     });
     this.synthService.tick.pipe(takeUntil(this.destroy$)).subscribe((measure: number) => {
@@ -42,16 +48,19 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   toggleSolo(index: number) {
     this.timelineTracks[index].solo = !this.timelineTracks[index].solo;
+    this.instruments[index].instrument.track.solo = !this.instruments[index].instrument.track.solo;
     this.meterChanged();
   }
 
   toggleMute(index: number) {
     this.timelineTracks[index].mute = !this.timelineTracks[index].mute;
+    this.instruments[index].instrument.track.mute = !this.instruments[index].instrument.track.mute;
     this.meterChanged();
   }
 
   toggleCollapsed(index: number) {
     this.timelineTracks[index].collapsed = !this.timelineTracks[index].collapsed;
+    this.instruments[index].instrument.track.collapsed = !this.instruments[index].instrument.track.collapsed;
     this.meterChanged();
   }
 
@@ -68,7 +77,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }*/
 
   meterChanged() {
-    this.synthService.tracks.next(this.timelineTracks);
+    this.synthService.instruments.next(this.instruments);
   }
 
 
@@ -85,31 +94,35 @@ export class TimelineComponent implements OnInit, OnDestroy {
       return track.instanceNumber === globalTrack.instanceNumber;
     });
    this.timelineTracks[trackIdx].patternPerMeasure[idx] = pattern;
+   this.instruments[trackIdx].instrument.track.patternPerMeasure[idx] = pattern;
    if (track.patternLengths[pattern - 1] > 1) {
      for (let i = 1; i < track.patternLengths[pattern - 1]; i++) {
-     this.timelineTracks[trackIdx].patternPerMeasure[i + idx] = -1;
+      this.timelineTracks[trackIdx].patternPerMeasure[i + idx] = -1;
+      this.instruments[trackIdx].instrument.track.patternPerMeasure[i + idx] = -1;
     }
    }
-
-   this.synthService.tracks.next(this.timelineTracks);
+   this.synthService.instruments.next(this.instruments);
+   this.toggleDropdown(this.dropdownShowing);
   }
 
   addMeasure() {
     this.synthService.numberOfMeasures++;
     this.measures.push({});
-    this.timelineTracks.forEach((track) => {
+    this.timelineTracks.forEach((track, index) => {
       track.patternPerMeasure.push(null);
+      this.instruments[index].instrument.track.patternPerMeasure.push(null);
     });
-    this.synthService.tracks.next(this.timelineTracks);
+    this.synthService.instruments.next(this.instruments);
   }
 
   deleteMeasure() {
     this.synthService.numberOfMeasures--;
     this.measures.pop();
-    this.timelineTracks.forEach((track) => {
+    this.timelineTracks.forEach((track, index) => {
       track.patternPerMeasure.pop();
+      this.instruments[index].instrument.track.patternPerMeasure.pop();
     });
-    this.synthService.tracks.next(this.timelineTracks);
+    this.synthService.instruments.next(this.instruments);
   }
 
 }

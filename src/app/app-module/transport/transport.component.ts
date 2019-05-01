@@ -19,6 +19,7 @@ export class TransportComponent implements OnInit, OnDestroy {
   menuItems = MENU_SCREENS;
   timeSigNumerator = 4;
   timeSigDenominator = 4;
+  numberOfStepsPerMeasure = 16;
 
   private destroy$ = new Subject<any>();
 
@@ -32,15 +33,10 @@ export class TransportComponent implements OnInit, OnDestroy {
       this.togglePlay(isPlaying);
       this.cdr.detectChanges();
     });
+    this.synthService.numberOfStepsPerMeasure.pipe(takeUntil(this.destroy$)).subscribe((num: number) => {
+      this.numberOfStepsPerMeasure = num;
+    });
     this.setTempo();
-    Tone.Transport.scheduleRepeat(() => {
-      const timeArray = Tone.Transport.position.split(':');
-      if (parseInt(timeArray[0]) === this.synthService.numberOfMeasures) {
-        this.synthService.playing.next(false);
-        this.synthService.recorder.finishRecording();
-      }
-      this.synthService.tick.next(parseInt(timeArray[0]));
-    }, '1m', 0);
   }
 
   ngOnDestroy() {
@@ -51,9 +47,18 @@ export class TransportComponent implements OnInit, OnDestroy {
     if (playing !== this.playing) {
       this.playing = playing;
       if (this.playing) {
+        Tone.Transport.scheduleRepeat(() => {
+          const timeArray = Tone.Transport.position.split(':');
+          if (parseInt(timeArray[0]) === this.synthService.numberOfMeasures) {
+            this.synthService.playing.next(false);
+            this.synthService.recorder.finishRecording();
+          }
+          this.synthService.tick.next(parseInt(timeArray[0]));
+        }, '1m', 0);
         Tone.Transport.start();
       } else {
         Tone.Transport.stop();
+        Tone.Transport.cancel();
       }
       this.synthService.playing.next(this.playing);
     }

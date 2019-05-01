@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { SynthService } from 'src/app/shared/components/services/synth.service';
-import { Pattern, BeepBlaster } from 'src/app/interfaces';
+import { SynthService } from 'src/app/shared/services/synth.service';
+import { Pattern, BeepBlaster, Instrument } from 'src/app/interfaces';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-beep-blaster',
@@ -16,19 +17,23 @@ export class BeepBlasterComponent implements OnInit, OnDestroy {
   instanceNumber: number;
   deviceNumberIndex: number;
   config: BeepBlaster;
-  destroy$ = new Subject<any>();
+  private destroy$ = new Subject<any>();
+  private instruments: Instrument<BeepBlaster>[];
 
   constructor(public synthService: SynthService) { }
 
   ngOnInit() {
+    this.synthService.instruments.pipe(takeUntil(this.destroy$)).subscribe((instruments: Instrument<BeepBlaster>[]) => {
+      this.instruments = JSON.parse(JSON.stringify(instruments));
+      this.deviceNumberIndex = instruments.findIndex((instrument) => {
+        return instrument.instrument.track.instanceNumber === this.instanceNumber;
+      });
+      this.patterns = this.instruments[this.deviceNumberIndex].instrument.patterns;
+    });
   }
 
   ngOnDestroy() {
     this.destroy$.next();
-  }
-
-  changePatterns(patterns: Pattern[]) {
-    this.patterns = patterns;
   }
 
   toggleSequencer() {

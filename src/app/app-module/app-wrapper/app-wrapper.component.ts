@@ -3,6 +3,7 @@ import { MENU_SCREENS } from '../../constants';
 import { SynthService } from '../../shared/services/synth.service';
 import { ModalService } from '../../shared/services/modal.service';
 import { RenderingModalComponent } from '../rendering-modal/rendering-modal.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-app-wrapper',
@@ -14,24 +15,30 @@ export class AppWrapperComponent implements OnInit {
   title = 'beep-boop';
   itemToShow: string;
   menuScreens = MENU_SCREENS;
+  loading = true;
 
   @ViewChild('audio') audio: ElementRef;
 
   constructor(
     private synthService: SynthService,
     private modalService: ModalService,
+    private http: HttpClient,
   ) {}
 
   ngOnInit() {
-    this.itemToShow = this.menuScreens.RACK;
-    navigator.requestMIDIAccess()
-    .then((midiAccess) => {
-      const inputs = midiAccess.inputs.values();
-        for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
-            input.value.onmidimessage = (event) => {
-              this.synthService.midiMessage.next(event);
-            };
-        }
+    this.http.get('assets/demo-song.json').toPromise().then((result: any) => {
+      this.synthService.instruments.next(JSON.parse(JSON.stringify(result)));
+      this.itemToShow = this.menuScreens.RACK;
+      navigator.requestMIDIAccess()
+      .then((midiAccess) => {
+        const inputs = midiAccess.inputs.values();
+          for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
+              input.value.onmidimessage = (event) => {
+                this.synthService.midiMessage.next(event);
+              };
+          }
+      });
+      this.loading = false;
     });
   }
 
