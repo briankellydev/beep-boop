@@ -3,7 +3,6 @@ import { MENU_SCREENS } from '../../constants';
 import { SynthService } from '../../shared/services/synth.service';
 import { ModalService } from '../../shared/services/modal.service';
 import { RenderingModalComponent } from '../rendering-modal/rendering-modal.component';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-app-wrapper',
@@ -22,12 +21,9 @@ export class AppWrapperComponent implements OnInit {
   constructor(
     private synthService: SynthService,
     private modalService: ModalService,
-    private http: HttpClient,
   ) {}
 
   ngOnInit() {
-    this.http.get('assets/demo-song.json').toPromise().then((result: any) => {
-      this.synthService.instruments.next(JSON.parse(JSON.stringify(result)));
       this.itemToShow = this.menuScreens.RACK;
       navigator.requestMIDIAccess()
       .then((midiAccess) => {
@@ -39,7 +35,6 @@ export class AppWrapperComponent implements OnInit {
           }
       });
       this.loading = false;
-    });
   }
 
   showItem(item: string) {
