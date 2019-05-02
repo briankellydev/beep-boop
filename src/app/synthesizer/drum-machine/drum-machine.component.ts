@@ -21,7 +21,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   patterns: PolyPattern[] = [];
   globalPlaying = null;
   collapsed = false;
-  drumMachine: any[];
+  drumMachine: any[] = [];
   DRUM_KITS = DRUM_KITS;
   selectedKit: string;
   parts: any[] = [];
@@ -47,9 +47,6 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     });
     this.volume = new Tone.Channel(0, 0).connect(this.meter);
     this.selectKit(this.DRUM_KITS['808']);
-    this.drumMachine.forEach((drum) => {
-      drum.connect(this.volume);
-    });
     this.synthService.numberOfStepsPerMeasure.pipe(takeUntil(this.destroy$)).subscribe((num: number) => {
       this.nullSequence = this.synthService.createNullSequence(num, 1);
       this.falseSequence = this.synthService.createFalseSequence(num, 1);
@@ -180,6 +177,9 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
 
   selectKit(kit: string) {
     this.selectedKit = kit;
+    this.drumMachine.forEach((drum) => {
+      drum.dispose();
+    });
     switch(kit) {
       case this.DRUM_KITS['707']:
       this.drumMachine = [
@@ -302,6 +302,9 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       ];
       break;
     }
+    this.drumMachine.forEach((drum) => {
+      drum.connect(this.volume);
+    });
   }
 
   toggleStep(rowIdx: number, noteIdx: number) {
