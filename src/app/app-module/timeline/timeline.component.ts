@@ -77,6 +77,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }*/
 
   meterChanged() {
+    this.timelineTracks.forEach((track: TimelineTrack, index: number) => {
+      this.instruments[index].instrument.track = track;
+    });
     this.synthService.instruments.next(this.instruments);
   }
 

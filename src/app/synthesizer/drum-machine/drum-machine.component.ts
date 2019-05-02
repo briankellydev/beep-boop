@@ -366,7 +366,6 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     });
     this.parts = [];
     this.instruments[this.tracksIndex].instrument.track.patternPerMeasure.forEach((pattern: number, index: number) => {
-      console.log(this.patterns);
       if (pattern && pattern > 0) {
         for (let i = 0; i < 6; i++) {
           this.parts.push(new Tone.Sequence((time, note) => {
