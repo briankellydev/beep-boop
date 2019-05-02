@@ -22,7 +22,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
   patterns: PolyPattern[] = [];
   globalPlaying = null;
   collapsed = false;
-  drumMachine: any[];
+  drumMachine: any[] = [];
   DRUM_KITS = DRUM_KITS;
   selectedKit: string;
   parts: any[] = [];
@@ -205,7 +205,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       }
       this.patterns[this.activePattern.num] = JSON.parse(JSON.stringify(this.activePattern));
     });
-    
+
     this.nullSequence = this.synthService.createNullSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
     this.falseSequence = this.synthService.createFalseSequence(this.numberOfStepsPerMeasure, this.activePattern.numberOfMeasures);
     this.initNoteRows();
@@ -221,6 +221,9 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       this.instruments[this.deviceNumberIndex].instrument.kit = kit;
       this.synthService.instruments.next(this.instruments);
     }
+    this.drumMachine.forEach((drumMachine: any) => {
+      drumMachine.dispose();
+    });
     switch(kit) {
       case this.DRUM_KITS['707']:
       this.drumMachine = [
@@ -343,6 +346,9 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       ];
       break;
     }
+    this.drumMachine.forEach((drum) => {
+      drum.connect(this.volume);
+    });
   }
 
   toggleStep(rowIdx: number, noteIdx: number) {
@@ -360,6 +366,7 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
     });
     this.parts = [];
     this.instruments[this.tracksIndex].instrument.track.patternPerMeasure.forEach((pattern: number, index: number) => {
+      console.log(this.patterns);
       if (pattern && pattern > 0) {
         for (let i = 0; i < 6; i++) {
           this.parts.push(new Tone.Sequence((time, note) => {

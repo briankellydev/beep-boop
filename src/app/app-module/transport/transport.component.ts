@@ -51,7 +51,9 @@ export class TransportComponent implements OnInit, OnDestroy {
           const timeArray = Tone.Transport.position.split(':');
           if (parseInt(timeArray[0]) === this.synthService.numberOfMeasures) {
             this.synthService.playing.next(false);
-            this.synthService.recorder.finishRecording();
+            if (this.synthService.recorder) {
+              this.synthService.recorder.finishRecording();
+            }
           }
           this.synthService.tick.next(parseInt(timeArray[0]));
         }, '1m', 0);

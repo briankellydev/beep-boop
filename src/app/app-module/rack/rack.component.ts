@@ -71,6 +71,10 @@ export class RackComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
   }
+  
+  /*consoleLog() {
+    console.log(JSON.stringify(this.instruments));
+  }*/
 
   createInstrument(component: string) {
     const inst = component === INSTRUMENTS.BEEPBLASTER ? BLANK_BEEPBLASTER : BLANK_BOOMBOOM;

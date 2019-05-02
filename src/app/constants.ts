@@ -23,13 +23,80 @@ export const INSTRUMENTS = {
 export const BLANK_BEEPBLASTER: Instrument<BeepBlaster> = {
     name: INSTRUMENTS.BEEPBLASTER,
     instrument: {
-        envConfig: null,
-        oscillators: [],
-        lfoConfig: null,
-        filterConfig: null,
-        distortionConfig: null,
-        reverbConfig: null,
-        delayConfig: null,
+        envConfig: {
+            attack: 0.001,
+            decay: 0.001,
+            sustain: 0.3,
+            release: 0.001
+        },
+        oscillators: [
+            {
+                oscillator: {
+                    frequency: 440,
+                    type: 'sine',
+                },
+                envelope: {
+                    attack: 0.001,
+                    decay: 0.001,
+                    sustain: 0.3,
+                    release: 0.001
+                },
+                enabled: true,
+            },
+            {
+                oscillator: {
+                    frequency: 440,
+                    type: 'sine',
+                },
+                envelope: {
+                    attack: 0.001,
+                    decay: 0.001,
+                    sustain: 0.3,
+                    release: 0.001
+                },
+                enabled: false,
+            },
+            {
+                oscillator: {
+                    frequency: 440,
+                    type: 'sine',
+                },
+                envelope: {
+                    attack: 0.001,
+                    decay: 0.001,
+                    sustain: 0.3,
+                    release: 0.001
+                },
+                enabled: false,
+            },
+        ],
+        lfoConfig: {
+            frequency: 1,
+            min: 0,
+            max: 10,
+            type: 'sine',
+            phase: null,
+            amplitude: null,
+            enabled: false,
+        },
+        filterConfig: {
+            frequency: 800,
+            Q: 0,
+            type: 'lowpass'
+        },
+        distortionConfig: {
+            distortion: 0,
+            enabled: false
+        },
+        reverbConfig: {
+            roomSize: 10,
+            enabled: false
+        },
+        delayConfig: {
+            delayTime: 0.5,
+            feedback: 1,
+            enabled: false,
+        },
         track: null,
         patterns: [],
     }
