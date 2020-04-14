@@ -82,13 +82,8 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
           this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
           this.volume.mute = this.tracks[this.tracksIndex].mute;
           this.volume.solo = this.tracks[this.tracksIndex].solo;
-          if (this.globalPlaying === null) {
-            return this.synthService.playing.pipe(takeUntil(this.destroy$));
-          } else {
-            return of(null);
-          }
+          return this.synthService.playing.pipe(takeUntil(this.destroy$));
         }),
-        filter((resp) => resp !== null),
         tap((isPlaying: boolean) => {
           this.globalPlaying = isPlaying;
           this.toggle();
