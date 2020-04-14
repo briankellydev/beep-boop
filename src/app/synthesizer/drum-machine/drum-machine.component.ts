@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { DrumMachineSample, DrumRow, PolyPattern, TimelineTrack } from 'src/app/interfaces';
+import { DrumRow, PolyPattern, TimelineTrack } from 'src/app/interfaces';
 import { SynthService } from 'src/app/shared/synth.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { takeUntil, switchMap, filter, tap } from 'rxjs/operators';
+import { Subject, BehaviorSubject, of } from 'rxjs';
 import { DRUM_KITS } from 'src/app/constants';
 
 @Component({
@@ -71,22 +71,29 @@ export class DrumMachineComponent implements OnInit, OnDestroy {
       this.cellWidth = this.calculateRowWidth(this.falseSequence.length);
     });
     if (!this.isTutorialMode) {
-      this.synthService.tracks.pipe(takeUntil(this.destroy$)).subscribe((tracks: TimelineTrack[]) => {
-        this.tracks = tracks;
-        this.tracksIndex = tracks.findIndex((track) => {
-          return track.instanceNumber === this.instanceNumber;
-        });
-        this.volume.volume.value = this.tracks[this.tracksIndex].volume;
-        this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
-        this.volume.mute = this.tracks[this.tracksIndex].mute;
-        this.volume.solo = this.tracks[this.tracksIndex].solo;
-        if (this.globalPlaying === null) {
-          this.synthService.playing.pipe(takeUntil(this.destroy$)).subscribe((isPlaying: boolean) => {
-            this.globalPlaying = isPlaying;
-            this.toggle();
+      this.synthService.tracks.pipe(
+        takeUntil(this.destroy$),
+        switchMap((tracks: TimelineTrack[]) => {
+          this.tracks = tracks;
+          this.tracksIndex = tracks.findIndex((track) => {
+            return track.instanceNumber === this.instanceNumber;
           });
-        }
-      });
+          this.volume.volume.value = this.tracks[this.tracksIndex].volume;
+          this.volume.pan.value = this.tracks[this.tracksIndex].pan / 100;
+          this.volume.mute = this.tracks[this.tracksIndex].mute;
+          this.volume.solo = this.tracks[this.tracksIndex].solo;
+          if (this.globalPlaying === null) {
+            return this.synthService.playing.pipe(takeUntil(this.destroy$));
+          } else {
+            return of(null);
+          }
+        }),
+        filter((resp) => resp !== null),
+        tap((isPlaying: boolean) => {
+          this.globalPlaying = isPlaying;
+          this.toggle();
+        })
+        ).subscribe();
     }
 
     this.synthService.midiMessage.pipe(takeUntil(this.destroy$)).subscribe((midiMessage: any) => {

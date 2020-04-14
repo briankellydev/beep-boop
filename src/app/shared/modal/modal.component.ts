@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { ModalService } from './modal.service';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'modal',
@@ -11,7 +12,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     @ViewChild('modal', {read: ViewContainerRef}) modalContent: ViewContainerRef;
     modalValue: any;
 
-    private subscriptions: Subscription[] = []
+    destroy$ = new Subject();
     
     constructor(
         private modalService: ModalService,
@@ -19,22 +20,18 @@ export class ModalComponent implements OnInit, OnDestroy {
         ) {}
 
     ngOnInit() {
-        this.subscriptions.push(
-            this.modalService.modalContent.subscribe((modal) => {
-                this.modalValue = modal;
-                this.modalContent.clear();
-                if (modal) {
-                    const compFactory = this.cfr.resolveComponentFactory(modal.component);
-                    this.modalContent.createComponent(compFactory);
-                }
-            })
-        );
+        this.modalService.modalContent.pipe(takeUntil(this.destroy$)).subscribe((modal) => {
+            this.modalValue = modal;
+            this.modalContent.clear();
+            if (modal) {
+                const compFactory = this.cfr.resolveComponentFactory(modal.component);
+                this.modalContent.createComponent(compFactory);
+            }
+        });
     }
 
     ngOnDestroy() {
-        this.subscriptions.forEach((sub: Subscription) => {
-            sub.unsubscribe();
-        });
+        this.destroy$.next();
     }
 
     closeModal() {
